@@ -1,4 +1,3 @@
-import js from "@eslint/js";
 import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
@@ -6,6 +5,8 @@ import tseslint from "typescript-eslint";
 import reactX from "eslint-plugin-react-x";
 import reactDom from "eslint-plugin-react-dom";
 import unicorn from "eslint-plugin-unicorn";
+import prettier from "eslint-plugin-prettier";
+import prettierConfig from "eslint-config-prettier";
 
 export default tseslint.config(
   { ignores: ["dist"] },
@@ -17,6 +18,7 @@ export default tseslint.config(
       // ...tseslint.configs.strictTypeChecked,
       // Стилистические правила:
       ...tseslint.configs.stylisticTypeChecked,
+      prettierConfig,
     ],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
@@ -37,6 +39,7 @@ export default tseslint.config(
       "react-x": reactX,
       "react-dom": reactDom,
       unicorn,
+      prettier,
     },
     rules: {
       ...reactX.configs["recommended-typescript"].rules,
@@ -70,6 +73,7 @@ export default tseslint.config(
       "eol-last": ["error", "always"],
       "no-console": ["warn", { allow: ["warn", "error"] }],
 
+      "prettier/prettier": "error",
     },
   }
 );
