@@ -5,6 +5,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 import reactX from "eslint-plugin-react-x";
 import reactDom from "eslint-plugin-react-dom";
+import unicorn from "eslint-plugin-unicorn";
 
 export default tseslint.config(
   { ignores: ["dist"] },
@@ -35,6 +36,7 @@ export default tseslint.config(
       "react-refresh": reactRefresh,
       "react-x": reactX,
       "react-dom": reactDom,
+      unicorn,
     },
     rules: {
       ...reactX.configs["recommended-typescript"].rules,
@@ -44,6 +46,30 @@ export default tseslint.config(
         "warn",
         { allowConstantExport: true },
       ],
+
+      "unicorn/no-magic-numbers": [
+        "warn",
+        {
+          ignore: [0, 1, -1],
+          ignoreArrayIndexes: true,
+          enforceConst: true,
+        }
+      ],
+      
+      "max-lines-per-function": [
+        "warn",
+        {
+          max: 40,
+          skipBlankLines: true,
+          skipComments: true,
+        }
+      ],
+      "quotes": ["error", "single"],
+      "semi": ["error", "always"],
+      "indent": ["error", 2],
+      "eol-last": ["error", "always"],
+      "no-console": ["warn", { allow: ["warn", "error"] }],
+
     },
   }
 );
