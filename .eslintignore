@@ -1,0 +1,14 @@
+# Build output
+dist/
+coverage/
+
+# Node dependencies
+node_modules/
+
+# Static files
+public/
+
+# ESLint old config files
+.eslintrc.*
+vite.config.ts
+*.config.ts
