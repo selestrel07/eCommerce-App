@@ -12,11 +12,11 @@ export default tseslint.config(
   { ignores: ["dist"] },
   {
     extends: [
-      // Без js.configs.recommended
+      // Without js.configs.recommended
       ...tseslint.configs.recommendedTypeChecked,
-      // Если захотим строже
+      // If we'll want more stricter
       // ...tseslint.configs.strictTypeChecked,
-      // Стилистические правила:
+      // Stylistic rules
       ...tseslint.configs.stylisticTypeChecked,
       prettierConfig,
     ],
@@ -53,7 +53,7 @@ export default tseslint.config(
       "unicorn/no-magic-numbers": [
         "warn",
         {
-          ignore: [0, 1, -1],
+          ignore: [0, 1, -1, 2, 10, 100, 1000],
           ignoreArrayIndexes: true,
           enforceConst: true,
         }
