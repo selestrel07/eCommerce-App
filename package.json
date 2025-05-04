@@ -10,7 +10,8 @@
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "format": "prettier --write .",
-    "test": "vitest"
+    "test": "vitest",
+    "prepare": "husky"
   },
   "dependencies": {
     "react": "^19.0.0",
@@ -32,6 +33,7 @@
     "eslint-plugin-react-x": "^1.48.5",
     "eslint-plugin-unicorn": "^59.0.0",
     "globals": "^16.0.0",
+    "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
     "sass-embedded": "^1.87.0",

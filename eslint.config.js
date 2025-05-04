@@ -50,7 +50,7 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
 
-      "unicorn/no-magic-numbers": [
+      "@/no-magic-numbers": [
         "warn",
         {
           ignore: [0, 1, -1, 2, 10, 100, 1000],
@@ -58,7 +58,7 @@ export default tseslint.config(
           enforceConst: true,
         }
       ],
-      
+
       "max-lines-per-function": [
         "warn",
         {
