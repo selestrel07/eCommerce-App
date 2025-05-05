@@ -63,13 +63,13 @@ The project was created as part of teamwork at RS School to practice developing 
 
 | Script | Description | Command |
 | ------ | ----------- | ------- |
-| **dev** | Launching a project in development mode | ```npm run dev```
-| **build** | Building the project into production | ```npm run build```
+| **dev** | Launch a project in development mode | ```npm run dev```
+| **build** | Build the project into production | ```npm run build```
 | **preview** | Local preview of production build | ```npm run preview```
-| **lint** | Checking code for linting errors | ```npm run lint```
+| **lint** | Check code for linting errors | ```npm run lint```
 | **lint:fix** | Automatically fix linting errors | ```npm run lint:fix```
-| **format** | Formatting an Entire Project with Prettier | ```npm run format```
-| **test** | Running tests via Vitest | ```npm run test```
+| **format** | Format an Entire Project with Prettier | ```npm run format```
+| **test** | Run tests via Vitest | ```npm run test```
 | **prepare** | Script to automatically activate Husky hooks after installing dependencies | ```npm run prepare```
 
 ---
@@ -83,35 +83,34 @@ git clone https://github.com/selestrel07/eCommerce-App.git
 cd ecommerce-app
 ```
 
-### 2. Installing dependencies
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Launching a project in development mode
+### 3. Setup Husky 
+
+```bash
+npm run prepare
+```
+
+### 4. Launch a project in development mode
 
 ```bash
 npm run dev
 ```
 
-### 4. Assembling a project for production
+### 5. Assemble a project for production
 
 ```bash
 npm run build
 ```
 
-### 5. Preview of the assembled project
+### 6. Preview of the assembled project
 
 ```bash
 npm run preview
-```
----
-
-### 6. Setup Husky 
-
-```bash
-npm run prepare
 ```
 
 ---
