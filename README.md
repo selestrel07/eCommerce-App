@@ -1,54 +1,156 @@
-# React + TypeScript + Vite
+# eCommerce Application 🛍️🌐
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+## 📋 Project Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Welcome to our eCommerce application!
 
-## Expanding the ESLint configuration
+This project simulates a real shopping experience in a digital environment 🏪.
+The platform provides users with a full interaction cycle - from searching for products to placing an order 🚀.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 📝 Project goal:
+
+The project was created as part of teamwork at RS School to practice developing a full-fledged commercial application using modern technologies.
+
+---
+
+## 🛠️ Tech stack:
+
+* Bundler: **Vite**
+
+* Programming language: **TypeScript**
+
+* Interface library: **React**
+
+* Style Preprocessor: **Sass(SCSS)**
+
+* Code analysis to identify errors and style inconsistencies: **ESLint**
+
+* Auto-formatting of code: **Prettier**
+
+* Pre- and post-commit hooks: **Husky + lint-staged**
+
+* Commit style: **Commitlint**
+
+* Testing: **Vitest**
+
+---
+
+## 📋 Plugins:
+
+- **eslint-plugin-react-x** — rules for React components.
+- **eslint-plugin-react-dom** — rules for working with React DOM API.
+- **eslint-plugin-unicorn** — advanced code quality rules.
+- **eslint-plugin-prettier** — Prettier integration into ESLint.
+- **typescript-eslint** — support for TypeScript rules.
+
+---
+
+## ⚙️ Requirements:
+
+* Node.js version >= 18
+
+* npm version >= 9
+
+---
+
+## ⌨️ Available scripts
+
+### The following commands are available in the project:
+
+| Script | Description | Command |
+| ------ | ----------- | ------- |
+| **dev** | Launch a project in development mode | ```npm run dev```
+| **build** | Build the project into production | ```npm run build```
+| **preview** | Local preview of production build | ```npm run preview```
+| **lint** | Check code for linting errors | ```npm run lint```
+| **lint:fix** | Automatically fix linting errors | ```npm run lint:fix```
+| **format** | Format an Entire Project with Prettier | ```npm run format```
+| **test** | Run tests via Vitest | ```npm run test```
+| **prepare** | Script to automatically activate Husky hooks after installing dependencies | ```npm run prepare```
+
+---
+
+## 🔌 Instructions for local installation and launch of the project
+
+### 1. Clone a repository
+
+```bash
+git clone https://github.com/selestrel07/eCommerce-App.git
+cd ecommerce-app
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Install dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+npm install
 ```
+
+### 3. Setup Husky 
+
+```bash
+npm run prepare
+```
+
+### 4. Launch a project in development mode
+
+```bash
+npm run dev
+```
+
+### 5. Assemble a project for production
+
+```bash
+npm run build
+```
+
+### 6. Preview of the assembled project
+
+```bash
+npm run preview
+```
+
+---
+
+## 📝 Rules for formatting commits
+  ### The project uses the [Conventional Commits standard](https://www.conventionalcommits.org/en/v1.0.0-beta.2/).
+
+  * The commit type MUST BE in lowercase only (init, feat, fix, refactor, docs etc.)
+  * Present tense ("add feature" not "added feature") should be used.
+  * Imperative mood ("move cursor to ..." not "moves cursor to ..." should be used).
+
+---
+
+## 💡 Additional recommendations
+
+* It is recommended to run the linter before each commit:
+
+```bash
+npm run lint
+```
+
+or immediately correct the errors found:
+
+```bash
+npm run lint:fix
+```
+
+* Prettier is used to format the code in the project:
+
+```bash
+npm run format
+```
+
+* To run tests use:
+
+```bash
+npm run test
+```
+
+## 👥 Authors
+The project was developed in a team of three participants ([Dzmitry,](https://github.com/selestrel07)
+[Egor,](https://github.com/heresyhawkins)
+[Tatyana](https://github.com/isvaya))👨‍💻👩‍💻👨‍💻 as part of the [RS School course](https://rs.school/courses/javascript-ru).
