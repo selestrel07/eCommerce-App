@@ -6,5 +6,6 @@ export default defineConfig({
     exclude: ["node_modules", "dist"],
     reporters: ["default"],
     setupFiles: ["./src/setupTests"],
+    environment: 'jsdom'
   },
 });
