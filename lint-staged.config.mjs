@@ -6,4 +6,4 @@ export default {
   'src/**/*.css': (stagedFiles) => {
     return [`prettier --write ${stagedFiles.join(' ')}`];
   },
-}
+};
