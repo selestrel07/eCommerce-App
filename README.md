@@ -19,23 +19,23 @@ The project was created as part of teamwork at RS School to practice developing 
 
 ## 🛠️ Tech stack:
 
-* Bundler: **Vite**
+- Bundler: **Vite**
 
-* Programming language: **TypeScript**
+- Programming language: **TypeScript**
 
-* Interface library: **React**
+- Interface library: **React**
 
-* Style Preprocessor: **Sass(SCSS)**
+- Style Preprocessor: **Sass(SCSS)**
 
-* Code analysis to identify errors and style inconsistencies: **ESLint**
+- Code analysis to identify errors and style inconsistencies: **ESLint**
 
-* Auto-formatting of code: **Prettier**
+- Auto-formatting of code: **Prettier**
 
-* Pre- and post-commit hooks: **Husky + lint-staged**
+- Pre- and post-commit hooks: **Husky + lint-staged**
 
-* Commit style: **Commitlint**
+- Commit style: **Commitlint**
 
-* Testing: **Vitest**
+- Testing: **Vitest**
 
 ---
 
@@ -51,9 +51,9 @@ The project was created as part of teamwork at RS School to practice developing 
 
 ## ⚙️ Requirements:
 
-* Node.js version >= 18
+- Node.js version >= 18
 
-* npm version >= 9
+- npm version >= 9
 
 ---
 
@@ -61,16 +61,16 @@ The project was created as part of teamwork at RS School to practice developing 
 
 ### The following commands are available in the project:
 
-| Script | Description | Command |
-| ------ | ----------- | ------- |
-| **dev** | Launch a project in development mode | ```npm run dev```
-| **build** | Build the project into production | ```npm run build```
-| **preview** | Local preview of production build | ```npm run preview```
-| **lint** | Check code for linting errors | ```npm run lint```
-| **lint:fix** | Automatically fix linting errors | ```npm run lint:fix```
-| **format** | Format an Entire Project with Prettier | ```npm run format```
-| **test** | Run tests via Vitest | ```npm run test```
-| **prepare** | Script to automatically activate Husky hooks after installing dependencies | ```npm run prepare```
+| Script       | Description                                                                | Command            |
+| ------------ | -------------------------------------------------------------------------- | ------------------ |
+| **dev**      | Launch a project in development mode                                       | `npm run dev`      |
+| **build**    | Build the project into production                                          | `npm run build`    |
+| **preview**  | Local preview of production build                                          | `npm run preview`  |
+| **lint**     | Check code for linting errors                                              | `npm run lint`     |
+| **lint:fix** | Automatically fix linting errors                                           | `npm run lint:fix` |
+| **format**   | Format an Entire Project with Prettier                                     | `npm run format`   |
+| **test**     | Run tests via Vitest                                                       | `npm run test`     |
+| **prepare**  | Script to automatically activate Husky hooks after installing dependencies | `npm run prepare`  |
 
 ---
 
@@ -89,7 +89,7 @@ cd ecommerce-app
 npm install
 ```
 
-### 3. Setup Husky 
+### 3. Setup Husky
 
 ```bash
 npm run prepare
@@ -116,17 +116,18 @@ npm run preview
 ---
 
 ## 📝 Rules for formatting commits
-  ### The project uses the [Conventional Commits standard](https://www.conventionalcommits.org/en/v1.0.0-beta.2/).
 
-  * The commit type MUST BE in lowercase only (init, feat, fix, refactor, docs etc.)
-  * Present tense ("add feature" not "added feature") should be used.
-  * Imperative mood ("move cursor to ..." not "moves cursor to ..." should be used).
+### The project uses the [Conventional Commits standard](https://www.conventionalcommits.org/en/v1.0.0-beta.2/).
+
+- The commit type MUST BE in lowercase only (init, feat, fix, refactor, docs etc.)
+- Present tense ("add feature" not "added feature") should be used.
+- Imperative mood ("move cursor to ..." not "moves cursor to ..." should be used).
 
 ---
 
 ## 💡 Additional recommendations
 
-* It is recommended to run the linter before each commit:
+- It is recommended to run the linter before each commit:
 
 ```bash
 npm run lint
@@ -138,19 +139,20 @@ or immediately correct the errors found:
 npm run lint:fix
 ```
 
-* Prettier is used to format the code in the project:
+- Prettier is used to format the code in the project:
 
 ```bash
 npm run format
 ```
 
-* To run tests use:
+- To run tests use:
 
 ```bash
 npm run test
 ```
 
 ## 👥 Authors
+
 The project was developed in a team of three participants ([Dzmitry,](https://github.com/selestrel07)
 [Egor,](https://github.com/heresyhawkins)
 [Tatyana](https://github.com/isvaya))👨‍💻👩‍💻👨‍💻 as part of the [RS School course](https://rs.school/courses/javascript-ru).
