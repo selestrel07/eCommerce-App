@@ -5,9 +5,9 @@ import { Paths } from '../enums/paths/paths.ts';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 
-const fakeSetSignedInFunction = (value: boolean) => console.log(value);
+const fakeSetSignedInFunction = (value: boolean) => (value = !value);
 
-describe('App Routes Tests', () => {
+describe('App Routes Tests authorized user', () => {
   it('Should redirect authorized user from the Sign in page to the Main page', () => {
     const history = createMemoryHistory();
     history.push(Paths.SIGN_IN);
@@ -31,7 +31,9 @@ describe('App Routes Tests', () => {
 
     expect(history.location.pathname).toBe(Paths.MAIN);
   });
+});
 
+describe('App Routes Tests non-authorized user', () => {
   it('Should not redirect non-authorized user the Sign in page to the Main page', () => {
     const history = createMemoryHistory();
     history.push(Paths.SIGN_IN);
@@ -55,7 +57,9 @@ describe('App Routes Tests', () => {
 
     expect(history.location.pathname).toBe(Paths.SIGN_UP);
   });
+});
 
+describe('App Routes Tests empty or unknown pathname', () => {
   it('Should redirect user to the main page if no pathname is provided', () => {
     const history = createMemoryHistory();
     history.push(Paths.EMPTY);
@@ -70,7 +74,7 @@ describe('App Routes Tests', () => {
 
   it('Should redirect user to the error page if unknown pathname was provided', () => {
     const history = createMemoryHistory();
-    history.push('/some-unknow-pathname');
+    history.push('/some-unknown-pathname');
     render(
       <Router location={history.location} navigator={history}>
         <AppRoutes isSignedIn={false} setSignedIn={fakeSetSignedInFunction} />
