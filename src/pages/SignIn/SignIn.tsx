@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import { Input } from '../../components/Input/Input';
 
 export default function SignIn({
   setSignedIn,
@@ -6,5 +7,10 @@ export default function SignIn({
   setSignedIn: (value: boolean) => void;
 }): ReactElement {
   setSignedIn(false); //TODO: remove after the page implementation
-  return <></>;
+  return (
+    <>
+      <Input />
+      <Input isPassword errorMessage="Error" />
+    </>
+  );
 }
