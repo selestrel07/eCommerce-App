@@ -7,22 +7,16 @@ interface InputProps {
   isPassword?: boolean;
   value?: string;
   placeholder?: string;
-  isValidationError?: boolean;
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-export const Input: FC<InputProps> = ({
-  isPassword,
-  isValidationError,
-  errorMessage,
-  ...props
-}) => {
+export const Input: FC<InputProps> = ({ isPassword, errorMessage, ...props }) => {
   const CustomInput = isPassword ? AntInput.Password : AntInput;
 
   return (
     <div className="input">
-      <CustomInput {...props} {...(isValidationError ? { status: 'error' } : {})} />
-      {isValidationError && <p className="error-message">{errorMessage}</p>}
+      <CustomInput {...props} {...(errorMessage ? { status: 'error' } : {})} />
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 };

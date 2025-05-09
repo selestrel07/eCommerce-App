@@ -10,7 +10,7 @@ export default function SignIn({
   return (
     <>
       <Input />
-      <Input isPassword errorMessage="Error" isValidationError />
+      <Input isPassword errorMessage="Error" />
     </>
   );
 }
