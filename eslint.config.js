@@ -68,7 +68,6 @@ export default tseslint.config(
       semi: ['error', 'always'],
       'eol-last': ['error', 'always'],
       'no-console': ['warn', { allow: ['warn', 'error'] }],
-
       'prettier/prettier': 'error',
     },
   }
