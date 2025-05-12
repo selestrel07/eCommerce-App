@@ -12,12 +12,12 @@ export default function SignIn({
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
-  const handlePasswordChange = (value: string) => {
-    setPassword(value);
+  const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setPassword(e.target.value);
   };
 
-  const handleEmailChange = (value: string) => {
-    setEmail(value);
+  const handleEmailChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setEmail(e.target.value);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -37,11 +37,11 @@ export default function SignIn({
   setSignedIn(false); //TODO: remove after the page implementation
   return (
     <form className="login-form" onSubmit={handleSubmit}>
-      <Input value={email} onValidate={handleEmailChange} errorMessage={emailError ?? undefined} />
+      <Input value={email} onChange={handleEmailChange} errorMessage={emailError ?? undefined} />
       <Input
         isPassword
         value={password}
-        onValidate={handlePasswordChange}
+        onChange={handlePasswordChange}
         errorMessage={passwordError ?? undefined}
       />
       <button type="submit">Sign In</button>
