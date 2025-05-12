@@ -14,17 +14,29 @@ export default function SignIn({
 
   const handlePasswordChange = (value: string) => {
     setPassword(value);
-    setPasswordError(validatePassword(value));
   };
 
   const handleEmailChange = (value: string) => {
     setEmail(value);
-    setEmailError(validateEmail(value));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const emailValidationError = validateEmail(email);
+    const passwordValidationError = validatePassword(password);
+
+    setPasswordError(passwordValidationError);
+    setEmailError(emailValidationError);
+
+    if (!emailValidationError && !passwordValidationError) {
+      setSignedIn(true);
+    }
   };
 
   setSignedIn(false); //TODO: remove after the page implementation
   return (
-    <>
+    <form className="login-form" onSubmit={handleSubmit}>
       <Input value={email} onValidate={handleEmailChange} errorMessage={emailError ?? undefined} />
       <Input
         isPassword
@@ -32,6 +44,7 @@ export default function SignIn({
         onValidate={handlePasswordChange}
         errorMessage={passwordError ?? undefined}
       />
-    </>
+      <button type="submit">Sign In</button>
+    </form>
   );
 }
