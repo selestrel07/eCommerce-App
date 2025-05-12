@@ -2,7 +2,7 @@ import { getAnonymousId, getAnonymousApi } from '../services/authService';
 
 export async function testAnonymousSession() {
   const anonId = getAnonymousId();
-  console.log('Anonymous ID (из localStorage):', anonId);
+  console.log('Anonymous ID:', anonId);
 
   const apiRoot = getAnonymousApi();
   try {
