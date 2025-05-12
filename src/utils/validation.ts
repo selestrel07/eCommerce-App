@@ -1,4 +1,4 @@
-const MIN_NUMBER_PASSWORD = 8;
+const PASSWORD_MIN_LENGTH = 8;
 
 export const validatePassword = (password: string): string | null => {
   if (!password.trim()) return null;
@@ -7,7 +7,7 @@ export const validatePassword = (password: string): string | null => {
     return 'The password must not contain spaces at the beginning or end.';
   }
 
-  if (password.length < MIN_NUMBER_PASSWORD) {
+  if (password.length < PASSWORD_MIN_LENGTH) {
     return 'The password must be at least 8 characters long.';
   }
 
