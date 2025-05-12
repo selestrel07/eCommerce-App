@@ -9,41 +9,34 @@
 //   return <></>;
 // }
 
-import { useState, FormEvent } from 'react';
-import { loginCustomer } from '../../services/authService';
+import { ReactElement } from 'react';
+import useSignInLogic from '../../hooks/useSignInLogic';
 
-export default function LoginForm() {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
+interface SignInProps {
+  setSignedIn: (value: boolean) => void;
+}
 
-  async function handleLogin(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    try {
-      const result = await loginCustomer(email, password);
-      console.log('Logged in:', result);
-      setError(null);
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Unknown error';
-      setError(message);
-    }
-  }
-
+export default function SignIn({ setSignedIn }: SignInProps): ReactElement {
+  const { fields, error, handleChange, handleSubmit } = useSignInLogic(setSignedIn);
   return (
-    <form onSubmit={(e) => void handleLogin(e)}>
+    <form onSubmit={handleSubmit}>
       <input
+        name="email"
         type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={fields.email}
+        onChange={handleChange}
         placeholder="Email"
+        required
       />
       <input
+        name="password"
         type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Пароль"
+        value={fields.password}
+        onChange={handleChange}
+        placeholder="Password"
+        required
       />
-      <button type="submit">Sign in</button>
+      <button type="submit">Sign In</button>
       {error && <div className="error">{error}</div>}
     </form>
   );

@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { CustomerSignInResult } from '@commercetools/platform-sdk';
+import type { CustomerSignInResult, MyCustomerDraft } from '@commercetools/platform-sdk';
 import { createAnonymousClient, createCustomerClient, apiRootBuilder } from './clientBuilder';
 import { handleApiError } from './errorHandler';
 
-//Generate or get a permanent anonymousId from localStorage
+//In-memory anonymousId — reset on full page reload
 let anonIdCache: string | null = null;
 
 export function getAnonymousId(): string {
@@ -41,8 +41,19 @@ export async function loginCustomer(
   }
 }
 
-//Mapping authentication errors into human-readable messages
+//Sign up customer
+export async function signUpCustomer(draft: MyCustomerDraft): Promise<CustomerSignInResult> {
+  const apiRoot = getAnonymousApi();
+  try {
+    const httpResponse = await apiRoot.me().signup().post({ body: draft }).execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    const humanReadbleMsg = handleApiError(rawError);
+    throw new Error(humanReadbleMsg);
+  }
+}
 
+//Mapping authentication errors into human-readable messages
 function mapAuthError(error: unknown): Error {
   // If it is Error, we get its text
   const errMessage = error instanceof Error ? error.message : String(error);
