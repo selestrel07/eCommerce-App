@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import type { CustomerSignInResult, MyCustomerDraft } from '@commercetools/platform-sdk';
 import { createAnonymousClient, createCustomerClient, apiRootBuilder } from './clientBuilder';
 import { handleApiError } from './errorHandler';
+import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 
 //In-memory anonymousId — reset on full page reload
 let anonIdCache: string | null = null;
@@ -12,7 +13,8 @@ export function getAnonymousId(): string {
 }
 
 //Function for get Anonymous client
-let anonApiRoot = null as ReturnType<typeof apiRootBuilder> | null;
+// let anonApiRoot = null as ReturnType<typeof apiRootBuilder> | null;
+let anonApiRoot: ByProjectKeyRequestBuilder | null = null;
 
 export function getAnonymousApi() {
   if (!anonApiRoot) {
@@ -36,8 +38,8 @@ export async function loginCustomer(
     return httpResponse.body;
   } catch (rawError: unknown) {
     // Convert CommerceTools errors to readable ones
-    const humanReadbleMsg = handleApiError(rawError);
-    throw mapAuthError(humanReadbleMsg);
+    const humanReadableMsg = handleApiError(rawError);
+    throw mapAuthError(humanReadableMsg);
   }
 }
 
@@ -48,8 +50,8 @@ export async function signUpCustomer(draft: MyCustomerDraft): Promise<CustomerSi
     const httpResponse = await apiRoot.me().signup().post({ body: draft }).execute();
     return httpResponse.body;
   } catch (rawError: unknown) {
-    const humanReadbleMsg = handleApiError(rawError);
-    throw new Error(humanReadbleMsg);
+    const humanReadableMsg = handleApiError(rawError);
+    throw new Error(humanReadableMsg);
   }
 }
 

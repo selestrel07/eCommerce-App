@@ -16,3 +16,8 @@ export interface SignInProps {
 export interface SignUpProps {
   setSignedIn: (value: boolean) => void;
 }
+
+export interface Fields {
+  email: string;
+  password: string;
+}

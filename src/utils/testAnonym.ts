@@ -1,3 +1,4 @@
+// TODO: remove this file later
 import { getAnonymousId, getAnonymousApi } from '../services/authService';
 
 export async function testAnonymousSession() {

@@ -1,6 +1,5 @@
 import { ClientBuilder } from '@commercetools/sdk-client-v2';
 import type {
-  // AuthMiddlewareOptions,
   Client,
   HttpMiddlewareOptions,
   AnonymousAuthMiddlewareOptions,
@@ -8,23 +7,24 @@ import type {
 } from '@commercetools/sdk-client-v2';
 
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+import { EnvKey } from '../enums/env-keys';
 
 // Type checking of environment variables
-export const getEnvVariable = (name: string): string => {
-  const value = import.meta.env[name] as string;
+export const getEnvVariable = (key: EnvKey): string => {
+  const value = import.meta.env[key];
   if (typeof value !== 'string' || !value.trim()) {
-    throw new Error(`Missing or invalid environment variable: ${name}`);
+    throw new Error(`Missing or invalid environment variable: ${key}`);
   }
   return value;
 };
 
 // Get and check variables
-const projectKey = getEnvVariable('VITE_PROJECT_KEY');
-const clientId = getEnvVariable('VITE_CLIENT_ID');
-const clientSecret = getEnvVariable('VITE_CLIENT_SECRET');
-const authUrl = getEnvVariable('VITE_AUTH_URL');
-const apiUrl = getEnvVariable('VITE_API_URL');
-const scopes = getEnvVariable('VITE_SCOPES').split(' ');
+const projectKey = getEnvVariable(EnvKey.PROJECT_KEY);
+const clientId = getEnvVariable(EnvKey.CLIENT_ID);
+const clientSecret = getEnvVariable(EnvKey.CLIENT_SECRET);
+const authUrl = getEnvVariable(EnvKey.AUTH_URL);
+const apiUrl = getEnvVariable(EnvKey.API_URL);
+const scopes = getEnvVariable(EnvKey.SCOPES).split(' ');
 
 // HTTP-setting for all clients
 const httpMiddlewareOptions: HttpMiddlewareOptions = {

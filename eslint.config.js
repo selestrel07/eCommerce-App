@@ -15,7 +15,6 @@ export default tseslint.config(
     'node_modules',
     'public',
     '.eslintrc.*',
-    'vite.config.ts',
     '*.config.ts',
     ] },
   {

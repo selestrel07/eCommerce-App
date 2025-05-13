@@ -1,11 +1,7 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginCustomer } from '../services/authService';
-
-interface Fields {
-  email: string;
-  password: string;
-}
+import { Fields } from '../interfaces/interfaces';
 
 export default function useSignInLogic(setSignedIn: (value: boolean) => void) {
   const [fields, setFields] = useState<Fields>({ email: '', password: '' });
