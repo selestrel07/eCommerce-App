@@ -1,20 +1,6 @@
-// import { ReactElement } from 'react';
-
-// export default function SignIn({
-//   setSignedIn,
-// }: {
-//   setSignedIn: (value: boolean) => void;
-// }): ReactElement {
-//   setSignedIn(false); //TODO: remove after the page implementation
-//   return <></>;
-// }
-
 import { ReactElement } from 'react';
 import useSignInLogic from '../../hooks/useSignInLogic';
-
-interface SignInProps {
-  setSignedIn: (value: boolean) => void;
-}
+import { SignInProps } from '../../interfaces/interfaces';
 
 export default function SignIn({ setSignedIn }: SignInProps): ReactElement {
   const { fields, error, handleChange, handleSubmit } = useSignInLogic(setSignedIn);

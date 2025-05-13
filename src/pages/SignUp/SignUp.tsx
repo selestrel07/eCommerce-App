@@ -1,22 +1,8 @@
-// import { ReactElement } from 'react';
-
-// export default function SignUp({
-//   setSignedIn,
-// }: {
-//   setSignedIn: (value: boolean) => void;
-// }): ReactElement {
-//   setSignedIn(false); //TODO: remove after the page implementation
-//   return <></>;
-// }
-
 import { useState, FormEvent, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signUpCustomer } from '../../services/authService';
 import type { ReactElement } from 'react';
-
-interface SignUpProps {
-  setSignedIn: (value: boolean) => void;
-}
+import { SignUpProps } from '../../interfaces/interfaces';
 
 interface FormFields {
   email: string;

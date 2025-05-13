@@ -1,12 +1,4 @@
-interface ApiErrorBody {
-  statusCode?: number;
-  message?: string;
-  errors?: { code?: string; message?: string }[];
-}
-interface RawApiError extends Error {
-  statusCode?: number;
-  body?: ApiErrorBody;
-}
+import { RawApiError } from '../interfaces/interfaces';
 
 const HTTP_STATUS = {
   BAD_REQUEST: 400,
