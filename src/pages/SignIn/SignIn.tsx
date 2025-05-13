@@ -14,10 +14,12 @@ export default function SignIn({
 
   const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setPassword(e.target.value);
+    setPasswordError(null);
   };
 
   const handleEmailChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setEmail(e.target.value);
+    setEmailError(null);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -34,7 +36,6 @@ export default function SignIn({
     }
   };
 
-  setSignedIn(false); //TODO: remove after the page implementation
   return (
     <form className="login-form" onSubmit={handleSubmit}>
       <Input value={email} onChange={handleEmailChange} errorMessage={emailError ?? undefined} />
