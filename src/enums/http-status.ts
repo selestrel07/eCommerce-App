@@ -1,15 +1,8 @@
-const status400 = 400;
-const status401 = 401;
-const status403 = 403;
-const status404 = 404;
-const status409 = 409;
-const status500 = 500;
-
 export enum HttpStatus {
-  BAD_REQUEST = status400,
-  UNAUTHORIZED = status401,
-  FORBIDDEN = status403,
-  NOT_FOUND = status404,
-  CONFLICT = status409,
-  INTERNAL_SERVER_ERROR = status500,
+  BAD_REQUEST = 400,
+  UNAUTHORIZED = 401,
+  FORBIDDEN = 403,
+  NOT_FOUND = 404,
+  CONFLICT = 409,
+  INTERNAL_SERVER_ERROR = 500,
 }
