@@ -4,6 +4,8 @@ import { signUpCustomer } from '../../services/authService';
 import type { ReactElement } from 'react';
 import { SignUpProps } from '../../interfaces/interfaces';
 
+// TODO: remove this content later
+
 interface FormFields {
   email: string;
   firstName: string;
