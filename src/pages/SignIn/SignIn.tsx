@@ -1,6 +1,38 @@
 import { ReactElement, useState } from 'react';
 import { Input } from '../../components/Input/Input';
-import { validatePassword, validateEmail } from '../../utils/validation';
+import {
+  validatePassword,
+  validateEmail,
+  validateFields,
+  composeFieldValidationObject,
+} from '../../utils/validation';
+import { Button } from 'antd';
+import { loginCustomer } from '../../services/authService.ts';
+import Alert from 'antd/es/alert/Alert';
+import './SignIn.scss';
+import { composeFieldHandler } from '../../utils/handlers.ts';
+
+const handleSubmit = (
+  errors: string[],
+  email: string,
+  password: string,
+  signInCallback: (value: boolean) => void,
+  errorSetter: (value: string) => void
+) => {
+  return (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (errors.length === 0) {
+      loginCustomer(email, password)
+        .then(() => {
+          signInCallback(true);
+        })
+        .catch((error: Error) => {
+          errorSetter(error.message);
+        });
+    }
+  };
+};
 
 export default function SignIn({
   setSignedIn,
@@ -11,41 +43,45 @@ export default function SignIn({
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [responseError, setResponseError] = useState<string | null>(null);
 
-  const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setPassword(e.target.value);
-    setPasswordError(null);
-  };
+  const handlePasswordChange = composeFieldHandler(setPassword, [
+    setPasswordError,
+    setResponseError,
+  ]);
 
-  const handleEmailChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setEmail(e.target.value);
-    setEmailError(null);
-  };
+  const handleEmailChange = composeFieldHandler(setEmail, [setEmailError, setResponseError]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const emailValidationError = validateEmail(email);
-    const passwordValidationError = validatePassword(password);
-
-    setPasswordError(passwordValidationError);
-    setEmailError(emailValidationError);
-
-    if (!emailValidationError && !passwordValidationError) {
-      setSignedIn(true);
-    }
-  };
+  const getErrors = () =>
+    validateFields([
+      composeFieldValidationObject(email, validateEmail, setEmailError),
+      composeFieldValidationObject(password, validatePassword, setPasswordError),
+    ]);
 
   return (
-    <form className="login-form" onSubmit={handleSubmit}>
-      <Input value={email} onChange={handleEmailChange} errorMessage={emailError ?? undefined} />
+    <form
+      className="login-form"
+      onSubmit={handleSubmit(getErrors(), email, password, setSignedIn, setResponseError)}
+    >
       <Input
+        fieldName="Email:"
+        value={email}
+        onChange={handleEmailChange}
+        errorMessage={emailError ?? undefined}
+      />
+      <Input
+        fieldName="Password:"
         isPassword
         value={password}
         onChange={handlePasswordChange}
         errorMessage={passwordError ?? undefined}
       />
-      <button type="submit">Sign In</button>
+      <div className="login-form-controls">
+        {responseError ? <Alert type="error" message={responseError} /> : undefined}
+        <Button type="primary" htmlType="submit">
+          Sign In
+        </Button>
+      </div>
     </form>
   );
 }
