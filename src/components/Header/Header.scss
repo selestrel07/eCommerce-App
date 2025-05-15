@@ -3,6 +3,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100vw;
+  background-color: rgba(241, 241, 239, 0.58);
 }
 
 .logoLink {
@@ -18,15 +19,12 @@
 }
 
 .logoText {
-  color: #fff;
+  color: rgba(43, 39, 39, 0.87);
   font-size: 20px;
   font-weight: bold;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-// .ant-menu-dark .ant-menu-item-selected {
-//   background-color: transparent !important;
-//   color: #40a9ff !important;
-//   font-weight: bold;
-//   border-bottom: 2px solid #40a9ff;
-// }
+.ant-menu-light {
+  background-color: rgba(241, 241, 239, 0.58);
+}
