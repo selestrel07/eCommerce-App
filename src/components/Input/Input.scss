@@ -1,21 +1,14 @@
-.login-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100vh;
-  height: 100vh;
-  gap: 10px;
-}
-
 .input {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   width: 30vw;
+  min-width: 320px;
+  height: 65px;
   align-items: flex-start;
 }
 
 .error-message {
   color: red;
+  font-size: 0.7rem;
 }
