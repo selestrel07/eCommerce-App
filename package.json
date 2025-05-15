@@ -14,6 +14,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@commercetools/history-sdk": "^5.2.1",
     "@commercetools/importapi-sdk": "^6.1.1",
     "@commercetools/platform-sdk": "^8.9.0",
