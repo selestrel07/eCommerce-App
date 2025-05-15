@@ -1,7 +1,11 @@
+import dayjs from 'dayjs';
+
 const PASSWORD_MIN_LENGTH = 8;
+const MINIMUM_AGE = 13;
 
 export const validatePassword = (password: string): string | null => {
-  if (!password.trim()) return null;
+  if (!password.trim())
+    return 'The password is required and must not be empty or consist of whitespace only.';
 
   if (password !== password.trim()) {
     return 'The password must not contain spaces at the beginning or end.';
@@ -30,8 +34,27 @@ export const validatePassword = (password: string): string | null => {
   return null;
 };
 
+export const validateRepeatPassword = (
+  repeatPassword: string,
+  originalPassword: string
+): string | null => {
+  if (!repeatPassword.trim())
+    return 'The password confirmation is required and must not be empty or consist of whitespace only.';
+
+  if (repeatPassword !== repeatPassword.trim()) {
+    return 'The password confirmation must not contain spaces at the beginning or end.';
+  }
+
+  if (repeatPassword !== originalPassword) {
+    return 'Passwords do not match.';
+  }
+
+  return null;
+};
+
 export const validateEmail = (email: string): string | null => {
-  if (!email.trim()) return null;
+  if (!email.trim())
+    return 'Email is required and must not be empty or consist of whitespace only.';
 
   if (email !== email.trim()) {
     return 'The Email must not contain spaces at the beginning or end.';
@@ -56,3 +79,45 @@ export const validateEmail = (email: string): string | null => {
 
   return null;
 };
+export const validateName = (
+  value: string,
+  fieldName: 'first name' | 'last name'
+): string | null => {
+  if (!value.trim()) {
+    return `The ${fieldName} is required and must not be empty or consist of whitespace only.`;
+  }
+
+  if (value.length < 1) {
+    return `The ${fieldName} must be at least 1 character long.`;
+  }
+
+  if (/[!@#$%^&*]/.test(value)) {
+    return `The ${fieldName} must not contain special characters (!@#$%^&*).`;
+  }
+
+  if (/\d/.test(value)) {
+    return `The ${fieldName} must not contain digits.`;
+  }
+
+  return null;
+};
+
+export function validateDate(date: string | null): string | null {
+  if (!date) {
+    return 'Date is required';
+  }
+
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!regex.test(date)) {
+    return 'Invalid date format. Use YYYY-MM-DD.';
+  }
+
+  const selectedDate = dayjs(date);
+  const thirteenYearsAgo = dayjs().subtract(MINIMUM_AGE, 'years');
+
+  if (selectedDate.isAfter(thirteenYearsAgo)) {
+    return 'You must be at least 13 years old.';
+  }
+
+  return null;
+}
