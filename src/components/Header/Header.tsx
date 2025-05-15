@@ -3,24 +3,12 @@ import { Link, useLocation } from 'react-router-dom';
 import { MenuOutlined } from '@ant-design/icons';
 import { useMediaQuery } from 'react-responsive';
 import { useState } from 'react';
+import { getMenuItems } from './menuItems';
+import { AppHeaderProps } from '../../interfaces/interfaces';
 import logo from '../../assets/logo.png';
 import './Header.scss';
 
-const menuItems = (onClick?: () => void) => (
-  <>
-    <Menu.Item key="/main" onClick={onClick}>
-      <Link to="/main">Main</Link>
-    </Menu.Item>
-    <Menu.Item key="/signin" onClick={onClick}>
-      <Link to="/signin">Sign in</Link>
-    </Menu.Item>
-    <Menu.Item key="/signup" onClick={onClick}>
-      <Link to="/signup">Sign up</Link>
-    </Menu.Item>
-  </>
-);
-
-const AppHeader = () => {
+const AppHeader = ({ isSignedIn }: AppHeaderProps) => {
   const location = useLocation();
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -41,7 +29,7 @@ const AppHeader = () => {
           />
           <Drawer open={drawerVisible} onClose={() => setDrawerVisible(false)} title="Menu">
             <Menu mode="vertical" selectedKeys={[location.pathname]}>
-              {menuItems(() => setDrawerVisible(false))}
+              {getMenuItems(isSignedIn, () => setDrawerVisible(false))}
             </Menu>
           </Drawer>
         </>
@@ -51,7 +39,7 @@ const AppHeader = () => {
           selectedKeys={[location.pathname]}
           style={{ flex: 1, justifyContent: 'flex-end' }}
         >
-          {menuItems()}
+          {getMenuItems(isSignedIn)}
         </Menu>
       )}
     </Layout.Header>

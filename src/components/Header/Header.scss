@@ -4,10 +4,12 @@
   align-items: center;
   width: 100vw;
   background-color: rgba(241, 241, 239, 0.58);
+  border-bottom: 2px solid rgba(5, 5, 5, 0.06);
 }
 
 .logoLink {
   display: flex;
+  justify-content: right;
   align-items: center;
   text-decoration: none;
 }

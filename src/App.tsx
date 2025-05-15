@@ -8,7 +8,7 @@ export const App = () => {
   const [isSignedIn, setSignedIn] = useState<boolean>(false);
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AppHeader />
+      <AppHeader isSignedIn={isSignedIn} />
       <Layout.Content style={{ marginTop: 64, padding: '24px' }}>
         <AppRoutes isSignedIn={isSignedIn} setSignedIn={setSignedIn} />
       </Layout.Content>
