@@ -9,7 +9,14 @@ import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  { ignores: [
+    'dist',
+    'coverage',
+    'node_modules',
+    'public',
+    '.eslintrc.*',
+    '*.config.ts',
+    ] },
   {
     extends: [
       // Without js.configs.recommended
@@ -50,7 +57,7 @@ export default tseslint.config(
       '@/no-magic-numbers': [
         'warn',
         {
-          ignore: [0, 1, -1, 2, 10, 100, 1000],
+          ignore: [0, 1, -1, 2, 10, 100, 400, 401, 403, 404, 409, 500, 1000],
           ignoreArrayIndexes: true,
           enforceConst: true,
         },
