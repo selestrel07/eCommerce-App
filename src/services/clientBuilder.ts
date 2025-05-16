@@ -11,7 +11,7 @@ import { EnvKey } from '../enums/env-keys';
 
 // Type checking of environment variables
 export const getEnvVariable = (key: EnvKey): string => {
-  const value = import.meta.env[key] as string;
+  const value: unknown = import.meta.env[key];
   if (typeof value !== 'string' || !value.trim()) {
     throw new Error(`Missing or invalid environment variable: ${key}`);
   }
