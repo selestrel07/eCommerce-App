@@ -15,10 +15,8 @@ export default tseslint.config(
     'node_modules',
     'public',
     '.eslintrc.*',
-    'vite.config.ts',
     '*.config.ts',
-    ]
-  },
+    ] },
   {
     extends: [
       // Without js.configs.recommended
@@ -59,7 +57,7 @@ export default tseslint.config(
       '@/no-magic-numbers': [
         'warn',
         {
-          ignore: [0, 1, -1, 2, 10, 100, 1000],
+          ignore: [0, 1, -1, 2, 10, 100, 400, 401, 403, 404, 409, 500, 1000],
           ignoreArrayIndexes: true,
           enforceConst: true,
         },

@@ -10,12 +10,21 @@ interface InputProps {
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-export const Input: FC<InputProps> = ({ isPassword, errorMessage, ...props }) => {
+export const Input: FC<InputProps> = ({ isPassword, errorMessage, value, onChange, ...props }) => {
   const CustomInput = isPassword ? AntInput.Password : AntInput;
+
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    onChange?.(e);
+  };
 
   return (
     <div className="input">
-      <CustomInput {...props} {...(errorMessage ? { status: 'error' } : {})} />
+      <CustomInput
+        {...props}
+        value={value}
+        onChange={handleChange}
+        status={errorMessage ? 'error' : undefined}
+      />
       {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
