@@ -38,13 +38,6 @@ export const validateRepeatPassword = (
   repeatPassword: string,
   originalPassword: string
 ): string | null => {
-  if (!repeatPassword.trim())
-    return 'The password confirmation is required and must not be empty or consist of whitespace only.';
-
-  if (repeatPassword !== repeatPassword.trim()) {
-    return 'The password confirmation must not contain spaces at the beginning or end.';
-  }
-
   if (repeatPassword !== originalPassword) {
     return 'Passwords do not match.';
   }
