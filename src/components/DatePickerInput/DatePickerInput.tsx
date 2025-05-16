@@ -15,7 +15,7 @@ export const DatePickerInput: FC<DatePickerInputProps> = ({
   onChange,
   placeholder,
 }) => {
-  const handleDateChange = (date: Dayjs | null, dateString: string | string[]) => {
+  const handleDateChange = (_date: Dayjs | null, dateString: string | string[]) => {
     const selectedDate = Array.isArray(dateString) ? dateString[0] : dateString;
     onChange?.(selectedDate || null);
   };
