@@ -4,7 +4,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100vh;
+  width: 100%;
   height: 100vh;
   gap: 10px;
 }
@@ -13,10 +13,17 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  width: 30vw;
+  width: 100%;
   align-items: flex-start;
 }
 
 .error-message {
   color: red;
+}
+
+.row-name,
+.row-info {
+  display: flex;
+  gap: 20px;
+  width: 100%;
 }

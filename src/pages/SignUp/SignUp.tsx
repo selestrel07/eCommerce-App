@@ -89,30 +89,35 @@ export default function SignUp({
 
   return (
     <form className="signup-form" onSubmit={handleSubmit}>
-      <Input
-        value={firstName}
-        onChange={handleFirstNameChange}
-        errorMessage={firstNameError ?? undefined}
-        placeholder="First Name"
-      />
-      <Input
-        value={lastName}
-        onChange={handleLastNameChange}
-        errorMessage={lastNameError ?? undefined}
-        placeholder="Last Name"
-      />
-      <DatePickerInput
-        value={date}
-        onChange={handleDateChange}
-        errorMessage={dateError ?? undefined}
-        placeholder="Select your birth date"
-      />
-      <Input
-        value={email}
-        onChange={handleEmailChange}
-        errorMessage={emailError ?? undefined}
-        placeholder="Email"
-      />
+      <div className="row-name">
+        <Input
+          value={firstName}
+          onChange={handleFirstNameChange}
+          errorMessage={firstNameError ?? undefined}
+          placeholder="First Name"
+        />
+        <Input
+          value={lastName}
+          onChange={handleLastNameChange}
+          errorMessage={lastNameError ?? undefined}
+          placeholder="Last Name"
+        />
+      </div>
+      <div className="row-info">
+        <DatePickerInput
+          value={date}
+          onChange={handleDateChange}
+          errorMessage={dateError ?? undefined}
+          placeholder="Select your birth date"
+        />
+        <Input
+          value={email}
+          onChange={handleEmailChange}
+          errorMessage={emailError ?? undefined}
+          placeholder="Email"
+        />
+      </div>
+
       <Input
         isPassword
         value={password}
