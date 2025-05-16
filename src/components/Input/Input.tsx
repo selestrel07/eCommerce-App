@@ -3,7 +3,7 @@ import { ChangeEventHandler, FC } from 'react';
 import './Input.scss';
 
 interface InputProps {
-  fieldName: string;
+  fieldName?: string;
   errorMessage?: string;
   isPassword?: boolean;
   value?: string;
@@ -27,7 +27,7 @@ export const Input: FC<InputProps> = ({
 
   return (
     <div className="input">
-      <p>{fieldName}</p>
+      {fieldName ? <p>{fieldName}</p> : undefined}
       <CustomInput
         {...props}
         value={value}

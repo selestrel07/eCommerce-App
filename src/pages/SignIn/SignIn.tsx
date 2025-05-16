@@ -12,28 +12,6 @@ import Alert from 'antd/es/alert/Alert';
 import './SignIn.scss';
 import { composeFieldHandler } from '../../utils/handlers.ts';
 
-const handleSubmit = (
-  errors: string[],
-  email: string,
-  password: string,
-  signInCallback: (value: boolean) => void,
-  errorSetter: (value: string) => void
-) => {
-  return (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (errors.length === 0) {
-      loginCustomer(email, password)
-        .then(() => {
-          signInCallback(true);
-        })
-        .catch((error: Error) => {
-          errorSetter(error.message);
-        });
-    }
-  };
-};
-
 export default function SignIn({
   setSignedIn,
 }: {
@@ -58,11 +36,24 @@ export default function SignIn({
       composeFieldValidationObject(password, validatePassword, setPasswordError),
     ]);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const errors: string[] = getErrors();
+
+    if (errors.length === 0) {
+      loginCustomer(email, password)
+        .then(() => {
+          setSignedIn(true);
+        })
+        .catch((error: Error) => {
+          setResponseError(error.message);
+        });
+    }
+  };
+
   return (
-    <form
-      className="login-form"
-      onSubmit={handleSubmit(getErrors(), email, password, setSignedIn, setResponseError)}
-    >
+    <form className="login-form" onSubmit={handleSubmit}>
       <Input
         fieldName="Email:"
         value={email}
