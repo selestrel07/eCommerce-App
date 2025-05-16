@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { MenuProps } from 'antd';
+import { Paths } from '../../enums/paths/paths';
 
 type ItemType = Required<MenuProps>['items'][number];
 
@@ -7,7 +8,7 @@ export const getMenuItems = (isSignedIn: boolean, onClick?: () => void): ItemTyp
   const baseItems: ItemType[] = [
     {
       key: '/main',
-      label: <Link to="/main">Main</Link>,
+      label: <Link to={Paths.MAIN}>Main</Link>,
       onClick,
     },
   ];
@@ -16,29 +17,16 @@ export const getMenuItems = (isSignedIn: boolean, onClick?: () => void): ItemTyp
     return baseItems.concat([
       {
         key: '/signin',
-        label: <Link to="/signin">Sign in</Link>,
+        label: <Link to={Paths.SIGN_IN}>Sign in</Link>,
         onClick,
       },
       {
         key: '/signup',
-        label: <Link to="/signup">Sign up</Link>,
+        label: <Link to={Paths.SIGN_UP}>Sign up</Link>,
         onClick,
       },
     ]);
   }
-
-  return baseItems.concat([
-    {
-      key: '/profile',
-      label: <Link to="/profile">Profile</Link>,
-      onClick,
-    },
-    {
-      key: '/logout',
-      label: 'Logout',
-      onClick,
-    },
-  ]);
 
   return baseItems;
 };

@@ -7,6 +7,7 @@ import { getMenuItems } from './menuItems';
 import { AppHeaderProps } from '../../interfaces/interfaces';
 import logo from '../../assets/logo.png';
 import './Header.scss';
+import { Paths } from '../../enums/paths/paths';
 
 const AppHeader = ({ isSignedIn }: AppHeaderProps) => {
   const location = useLocation();
@@ -16,7 +17,7 @@ const AppHeader = ({ isSignedIn }: AppHeaderProps) => {
   return (
     <Layout.Header className="header">
       <div className="header-content">
-        <Link to="/" className="logo-link">
+        <Link to={Paths.MAIN} className="logo-link">
           <img src={logo} alt="Logo" className="logo-image" />
           <span className="logo-text">eCommerce-App</span>
         </Link>
@@ -30,6 +31,7 @@ const AppHeader = ({ isSignedIn }: AppHeaderProps) => {
             />
             <Drawer open={drawerVisible} onClose={() => setDrawerVisible(false)} title="Menu">
               <Menu
+                className="menu"
                 mode="vertical"
                 selectedKeys={[location.pathname]}
                 items={getMenuItems(isSignedIn, () => setDrawerVisible(false))}
@@ -38,9 +40,9 @@ const AppHeader = ({ isSignedIn }: AppHeaderProps) => {
           </>
         ) : (
           <Menu
+            className="menu"
             mode="horizontal"
             selectedKeys={[location.pathname]}
-            style={{ flex: 1, justifyContent: 'flex-end' }}
             items={getMenuItems(isSignedIn)}
           />
         )}
