@@ -1,0 +1,54 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: rgba(241, 241, 239, 0.58);
+  border-bottom: 2px solid rgba(5, 5, 5, 0.06);
+  height: 64px;
+  box-sizing: border-box;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.logo-link {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo-image {
+  width: 50px;
+  height: 50px;
+  margin-right: 8px;
+}
+
+.logo-text {
+  color: rgba(43, 39, 39, 0.87);
+  font-size: 20px;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.ant-menu-light {
+  background-color: rgba(241, 241, 239, 0.58);
+}
+
+:where(.css-dev-only-do-not-override-1m2bkf9).ant-layout-header {
+  padding: 0;
+}
+
+.menu {
+  flex: 1;
+  justify-content: flex-end;
+}

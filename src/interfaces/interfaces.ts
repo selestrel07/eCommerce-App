@@ -1,3 +1,7 @@
+export interface AppHeaderProps {
+  isSignedIn: boolean;
+}
+
 export interface ApiErrorBody {
   statusCode?: number;
   message?: string;
@@ -20,4 +24,10 @@ export interface SignUpProps {
 export interface Fields {
   email: string;
   password: string;
+}
+
+export interface FieldValidationObject {
+  value: string;
+  validationFunction: (value: string) => string | null;
+  errorSetter: (error: string) => void;
 }

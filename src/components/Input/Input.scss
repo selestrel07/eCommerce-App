@@ -8,17 +8,19 @@
   height: 100vh;
   gap: 10px;
 }
-
 .input {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  width: 100%;
+  gap: 5px;
+  width: 30vw;
+  min-width: 320px;
+  height: 65px;
   align-items: flex-start;
 }
 
 .error-message {
   color: red;
+  font-size: 0.7rem;
 }
 
 .row-name,

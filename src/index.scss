@@ -33,3 +33,10 @@ h1 {
   user-select: none;
   margin: 4rem 0 3rem 0;
 }
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+}

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { FieldValidationObject } from '../interfaces/interfaces.ts';
 
 const PASSWORD_MIN_LENGTH = 8;
 const MINIMUM_AGE = 13;
@@ -114,3 +115,28 @@ export function validateDate(date: string | null): string | null {
 
   return null;
 }
+
+export const composeFieldValidationObject = (
+  value: string,
+  validationFunction: (value: string) => string | null,
+  errorSetter: (error: string) => void
+): FieldValidationObject => {
+  return {
+    value,
+    validationFunction,
+    errorSetter,
+  };
+};
+
+export const validateFields = (fieldValidationObjects: FieldValidationObject[]): string[] => {
+  const validationErrors = [];
+  for (const validationObject of fieldValidationObjects) {
+    const error = validationObject.validationFunction(validationObject.value);
+    if (error) {
+      validationObject.errorSetter(error);
+      validationErrors.push(error);
+    }
+  }
+
+  return validationErrors;
+};
