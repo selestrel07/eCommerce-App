@@ -1,3 +1,7 @@
+export interface AppHeaderProps {
+  isSignedIn: boolean;
+}
+
 export interface ApiErrorBody {
   statusCode?: number;
   message?: string;
