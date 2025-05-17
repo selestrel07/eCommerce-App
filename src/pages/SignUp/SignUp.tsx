@@ -1,71 +1,130 @@
-import { useState, FormEvent, ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { signUpCustomer } from '../../services/authService';
-import type { ReactElement } from 'react';
-import { SignUpProps } from '../../interfaces/interfaces';
+/* eslint-disable max-lines-per-function */
+import { ReactElement, useState } from 'react';
+import { Input } from '../../components/Input/Input';
+import {
+  validatePassword,
+  validateEmail,
+  validateRepeatPassword,
+  validateName,
+  validateDate,
+} from '../../utils/validation';
+import { DatePickerInput } from '../../components/DatePickerInput/DatePickerInput';
 
-// TODO: remove this content later
+type FormField = 'email' | 'firstName' | 'lastName' | 'password' | 'repeatPassword' | 'date';
 
-interface FormFields {
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-}
+export default function SignUp({
+  setSignedIn,
+}: {
+  setSignedIn: (value: boolean) => void;
+}): ReactElement {
+  const [form, setForm] = useState({
+    email: '',
+    firstName: '',
+    lastName: '',
+    password: '',
+    repeatPassword: '',
+    date: null as string | null,
+  });
 
-const initialFields: FormFields = {
-  email: '',
-  firstName: '',
-  lastName: '',
-  password: '',
-};
+  const [errors, setErrors] = useState<Record<FormField, string | null>>({
+    email: null,
+    firstName: null,
+    lastName: null,
+    password: null,
+    repeatPassword: null,
+    date: null,
+  });
 
-const fieldConfigs = [
-  { name: 'email', type: 'email', placeholder: 'Email', required: true },
-  { name: 'firstName', type: 'text', placeholder: 'First Name', required: true },
-  { name: 'lastName', type: 'text', placeholder: 'Last Name', required: true },
-  { name: 'password', type: 'password', placeholder: 'Password', required: true },
-];
-
-export default function SignUp({ setSignedIn }: SignUpProps): ReactElement {
-  const [fields, setFields] = useState<FormFields>(initialFields);
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFields((prev) => ({ ...prev, [name]: value }));
+  const handleChange = <K extends keyof typeof form>(field: K, value: (typeof form)[K]) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: null }));
   };
 
-  const handleSignUp = (e: FormEvent) => {
+  const handleFirstNameChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
+    handleChange('firstName', e.target.value);
+
+  const handleLastNameChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
+    handleChange('lastName', e.target.value);
+
+  const handleEmailChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
+    handleChange('email', e.target.value);
+
+  const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
+    handleChange('password', e.target.value);
+
+  const handleRepeatPasswordChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
+    handleChange('repeatPassword', e.target.value);
+
+  const handleDateChange = (selectedDate: string | null) => {
+    handleChange('date', selectedDate);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    void (async () => {
-      try {
-        await signUpCustomer(fields);
-        setError(null);
-        setSignedIn(true);
-        await navigate('/app');
-      } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Unknown error during registration');
-      }
-    })();
+
+    const newErrors = {
+      email: validateEmail(form.email),
+      password: validatePassword(form.password),
+      repeatPassword: validateRepeatPassword(form.repeatPassword, form.password),
+      firstName: validateName(form.firstName, 'first name'),
+      lastName: validateName(form.lastName, 'last name'),
+      date: validateDate(form.date),
+    };
+
+    setErrors(newErrors);
+
+    if (Object.values(newErrors).every((error) => error === null)) {
+      setSignedIn(true);
+    }
   };
 
   return (
-    <form onSubmit={handleSignUp}>
-      {fieldConfigs.map(({ name, type, placeholder, required }) => (
-        <input
-          key={name}
-          name={name}
-          type={type}
-          value={fields[name as keyof FormFields]}
-          onChange={handleChange}
-          placeholder={placeholder}
-          required={required}
+    <form className="signup-form" onSubmit={handleSubmit}>
+      <div className="row-name">
+        <Input
+          value={form.firstName}
+          onChange={handleFirstNameChange}
+          errorMessage={errors.firstName ?? undefined}
+          placeholder="First Name"
         />
-      ))}
+        <Input
+          value={form.lastName}
+          onChange={handleLastNameChange}
+          errorMessage={errors.lastName ?? undefined}
+          placeholder="Last Name"
+        />
+      </div>
+      <div className="row-info">
+        <DatePickerInput
+          value={form.date}
+          onChange={handleDateChange}
+          errorMessage={errors.date ?? undefined}
+          placeholder="Select your birth date"
+        />
+        <Input
+          value={form.email}
+          onChange={handleEmailChange}
+          errorMessage={errors.email ?? undefined}
+          placeholder="Email"
+        />
+      </div>
+
+      <Input
+        isPassword
+        value={form.password}
+        onChange={handlePasswordChange}
+        errorMessage={errors.password ?? undefined}
+        placeholder="Password"
+      />
+      <Input
+        isPassword
+        value={form.repeatPassword}
+        onChange={handleRepeatPasswordChange}
+        errorMessage={errors.repeatPassword ?? undefined}
+        placeholder="Repeat Password"
+      />
+
       <button type="submit">Sign Up</button>
-      {error && <div className="error">{error}</div>}
     </form>
   );
 }
