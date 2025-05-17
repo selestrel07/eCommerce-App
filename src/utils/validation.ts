@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { FieldValidationObject } from '../interfaces/interfaces.ts';
+import { CountriesData } from '../data/countries/countries.ts';
 
 const PASSWORD_MIN_LENGTH = 8;
 const MINIMUM_AGE = 13;
@@ -73,12 +74,16 @@ export const validateEmail = (email: string): string | null => {
 
   return null;
 };
-export const validateName = (
+export const validateStringField = (
   value: string,
-  fieldName: 'first name' | 'last name'
+  fieldName: 'first name' | 'last name' | 'city' | 'street'
 ): string | null => {
   if (!value.trim()) {
     return `The ${fieldName} is required and must not be empty or consist of whitespace only.`;
+  }
+
+  if (value.trim() !== value) {
+    return `The ${fieldName} must not contain spaces at the beginning or end.`;
   }
 
   if (value.length < 1) {
@@ -115,6 +120,15 @@ export function validateDate(date: string | null): string | null {
 
   return null;
 }
+
+export const validatePostalCode = (value: string, country: string): string | null => {
+  const regex = Object.entries(CountriesData).find((key) => key[0] === country);
+  if (regex && !new RegExp(regex[1]).test(value)) {
+    return 'Invalid postal code format.';
+  }
+
+  return null;
+};
 
 export const composeFieldValidationObject = (
   value: string,
