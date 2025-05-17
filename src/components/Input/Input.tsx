@@ -3,6 +3,7 @@ import { ChangeEventHandler, FC } from 'react';
 import './Input.scss';
 
 interface InputProps {
+  fieldName?: string;
   errorMessage?: string;
   isPassword?: boolean;
   value?: string;
@@ -10,7 +11,14 @@ interface InputProps {
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-export const Input: FC<InputProps> = ({ isPassword, errorMessage, value, onChange, ...props }) => {
+export const Input: FC<InputProps> = ({
+  fieldName,
+  isPassword,
+  errorMessage,
+  value,
+  onChange,
+  ...props
+}) => {
   const CustomInput = isPassword ? AntInput.Password : AntInput;
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -19,6 +27,7 @@ export const Input: FC<InputProps> = ({ isPassword, errorMessage, value, onChang
 
   return (
     <div className="input">
+      {fieldName ? <p>{fieldName}</p> : undefined}
       <CustomInput
         {...props}
         value={value}

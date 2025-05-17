@@ -26,3 +26,9 @@ export interface Fields {
   email: string;
   password: string;
 }
+
+export interface FieldValidationObject {
+  value: string;
+  validationFunction: (value: string) => string | null;
+  errorSetter: (error: string) => void;
+}
