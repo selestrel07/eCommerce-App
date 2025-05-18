@@ -101,7 +101,7 @@ export const validateStringField = (
   return null;
 };
 
-export function validateDate(date: string | null): string | null {
+export function validateDate(date: string | undefined): string | null {
   if (!date) {
     return 'Date is required';
   }

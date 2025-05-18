@@ -10,16 +10,20 @@ import {
   validateStringField,
 } from '../../utils/validation';
 import { DatePickerInput } from '../../components/DatePickerInput/DatePickerInput';
-import { Typography } from 'antd';
+import { Button, Typography } from 'antd';
 import { Address } from '../../components/Address/Address.tsx';
 import { AddressErrorData } from '../../types/address/address-types.ts';
 import { CountriesData } from '../../data/countries/countries.ts';
 import { AddressFields } from '../../enums/address-fields/address-fields.ts';
 import { AddressData } from '../../interfaces/address/address.ts';
+import Alert from 'antd/es/alert/Alert';
+import { loginCustomer, signUpCustomer } from '../../services/authService.ts';
+import { Customer } from '../../interfaces/customer/customer.ts';
+import './SignUp.scss';
 
 const { Text } = Typography;
 
-type FormField = 'email' | 'firstName' | 'lastName' | 'password' | 'repeatPassword' | 'date';
+type FormField = 'email' | 'firstName' | 'lastName' | 'password' | 'repeatPassword' | 'dateOfBirth';
 
 export default function SignUp({
   setSignedIn,
@@ -32,7 +36,7 @@ export default function SignUp({
     lastName: '',
     password: '',
     repeatPassword: '',
-    date: null as string | null,
+    dateOfBirth: undefined as string | undefined,
   });
 
   const [errors, setErrors] = useState<Record<FormField, string | null>>({
@@ -41,21 +45,22 @@ export default function SignUp({
     lastName: null,
     password: null,
     repeatPassword: null,
-    date: null,
+    dateOfBirth: null,
   });
 
   const [address, setAddress] = useState<AddressData>({
     country: Object.keys(CountriesData)[0],
     city: '',
-    street: '',
+    streetName: '',
     postalCode: '',
   });
   const [addressErrors, setAddressErrors] = useState<AddressErrorData>({
-    country: '',
-    city: '',
-    street: '',
-    postalCode: '',
+    country: null,
+    city: null,
+    streetName: null,
+    postalCode: null,
   });
+  const [responseError, setResponseError] = useState<string | null>(null);
 
   const handleAddressChange = <K extends keyof AddressData>(field: K) => {
     return (event: ChangeEvent<HTMLInputElement>) => {
@@ -90,8 +95,8 @@ export default function SignUp({
   const handleRepeatPasswordChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
     handleChange('repeatPassword', e.target.value);
 
-  const handleDateChange = (selectedDate: string | null) => {
-    handleChange('date', selectedDate);
+  const handleDateChange = (selectedDate: string | undefined) => {
+    handleChange('dateOfBirth', selectedDate);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -103,21 +108,32 @@ export default function SignUp({
       repeatPassword: validateRepeatPassword(form.repeatPassword, form.password),
       firstName: validateStringField(form.firstName, 'first name'),
       lastName: validateStringField(form.lastName, 'last name'),
-      date: validateDate(form.date),
+      dateOfBirth: validateDate(form.dateOfBirth),
     };
 
     const newAddressErrors = {
-      country: '',
-      city: validateStringField(address.city || '', 'city'),
-      street: validateStringField(address.street || '', 'street'),
+      country: addressErrors.country,
+      city: validateStringField(address.city, 'city'),
+      streetName: validateStringField(address.streetName, 'street'),
       postalCode: validatePostalCode(address.postalCode, address.country),
     };
 
     setErrors(newErrors);
     setAddressErrors(newAddressErrors);
 
-    if (Object.values(newErrors).every((error) => error === null)) {
-      setSignedIn(true);
+    if (Object.values({ ...newErrors, ...newAddressErrors }).every((error) => error === null)) {
+      const customerData: Customer = {
+        ...form,
+        addresses: [address],
+      };
+      signUpCustomer(customerData)
+        .then(async () => {
+          await loginCustomer(form.email, form.password);
+        })
+        .then(() => setSignedIn(true))
+        .catch((error: Error) => {
+          setResponseError(error.message);
+        });
     }
   };
 
@@ -139,9 +155,9 @@ export default function SignUp({
       </div>
       <div className="row-info">
         <DatePickerInput
-          value={form.date}
+          value={form.dateOfBirth}
           onChange={handleDateChange}
-          errorMessage={errors.date ?? undefined}
+          errorMessage={errors.dateOfBirth ?? undefined}
           placeholder="Select your birth date"
         />
         <Input
@@ -169,14 +185,18 @@ export default function SignUp({
         />
       </div>
 
-      <Text>Address</Text>
+      <Text>Address:</Text>
       <Address
         addressErrors={addressErrors}
         onChange={handleAddressChange}
         onCountryChange={handleCountrySelect}
       />
-
-      <button type="submit">Sign Up</button>
+      <div className="form-controls">
+        {responseError ? <Alert type="error" message={responseError} /> : undefined}
+        <Button type="primary" htmlType="submit">
+          Sign Up
+        </Button>
+      </div>
     </form>
   );
 }

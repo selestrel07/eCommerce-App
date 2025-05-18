@@ -4,7 +4,7 @@ import dayjs, { Dayjs } from 'dayjs';
 
 interface DatePickerInputProps {
   value?: string | null;
-  onChange?: (date: string | null) => void;
+  onChange?: (date: string | undefined) => void;
   errorMessage?: string;
   placeholder?: string;
 }
@@ -17,7 +17,7 @@ export const DatePickerInput: FC<DatePickerInputProps> = ({
 }) => {
   const handleDateChange = (_date: Dayjs | null, dateString: string | string[]) => {
     const selectedDate = Array.isArray(dateString) ? dateString[0] : dateString;
-    onChange?.(selectedDate || null);
+    onChange?.(selectedDate || undefined);
   };
 
   return (

@@ -1,6 +1,6 @@
 export enum AddressFields {
   COUNTRY = 'country',
   CITY = 'city',
-  STREET = 'street',
+  STREET = 'streetName',
   POSTAL_CODE = 'postalCode',
 }

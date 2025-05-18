@@ -1,0 +1,29 @@
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin: 0 auto;
+  border: 2px solid rgb(193, 192, 192);
+  border-radius: 10px;
+  padding: 15px;
+
+  .row-name,
+  .row-info {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .signup-form {
+    margin: 20px auto;
+
+    .row-name,
+    .row-info {
+      flex-direction: column;
+    }
+  }
+}
