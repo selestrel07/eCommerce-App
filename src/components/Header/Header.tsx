@@ -53,13 +53,8 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
               className="menu"
               mode="horizontal"
               selectedKeys={[location.pathname]}
-              items={getMenuItems(isSignedIn)}
+              items={getMenuItems(isSignedIn, undefined, handleLogout)}
             />
-            {isSignedIn && (
-              <Button type="primary" onClick={handleLogout} style={{ marginLeft: '1rem' }}>
-                Logout
-              </Button>
-            )}
           </>
         )}
       </div>
