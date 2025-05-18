@@ -17,7 +17,6 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
 
   const navigate = useNavigate();
   const handleLogout = () => {
-    localStorage.removeItem('token');
     setSignedIn(false);
     void navigate(Paths.SIGN_IN);
   };
