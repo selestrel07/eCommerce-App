@@ -1,17 +1,7 @@
-.login-form,
-.signup-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 7px;
-  margin: 0 auto;
-}
 .input {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  width: 30vw;
   min-width: 320px;
   height: 65px;
   align-items: flex-start;
@@ -20,11 +10,4 @@
 .error-message {
   color: red;
   font-size: 0.7rem;
-}
-
-.row-name,
-.row-info {
-  display: flex;
-  gap: 20px;
-  width: 100%;
 }

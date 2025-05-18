@@ -67,7 +67,7 @@ export default function SignIn({
         onChange={handlePasswordChange}
         errorMessage={passwordError ?? undefined}
       />
-      <div className="login-form-controls">
+      <div className="form-controls">
         {responseError ? <Alert type="error" message={responseError} /> : undefined}
         <Button type="primary" htmlType="submit">
           Sign In

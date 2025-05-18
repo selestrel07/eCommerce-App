@@ -12,6 +12,6 @@ export interface AddressProps {
 export interface AddressData {
   country: string;
   city: string;
-  street: string;
+  streetName: string;
   postalCode: string;
 }

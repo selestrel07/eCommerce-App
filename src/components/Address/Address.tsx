@@ -23,7 +23,7 @@ export const Address: FC<AddressProps> = ({ addressErrors, onChange, onCountryCh
       <div className="address-row">
         <Input
           placeholder="Street"
-          errorMessage={addressErrors.street ?? undefined}
+          errorMessage={addressErrors.streetName ?? undefined}
           onChange={handleStreetChange}
         />
         <Input
