@@ -71,16 +71,4 @@ describe('App Routes Tests empty or unknown pathname', () => {
 
     expect(history.location.pathname).toBe(Paths.MAIN);
   });
-
-  it('Should redirect user to the error page if unknown pathname was provided', () => {
-    const history = createMemoryHistory();
-    history.push('/some-unknown-pathname');
-    render(
-      <Router location={history.location} navigator={history}>
-        <AppRoutes isSignedIn={false} setSignedIn={fakeSetSignedInFunction} />
-      </Router>
-    );
-
-    expect(history.location.pathname).toBe(Paths.NOT_FOUND);
-  });
 });

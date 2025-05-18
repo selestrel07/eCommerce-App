@@ -29,8 +29,7 @@ export default function AppRoutes({
         }
       />
       <Route path={Paths.MAIN} element={<Home />} />
-      <Route path={Paths.NOT_FOUND} element={<NotFound />} />
-      <Route path={Paths.ANY} element={<Navigate to={Paths.NOT_FOUND} replace />} />
+      <Route path={Paths.ANY} element={<NotFound />} />
     </Routes>
   );
 }
