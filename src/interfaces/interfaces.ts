@@ -13,19 +13,6 @@ export interface RawApiError extends Error {
   body?: ApiErrorBody;
 }
 
-export interface SignInProps {
-  setSignedIn: (value: boolean) => void;
-}
-
-export interface SignUpProps {
-  setSignedIn: (value: boolean) => void;
-}
-
-export interface Fields {
-  email: string;
-  password: string;
-}
-
 export interface FieldValidationObject {
   value: string;
   validationFunction: (value: string) => string | null;

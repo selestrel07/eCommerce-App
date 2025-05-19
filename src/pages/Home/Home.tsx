@@ -1,5 +1,11 @@
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
+import { Client } from '@commercetools/sdk-client-v2';
+import { loadProducts } from '../../services/api.service.ts';
 
-export default function Home(): ReactElement {
+export default function Home({ apiClient }: { apiClient: Client }): ReactElement {
+  useEffect(() => {
+    void loadProducts(apiClient);
+  }, [apiClient]);
+
   return <></>;
 }

@@ -11,11 +11,18 @@ import { loginCustomer } from '../../services/authService.ts';
 import Alert from 'antd/es/alert/Alert';
 import './SignIn.scss';
 import { composeFieldHandler } from '../../utils/handlers.ts';
+import { Client } from '@commercetools/sdk-client-v2';
+import { createCustomerClient } from '../../services/clientBuilder.ts';
+import { setAnonymousClient } from '../../services/storage/storage.service.ts';
 
 export default function SignIn({
   setSignedIn,
+  apiClient,
+  setApiClient,
 }: {
   setSignedIn: (value: boolean) => void;
+  apiClient: Client;
+  setApiClient: (client: Client) => void;
 }): ReactElement {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -42,8 +49,11 @@ export default function SignIn({
     const errors: string[] = getErrors();
 
     if (errors.length === 0) {
-      loginCustomer(email, password)
+      const newApiClient = createCustomerClient(email, password);
+      loginCustomer(email, password, newApiClient)
         .then(() => {
+          setAnonymousClient(apiClient);
+          setApiClient(newApiClient);
           setSignedIn(true);
         })
         .catch((error: Error) => {
