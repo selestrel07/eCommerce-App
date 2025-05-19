@@ -2,7 +2,7 @@ import './App.scss';
 import AppRoutes from './routes/AppRoutes.tsx';
 import { Layout } from 'antd';
 import AppHeader from './components/Header/Header';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import '@ant-design/v5-patch-for-react-19';
 import {
   deleteCustomerToken,
@@ -13,7 +13,6 @@ import { Client } from '@commercetools/sdk-client-v2';
 import { createAnonymousClient, createRefreshTokenClient } from './services/clientBuilder.ts';
 import { getAnonymousId } from './services/authService.ts';
 import { tokenCache } from './services/storage/storage.service.ts';
-import { loadProducts } from './services/api.service.ts';
 import { isTokenStore } from './types/token-store/token-store.ts';
 
 export const App = () => {
@@ -35,10 +34,6 @@ export const App = () => {
       saveCustomerToken();
     }
   });
-
-  useEffect(() => {
-    void loadProducts(client);
-  }, []);
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
