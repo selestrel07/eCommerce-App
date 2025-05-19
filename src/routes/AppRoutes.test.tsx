@@ -1,11 +1,15 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import AppRoutes from './AppRoutes.tsx';
 import { render } from '@testing-library/react';
 import { Paths } from '../enums/paths/paths.ts';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
+import { createAnonymousClient } from '../services/clientBuilder.ts';
+import { getAnonymousId } from '../services/authService.ts';
 
-const fakeSetSignedInFunction = (value: boolean) => (value = !value);
+const mockSetSignedIn = vi.fn();
+const mockSetClient = vi.fn();
+const client = createAnonymousClient(getAnonymousId());
 
 describe('App Routes Tests authorized user', () => {
   it('Should redirect authorized user from the Sign in page to the Main page', () => {
@@ -13,7 +17,12 @@ describe('App Routes Tests authorized user', () => {
     history.push(Paths.SIGN_IN);
     render(
       <Router location={history.location} navigator={history}>
-        <AppRoutes isSignedIn={true} setSignedIn={fakeSetSignedInFunction} />
+        <AppRoutes
+          isSignedIn={true}
+          setSignedIn={mockSetSignedIn}
+          apiClient={client}
+          setApiClient={mockSetClient}
+        />
       </Router>
     );
 
@@ -25,7 +34,12 @@ describe('App Routes Tests authorized user', () => {
     history.push(Paths.SIGN_UP);
     render(
       <Router location={history.location} navigator={history}>
-        <AppRoutes isSignedIn={true} setSignedIn={fakeSetSignedInFunction} />
+        <AppRoutes
+          isSignedIn={true}
+          setSignedIn={mockSetSignedIn}
+          apiClient={client}
+          setApiClient={mockSetClient}
+        />
       </Router>
     );
 
@@ -39,7 +53,12 @@ describe('App Routes Tests non-authorized user', () => {
     history.push(Paths.SIGN_IN);
     render(
       <Router location={history.location} navigator={history}>
-        <AppRoutes isSignedIn={false} setSignedIn={fakeSetSignedInFunction} />
+        <AppRoutes
+          isSignedIn={false}
+          setSignedIn={mockSetSignedIn}
+          apiClient={client}
+          setApiClient={mockSetClient}
+        />
       </Router>
     );
 
@@ -51,7 +70,12 @@ describe('App Routes Tests non-authorized user', () => {
     history.push(Paths.SIGN_UP);
     render(
       <Router location={history.location} navigator={history}>
-        <AppRoutes isSignedIn={false} setSignedIn={fakeSetSignedInFunction} />
+        <AppRoutes
+          isSignedIn={false}
+          setSignedIn={mockSetSignedIn}
+          apiClient={client}
+          setApiClient={mockSetClient}
+        />
       </Router>
     );
 
@@ -65,7 +89,12 @@ describe('App Routes Tests empty or unknown pathname', () => {
     history.push(Paths.EMPTY);
     render(
       <Router location={history.location} navigator={history}>
-        <AppRoutes isSignedIn={false} setSignedIn={fakeSetSignedInFunction} />
+        <AppRoutes
+          isSignedIn={false}
+          setSignedIn={mockSetSignedIn}
+          apiClient={client}
+          setApiClient={mockSetClient}
+        />
       </Router>
     );
 
