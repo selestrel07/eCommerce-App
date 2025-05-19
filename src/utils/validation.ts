@@ -6,8 +6,11 @@ const PASSWORD_MIN_LENGTH = 8;
 const MINIMUM_AGE = 13;
 
 export const validatePassword = (password: string): string | null => {
-  if (!password.trim())
-    return 'The password is required and must not be empty or consist of whitespace only.';
+  if (!password) return 'The password is required.';
+
+  if (!password.trim()) {
+    return 'The password must not consist only of spaces.';
+  }
 
   if (password !== password.trim()) {
     return 'The password must not contain spaces at the beginning or end.';
@@ -48,8 +51,11 @@ export const validateRepeatPassword = (
 };
 
 export const validateEmail = (email: string): string | null => {
-  if (!email.trim())
-    return 'Email is required and must not be empty or consist of whitespace only.';
+  if (!email) return 'Email is required.';
+
+  if (!email.trim()) {
+    return 'Email must not consist only of spaces.';
+  }
 
   if (email !== email.trim()) {
     return 'The Email must not contain spaces at the beginning or end.';
@@ -78,8 +84,10 @@ export const validateStringField = (
   value: string,
   fieldName: 'first name' | 'last name' | 'city' | 'street'
 ): string | null => {
+  if (!value) return `The ${fieldName} is required.`;
+
   if (!value.trim()) {
-    return `The ${fieldName} is required and must not be empty or consist of whitespace only.`;
+    return `The ${fieldName} must not consist only of spaces.`;
   }
 
   if (value.trim() !== value) {
