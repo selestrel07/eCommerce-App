@@ -1,6 +1,7 @@
 import { Input as AntInput } from 'antd';
 import { ChangeEventHandler, FC } from 'react';
 import './Input.scss';
+import Alert from 'antd/es/alert/Alert';
 
 interface InputProps {
   fieldName?: string;
@@ -34,7 +35,7 @@ export const Input: FC<InputProps> = ({
         onChange={handleChange}
         status={errorMessage ? 'error' : undefined}
       />
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {errorMessage && <Alert type="error" message={errorMessage} />}
     </div>
   );
 };

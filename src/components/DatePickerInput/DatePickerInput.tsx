@@ -1,6 +1,7 @@
 import { DatePicker as AntDatePicker } from 'antd';
 import { FC } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
+import Alert from 'antd/es/alert/Alert';
 
 interface DatePickerInputProps {
   value?: string | null;
@@ -29,7 +30,7 @@ export const DatePickerInput: FC<DatePickerInputProps> = ({
         onChange={handleDateChange}
         placeholder={placeholder}
       />
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {errorMessage && <Alert type="error" message={errorMessage} />}
     </div>
   );
 };
