@@ -20,6 +20,9 @@ import Alert from 'antd/es/alert/Alert';
 import { loginCustomer, signUpCustomer } from '../../services/authService.ts';
 import { Customer } from '../../interfaces/customer/customer.ts';
 import './SignUp.scss';
+import { Client } from '@commercetools/sdk-client-v2';
+import { createCustomerClient } from '../../services/clientBuilder.ts';
+import { setAnonymousClient } from '../../services/storage/storage.service.ts';
 
 const { Text } = Typography;
 
@@ -27,8 +30,12 @@ type FormField = 'email' | 'firstName' | 'lastName' | 'password' | 'repeatPasswo
 
 export default function SignUp({
   setSignedIn,
+  apiClient,
+  setApiClient,
 }: {
   setSignedIn: (value: boolean) => void;
+  apiClient: Client;
+  setApiClient: (client: Client) => void;
 }): ReactElement {
   const [form, setForm] = useState({
     email: '',
@@ -126,9 +133,12 @@ export default function SignUp({
         ...form,
         addresses: [address],
       };
-      signUpCustomer(customerData)
+      signUpCustomer(customerData, apiClient)
         .then(async () => {
-          await loginCustomer(form.email, form.password);
+          const newApiClient = createCustomerClient(form.email, form.password);
+          await loginCustomer(form.email, form.password, newApiClient);
+          setAnonymousClient(apiClient);
+          setApiClient(newApiClient);
         })
         .then(() => setSignedIn(true))
         .catch((error: Error) => {

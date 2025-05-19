@@ -4,10 +4,13 @@ import type {
   HttpMiddlewareOptions,
   AnonymousAuthMiddlewareOptions,
   PasswordAuthMiddlewareOptions,
+  RefreshAuthMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
 
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import { EnvKey } from '../enums/env-keys';
+import { TokenCache, TokenStore } from '@commercetools/ts-client';
+import { tokenCache } from './storage/storage.service.ts';
 
 // Type checking of environment variables
 export const getEnvVariable = (key: EnvKey): string => {
@@ -19,10 +22,10 @@ export const getEnvVariable = (key: EnvKey): string => {
 };
 
 // Get and check variables
-const projectKey = getEnvVariable(EnvKey.PROJECT_KEY);
-const clientId = getEnvVariable(EnvKey.CLIENT_ID);
+export const projectKey = getEnvVariable(EnvKey.PROJECT_KEY);
+export const clientId = getEnvVariable(EnvKey.CLIENT_ID);
 const clientSecret = getEnvVariable(EnvKey.CLIENT_SECRET);
-const authUrl = getEnvVariable(EnvKey.AUTH_URL);
+export const authUrl = getEnvVariable(EnvKey.AUTH_URL);
 const apiUrl = getEnvVariable(EnvKey.API_URL);
 const scopes = getEnvVariable(EnvKey.SCOPES).split(' ');
 
@@ -53,7 +56,6 @@ export function createAnonymousClient(anonymousId?: string): Client {
     .withAnonymousSessionFlow(anonOptions)
     .withProjectKey(projectKey)
     .withHttpMiddleware(httpMiddlewareOptions)
-    .withLoggerMiddleware()
     .build();
 }
 
@@ -68,6 +70,7 @@ export function createCustomerClient(username: string, password: string): Client
       user: { username, password },
     },
     scopes,
+    tokenCache,
     fetch: window.fetch.bind(window),
   };
 
@@ -75,7 +78,29 @@ export function createCustomerClient(username: string, password: string): Client
     .withPasswordFlow(passOptions)
     .withProjectKey(projectKey)
     .withHttpMiddleware(httpMiddlewareOptions)
-    .withLoggerMiddleware()
+    .build();
+}
+
+// Client for customer (refresh token flow)
+export function createRefreshTokenClient(tokenCache: TokenCache): Client {
+  const tokenStore: TokenStore = tokenCache.get();
+  const refreshToken = tokenStore.refreshToken ?? '';
+  const options: RefreshAuthMiddlewareOptions = {
+    host: authUrl,
+    projectKey,
+    credentials: {
+      clientId,
+      clientSecret,
+    },
+    refreshToken,
+    tokenCache,
+    fetch,
+  };
+
+  return new ClientBuilder()
+    .withRefreshTokenFlow(options)
+    .withProjectKey(projectKey)
+    .withHttpMiddleware(httpMiddlewareOptions)
     .build();
 }
 

@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { CustomerSignInResult, MyCustomerDraft } from '@commercetools/platform-sdk';
-import { createAnonymousClient, createCustomerClient, apiRootBuilder } from './clientBuilder';
+import { apiRootBuilder } from './clientBuilder';
 import { handleApiError } from './errorHandler';
-import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
+import { Client } from '@commercetools/sdk-client-v2';
 
 //In-memory anonymousId — reset on full page reload
 let anonIdCache: string | null = null;
@@ -12,24 +12,12 @@ export function getAnonymousId(): string {
   return anonIdCache;
 }
 
-//Function for get Anonymous client
-// let anonApiRoot = null as ReturnType<typeof apiRootBuilder> | null;
-let anonApiRoot: ByProjectKeyRequestBuilder | null = null;
-
-export function getAnonymousApi() {
-  if (!anonApiRoot) {
-    const client = createAnonymousClient(getAnonymousId());
-    anonApiRoot = apiRootBuilder(client);
-  }
-  return anonApiRoot;
-}
-
 //Login customer with Email + password
 export async function loginCustomer(
   email: string,
-  password: string
+  password: string,
+  client: Client
 ): Promise<CustomerSignInResult> {
-  const client = createCustomerClient(email, password);
   const apiRoot = apiRootBuilder(client);
 
   try {
@@ -44,8 +32,11 @@ export async function loginCustomer(
 }
 
 //Sign up customer
-export async function signUpCustomer(draft: MyCustomerDraft): Promise<CustomerSignInResult> {
-  const apiRoot = getAnonymousApi();
+export async function signUpCustomer(
+  draft: MyCustomerDraft,
+  client: Client
+): Promise<CustomerSignInResult> {
+  const apiRoot = apiRootBuilder(client);
   try {
     const httpResponse = await apiRoot.me().signup().post({ body: draft }).execute();
     return httpResponse.body;
@@ -56,7 +47,7 @@ export async function signUpCustomer(draft: MyCustomerDraft): Promise<CustomerSi
 }
 
 //Mapping authentication errors into human-readable messages
-function mapAuthError(error: unknown): Error {
+export function mapAuthError(error: unknown): Error {
   // If it is Error, we get its text
   const errMessage = error instanceof Error ? error.message : String(error);
 
