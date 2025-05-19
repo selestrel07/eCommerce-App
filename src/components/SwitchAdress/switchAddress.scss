@@ -5,3 +5,10 @@
   align-items: center;
   justify-content: space-around;
 }
+
+@media (max-width: 900px) {
+  .switch-group {
+    display: flex;
+    flex-direction: column;
+  }
+}

@@ -24,6 +24,7 @@ const SwitchAddress: React.FC<SwitchAddressProps> = ({ onChange }) => {
       <div className="switch-item">
         <span>Set as default address shipping</span>
         <Switch
+          aria-label="Default shipping address"
           checked={defaultAddresses.defaultShipping}
           onChange={(checked: boolean) => handleSwitchChange('shipping', checked)}
         />
@@ -31,6 +32,7 @@ const SwitchAddress: React.FC<SwitchAddressProps> = ({ onChange }) => {
       <div className="switch-item">
         <span>Set as default address billing</span>
         <Switch
+          aria-label="Default billing address"
           checked={defaultAddresses.defaultBilling}
           onChange={(checked: boolean) => handleSwitchChange('billing', checked)}
         />
