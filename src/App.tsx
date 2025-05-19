@@ -14,9 +14,9 @@ export const App = () => {
   }, []);
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout>
       <AppHeader isSignedIn={isSignedIn} setSignedIn={setSignedIn} />
-      <Layout.Content style={{ marginTop: 64, padding: '24px' }}>
+      <Layout.Content>
         <AppRoutes isSignedIn={isSignedIn} setSignedIn={setSignedIn} />
       </Layout.Content>
     </Layout>

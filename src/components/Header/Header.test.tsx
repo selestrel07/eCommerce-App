@@ -16,7 +16,7 @@ vi.mock('react-router-dom', async () => {
 const mockNavigate = vi.fn();
 
 describe('AppHeader', () => {
-  it('calls setSignedIn(false) and navigates on logout (desktop)', () => {
+  it('cCalls setSignedIn(false) and navigates to the Sign In page (desktop)', () => {
     const mockSetSignedIn = vi.fn();
 
     vi.mock('react-responsive', () => ({

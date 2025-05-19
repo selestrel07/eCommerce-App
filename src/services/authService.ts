@@ -3,7 +3,6 @@ import type { CustomerSignInResult, MyCustomerDraft } from '@commercetools/platf
 import { createAnonymousClient, createCustomerClient, apiRootBuilder } from './clientBuilder';
 import { handleApiError } from './errorHandler';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
-// import { authUrl, clientId, clientSecret } from './clientBuilder';
 
 //In-memory anonymousId — reset on full page reload
 let anonIdCache: string | null = null;
@@ -80,21 +79,3 @@ function mapAuthError(error: unknown): Error {
 
   return new Error('Unknown error during authentication');
 }
-
-//Logout, if we want to save token in LocalStorage or SessionStorage
-
-// export async function logoutCustomer(accessToken: string): Promise<void> {
-//   const revokeUrl = `${authUrl}/oauth/token/revoke`;
-//   try {
-//     await fetch(revokeUrl, {
-//       method: 'POST',
-//       headers: {
-//         Authrization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
-//         'Content-Type': 'application/x-www-form-urlencoded',
-//       },
-//       body: `token=${encodeURIComponent(accessToken)}`,
-//     });
-//   } catch (error) {
-//     console.error('Failed to revoke token:', error);
-//   }
-// }

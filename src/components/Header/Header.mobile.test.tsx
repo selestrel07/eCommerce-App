@@ -18,7 +18,7 @@ vi.mock('react-responsive', () => ({
 }));
 
 describe('AppHeader (mobile)', () => {
-  it('calls setSignedIn(false) and navigates on logout from drawer menu', async () => {
+  it('Calls setSignedIn(false) and navigates to the Sign In page from drawer menu', async () => {
     const mockSetSignedIn = vi.fn();
 
     render(
