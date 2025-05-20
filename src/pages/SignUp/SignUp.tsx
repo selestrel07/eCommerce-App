@@ -164,13 +164,20 @@ export default function SignUp({
       ...Object.values(billingErrorsValidated),
     ].some((e) => e !== null);
 
-    const finalBillingAddress = sameAddress ? shippingAddress : billingAddress;
+    // const finalBillingAddress = sameAddress ? shippingAddress : billingAddress;
     if (!formHasErrors) {
+      const addresses = sameAddress ? [shippingAddress] : [shippingAddress, billingAddress];
       const customerData: MyCustomerDraft = {
         ...form,
-        addresses: [shippingAddress, finalBillingAddress],
+        addresses,
+        shippingAddresses: [0], // Правильное поле из документации
+        billingAddresses: sameAddress ? [0] : [1], // Правильное поле из документации
         defaultShippingAddress: defaultAddressFlags.defaultShipping ? 0 : undefined,
-        defaultBillingAddress: defaultAddressFlags.defaultBilling ? 1 : undefined,
+        defaultBillingAddress: defaultAddressFlags.defaultBilling
+          ? sameAddress
+            ? 0
+            : 1
+          : undefined,
       };
 
       signUpCustomer(customerData)
