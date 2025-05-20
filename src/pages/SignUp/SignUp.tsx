@@ -14,11 +14,9 @@ import { Button, Typography } from 'antd';
 import { Address } from '../../components/Address/Address.tsx';
 import { AddressErrorData } from '../../types/address/address-types.ts';
 import { CountriesData } from '../../data/countries/countries.ts';
-// import { AddressFields } from '../../enums/address-fields/address-fields.ts';
 import { AddressData } from '../../interfaces/address/address.ts';
 import Alert from 'antd/es/alert/Alert';
 import { loginCustomer, signUpCustomer } from '../../services/authService.ts';
-// import { Customer } from '../../interfaces/customer/customer.ts';
 import './SignUp.scss';
 import SwitchAddress from '../../components/SwitchAdress/switchAddress.tsx';
 import type { MyCustomerDraft } from '@commercetools/platform-sdk';
@@ -164,14 +162,13 @@ export default function SignUp({
       ...Object.values(billingErrorsValidated),
     ].some((e) => e !== null);
 
-    // const finalBillingAddress = sameAddress ? shippingAddress : billingAddress;
     if (!formHasErrors) {
       const addresses = sameAddress ? [shippingAddress] : [shippingAddress, billingAddress];
       const customerData: MyCustomerDraft = {
         ...form,
         addresses,
-        shippingAddresses: [0], // Правильное поле из документации
-        billingAddresses: sameAddress ? [0] : [1], // Правильное поле из документации
+        shippingAddresses: [0],
+        billingAddresses: sameAddress ? [0] : [1],
         defaultShippingAddress: defaultAddressFlags.defaultShipping ? 0 : undefined,
         defaultBillingAddress: defaultAddressFlags.defaultBilling
           ? sameAddress
