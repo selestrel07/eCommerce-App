@@ -24,7 +24,7 @@ export const getEnvVariable = (key: EnvKey): string => {
 // Get and check variables
 export const projectKey = getEnvVariable(EnvKey.PROJECT_KEY);
 export const clientId = getEnvVariable(EnvKey.CLIENT_ID);
-const clientSecret = getEnvVariable(EnvKey.CLIENT_SECRET);
+export const clientSecret = getEnvVariable(EnvKey.CLIENT_SECRET);
 export const authUrl = getEnvVariable(EnvKey.AUTH_URL);
 const apiUrl = getEnvVariable(EnvKey.API_URL);
 const scopes = getEnvVariable(EnvKey.SCOPES).split(' ');
