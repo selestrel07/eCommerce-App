@@ -37,7 +37,7 @@ export const App = () => {
 
   return (
     <Layout>
-      <AppHeader isSignedIn={isSignedIn} />
+      <AppHeader isSignedIn={isSignedIn} setSignedIn={setSignedIn} />
       <Layout.Content>
         <AppRoutes
           isSignedIn={isSignedIn}

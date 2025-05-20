@@ -9,6 +9,8 @@ import logo from '../../assets/logo.png';
 import './Header.scss';
 import { Paths } from '../../enums/paths/paths';
 import { useNavigate } from 'react-router-dom';
+import { emptyTokenStore, tokenCache } from '../../services/storage/storage.service.ts';
+import { revokeToken } from '../../services/authService.ts';
 
 const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
   const location = useLocation();
@@ -19,6 +21,8 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
   const handleLogout = () => {
     setSignedIn(false);
     void navigate(Paths.SIGN_IN);
+    void revokeToken(tokenCache.get().token);
+    tokenCache.set(emptyTokenStore);
   };
   return (
     <Layout.Header className="header">
