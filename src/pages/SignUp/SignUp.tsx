@@ -19,8 +19,8 @@ import Alert from 'antd/es/alert/Alert';
 import { loginCustomer, signUpCustomer } from '../../services/authService.ts';
 import './SignUp.scss';
 import SwitchAddress from '../../components/SwitchAdress/switchAddress.tsx';
-import type { MyCustomerDraft } from '@commercetools/platform-sdk';
 import { Switch } from 'antd';
+import { AppCustomerDraft } from '../../interfaces/customer/customer.ts';
 
 const { Text } = Typography;
 
@@ -164,7 +164,7 @@ export default function SignUp({
 
     if (!formHasErrors) {
       const addresses = sameAddress ? [shippingAddress] : [shippingAddress, billingAddress];
-      const customerData: MyCustomerDraft = {
+      const customerData: AppCustomerDraft = {
         ...form,
         addresses,
         shippingAddresses: [0],
