@@ -1,9 +1,13 @@
 import { tokenCache } from './storage.service.ts';
+import { TokenStore } from '@commercetools/ts-client';
 
 const TOKEN_KEY = 'ecommerce-customer-token';
 
 export const saveCustomerToken = (): void => {
-  sessionStorage.setItem(TOKEN_KEY, JSON.stringify(tokenCache.get()));
+  const tokenStore: TokenStore = tokenCache.get();
+  if (tokenStore.token.length > 0) {
+    sessionStorage.setItem(TOKEN_KEY, JSON.stringify(tokenStore));
+  }
 };
 
 export const loadCustomerToken = (): string | null => {

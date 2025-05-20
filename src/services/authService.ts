@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { CustomerSignInResult, MyCustomerDraft } from '@commercetools/platform-sdk';
-import { apiRootBuilder } from './clientBuilder';
+import { apiRootBuilder, authUrl, clientId, clientSecret } from './clientBuilder';
 import { handleApiError } from './errorHandler';
 import { Client } from '@commercetools/sdk-client-v2';
 
@@ -70,4 +70,20 @@ export function mapAuthError(error: unknown): Error {
   }
 
   return new Error('Unknown error during authentication');
+}
+
+export async function revokeToken(accessToken: string): Promise<void> {
+  const revokeUrl = `${authUrl}/oauth/token/revoke`;
+  try {
+    await fetch(revokeUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `token=${encodeURIComponent(accessToken)}`,
+    });
+  } catch (error) {
+    console.error('Failed to revoke token:', error);
+  }
 }
