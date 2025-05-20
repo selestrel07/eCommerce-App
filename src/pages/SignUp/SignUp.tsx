@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import React, { ChangeEvent, ReactElement, useState } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
 import { Input } from '../../components/Input/Input';
 import {
   validateDate,
@@ -14,15 +14,16 @@ import { Button, Typography } from 'antd';
 import { Address } from '../../components/Address/Address.tsx';
 import { AddressErrorData } from '../../types/address/address-types.ts';
 import { CountriesData } from '../../data/countries/countries.ts';
-import { AddressFields } from '../../enums/address-fields/address-fields.ts';
 import { AddressData } from '../../interfaces/address/address.ts';
 import Alert from 'antd/es/alert/Alert';
 import { loginCustomer, signUpCustomer } from '../../services/authService.ts';
-import { Customer } from '../../interfaces/customer/customer.ts';
 import './SignUp.scss';
 import { Client } from '@commercetools/sdk-client-v2';
 import { createCustomerClient } from '../../services/clientBuilder.ts';
 import { setAnonymousClient } from '../../services/storage/storage.service.ts';
+import SwitchAddress from '../../components/SwitchAdress/switchAddress.tsx';
+import { Switch } from 'antd';
+import { AppCustomerDraft } from '../../interfaces/customer/customer.ts';
 
 const { Text } = Typography;
 
@@ -57,32 +58,54 @@ export default function SignUp({
     dateOfBirth: null,
   });
 
-  const [address, setAddress] = useState<AddressData>({
+  const [shippingAddress, setShippingAddress] = useState<AddressData>({
     country: Object.keys(CountriesData)[0],
     city: '',
     streetName: '',
     postalCode: '',
   });
-  const [addressErrors, setAddressErrors] = useState<AddressErrorData>({
+
+  const [billingAddress, setBillingAddress] = useState<AddressData>({
+    country: Object.keys(CountriesData)[0],
+    city: '',
+    streetName: '',
+    postalCode: '',
+  });
+
+  const [sameAddress, setSameAddress] = useState(false);
+
+  // Copy from shipping to billing addresses
+  useEffect(() => {
+    if (sameAddress) {
+      setBillingAddress(shippingAddress);
+      setBillingErrors({
+        country: null,
+        city: null,
+        streetName: null,
+        postalCode: null,
+      });
+    }
+  }, [sameAddress, shippingAddress]);
+
+  const [shippingErrors, setShippingErrors] = useState<AddressErrorData>({
     country: null,
     city: null,
     streetName: null,
     postalCode: null,
   });
+  const [billingErrors, setBillingErrors] = useState<AddressErrorData>({
+    country: null,
+    city: null,
+    streetName: null,
+    postalCode: null,
+  });
+
   const [responseError, setResponseError] = useState<string | null>(null);
 
-  const handleAddressChange = <K extends keyof AddressData>(field: K) => {
-    return (event: ChangeEvent<HTMLInputElement>) => {
-      setAddress({ ...address, [field]: event.target.value });
-      setAddressErrors({ ...addressErrors, [field]: null });
-    };
-  };
-
-  const handleCountrySelect = (value: string) => {
-    const field = AddressFields.COUNTRY;
-    setAddress({ ...address, [field]: value });
-    setAddressErrors({ ...addressErrors, [field]: null });
-  };
+  const [defaultAddressFlags, setDefaultAddressFlags] = useState({
+    defaultShipping: false,
+    defaultBilling: false,
+  });
 
   const handleChange = <K extends keyof typeof form>(field: K, value: (typeof form)[K]) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -120,21 +143,49 @@ export default function SignUp({
       dateOfBirth: validateDate(form.dateOfBirth),
     };
 
-    const newAddressErrors = {
-      country: addressErrors.country,
-      city: validateStringField(address.city, 'city'),
-      streetName: validateStringField(address.streetName, 'street'),
-      postalCode: validatePostalCode(address.postalCode, address.country),
+    setErrors(newErrors);
+
+    const validateCountry = (value: string): string | null => {
+      return value.trim() ? null : 'Please select a country';
     };
 
-    setErrors(newErrors);
-    setAddressErrors(newAddressErrors);
+    const shippingErrorsValidated = {
+      country: validateCountry(shippingAddress.country),
+      city: validateStringField(shippingAddress.city, 'city'),
+      streetName: validateStringField(shippingAddress.streetName, 'street'),
+      postalCode: validatePostalCode(shippingAddress.postalCode, shippingAddress.country),
+    };
+    const billingErrorsValidated = {
+      country: validateCountry(billingAddress.country),
+      city: validateStringField(billingAddress.city, 'city'),
+      streetName: validateStringField(billingAddress.streetName, 'street'),
+      postalCode: validatePostalCode(billingAddress.postalCode, billingAddress.country),
+    };
 
-    if (Object.values({ ...newErrors, ...newAddressErrors }).every((error) => error === null)) {
-      const customerData: Customer = {
+    setShippingErrors(shippingErrorsValidated);
+    setBillingErrors(billingErrorsValidated);
+
+    const formHasErrors = [
+      ...Object.values(newErrors),
+      ...Object.values(shippingErrorsValidated),
+      ...Object.values(billingErrorsValidated),
+    ].some((e) => e !== null);
+
+    if (!formHasErrors) {
+      const addresses = sameAddress ? [shippingAddress] : [shippingAddress, billingAddress];
+      const customerData: AppCustomerDraft = {
         ...form,
-        addresses: [address],
+        addresses,
+        shippingAddresses: [0],
+        billingAddresses: sameAddress ? [0] : [1],
+        defaultShippingAddress: defaultAddressFlags.defaultShipping ? 0 : undefined,
+        defaultBillingAddress: defaultAddressFlags.defaultBilling
+          ? sameAddress
+            ? 0
+            : 1
+          : undefined,
       };
+
       signUpCustomer(customerData, apiClient)
         .then(async () => {
           openNotification();
@@ -149,6 +200,9 @@ export default function SignUp({
         });
     }
   };
+
+  const sameLabel = 'Same address for billing';
+  const differentLabel = 'Different billing address';
 
   return (
     <form className="signup-form" onSubmit={handleSubmit}>
@@ -198,12 +252,48 @@ export default function SignUp({
         />
       </div>
 
-      <Text>Address:</Text>
-      <Address
-        addressErrors={addressErrors}
-        onChange={handleAddressChange}
-        onCountryChange={handleCountrySelect}
-      />
+      <div className="address-container">
+        <div className="adress-component">
+          <Text>Shipping address:</Text>
+          <Address
+            value={shippingAddress}
+            addressErrors={shippingErrors}
+            onChange={(field) => (e) => {
+              setShippingAddress({ ...shippingAddress, [field]: e.target.value });
+              setShippingErrors({ ...shippingErrors, [field]: null });
+            }}
+            onCountryChange={(value) => {
+              setShippingAddress({ ...shippingAddress, country: value });
+              setShippingErrors({ ...shippingErrors, country: null });
+            }}
+          />
+        </div>
+
+        <div className="adress-component">
+          <Text>Billing address:</Text>
+          <Address
+            value={billingAddress}
+            disabled={sameAddress}
+            addressErrors={billingErrors}
+            onChange={(field) => (e) => {
+              setBillingAddress({ ...billingAddress, [field]: e.target.value });
+              setBillingErrors({ ...billingErrors, [field]: null });
+            }}
+            onCountryChange={(value) => {
+              setBillingAddress({ ...billingAddress, country: value });
+              setBillingErrors({ ...billingErrors, country: null });
+            }}
+          />
+        </div>
+
+        <SwitchAddress onChange={setDefaultAddressFlags} />
+
+        <div className="switch-container">
+          <span>{sameAddress ? sameLabel : differentLabel}</span>
+          <Switch checked={sameAddress} onChange={setSameAddress} />
+        </div>
+      </div>
+
       <div className="form-controls">
         {responseError ? <Alert type="error" message={responseError} /> : undefined}
         <Button type="primary" htmlType="submit">

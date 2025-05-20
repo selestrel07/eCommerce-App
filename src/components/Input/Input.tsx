@@ -10,6 +10,7 @@ interface InputProps {
   value?: string;
   placeholder?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  disabled?: boolean;
 }
 
 export const Input: FC<InputProps> = ({

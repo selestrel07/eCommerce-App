@@ -7,6 +7,8 @@ export interface AddressProps {
     field: K
   ) => (event: ChangeEvent<HTMLInputElement>) => void;
   onCountryChange: (value: string) => void;
+  disabled?: boolean;
+  value: AddressData;
 }
 
 export interface AddressData {
