@@ -12,11 +12,13 @@ export default function AppRoutes({
   setSignedIn,
   apiClient,
   setApiClient,
+  openNotification,
 }: {
   isSignedIn: boolean;
   setSignedIn: (value: boolean) => void;
   apiClient: Client;
   setApiClient: (client: Client) => void;
+  openNotification: () => void;
 }): ReactElement {
   return (
     <Routes>
@@ -27,7 +29,12 @@ export default function AppRoutes({
           isSignedIn ? (
             <Navigate to={Paths.MAIN} replace />
           ) : (
-            <SignUp setSignedIn={setSignedIn} apiClient={apiClient} setApiClient={setApiClient} />
+            <SignUp
+              setSignedIn={setSignedIn}
+              apiClient={apiClient}
+              setApiClient={setApiClient}
+              openNotification={openNotification}
+            />
           )
         }
       />

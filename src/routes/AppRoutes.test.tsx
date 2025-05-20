@@ -9,6 +9,7 @@ import { getAnonymousId } from '../services/authService.ts';
 
 const mockSetSignedIn = vi.fn();
 const mockSetClient = vi.fn();
+const mockOpenNotification = vi.fn();
 const client = createAnonymousClient(getAnonymousId());
 
 describe('App Routes Tests authorized user', () => {
@@ -22,6 +23,7 @@ describe('App Routes Tests authorized user', () => {
           setSignedIn={mockSetSignedIn}
           apiClient={client}
           setApiClient={mockSetClient}
+          openNotification={mockOpenNotification}
         />
       </Router>
     );
@@ -39,6 +41,7 @@ describe('App Routes Tests authorized user', () => {
           setSignedIn={mockSetSignedIn}
           apiClient={client}
           setApiClient={mockSetClient}
+          openNotification={mockOpenNotification}
         />
       </Router>
     );
@@ -58,6 +61,7 @@ describe('App Routes Tests non-authorized user', () => {
           setSignedIn={mockSetSignedIn}
           apiClient={client}
           setApiClient={mockSetClient}
+          openNotification={mockOpenNotification}
         />
       </Router>
     );
@@ -75,6 +79,7 @@ describe('App Routes Tests non-authorized user', () => {
           setSignedIn={mockSetSignedIn}
           apiClient={client}
           setApiClient={mockSetClient}
+          openNotification={mockOpenNotification}
         />
       </Router>
     );
@@ -94,6 +99,7 @@ describe('App Routes Tests empty or unknown pathname', () => {
           setSignedIn={mockSetSignedIn}
           apiClient={client}
           setApiClient={mockSetClient}
+          openNotification={mockOpenNotification}
         />
       </Router>
     );
