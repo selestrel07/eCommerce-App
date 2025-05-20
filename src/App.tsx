@@ -36,7 +36,7 @@ export const App = () => {
   });
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout>
       <AppHeader isSignedIn={isSignedIn} />
       <Layout.Content>
         <AppRoutes

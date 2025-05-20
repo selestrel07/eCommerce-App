@@ -8,12 +8,18 @@ import { AppHeaderProps } from '../../interfaces/interfaces';
 import logo from '../../assets/logo.png';
 import './Header.scss';
 import { Paths } from '../../enums/paths/paths';
+import { useNavigate } from 'react-router-dom';
 
-const AppHeader = ({ isSignedIn }: AppHeaderProps) => {
+const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
   const location = useLocation();
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [drawerVisible, setDrawerVisible] = useState(false);
 
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    setSignedIn(false);
+    void navigate(Paths.SIGN_IN);
+  };
   return (
     <Layout.Header className="header">
       <div className="header-content">
@@ -29,22 +35,26 @@ const AppHeader = ({ isSignedIn }: AppHeaderProps) => {
               className="menu-button"
               onClick={() => setDrawerVisible(true)}
             />
-            <Drawer open={drawerVisible} onClose={() => setDrawerVisible(false)} title="Menu">
-              <Menu
-                className="menu"
-                mode="vertical"
-                selectedKeys={[location.pathname]}
-                items={getMenuItems(isSignedIn, () => setDrawerVisible(false))}
-              />
-            </Drawer>
+            {isMobile && (
+              <Drawer open={drawerVisible} onClose={() => setDrawerVisible(false)} title="Menu">
+                <Menu
+                  className="menu"
+                  mode="vertical"
+                  selectedKeys={[location.pathname]}
+                  items={getMenuItems(isSignedIn, () => setDrawerVisible(false), handleLogout)}
+                />
+              </Drawer>
+            )}
           </>
         ) : (
-          <Menu
-            className="menu"
-            mode="horizontal"
-            selectedKeys={[location.pathname]}
-            items={getMenuItems(isSignedIn)}
-          />
+          <>
+            <Menu
+              className="menu"
+              mode="horizontal"
+              selectedKeys={[location.pathname]}
+              items={getMenuItems(isSignedIn, undefined, handleLogout)}
+            />
+          </>
         )}
       </div>
     </Layout.Header>

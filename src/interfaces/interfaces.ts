@@ -1,5 +1,6 @@
 export interface AppHeaderProps {
   isSignedIn: boolean;
+  setSignedIn: (value: boolean) => void;
 }
 
 export interface ApiErrorBody {

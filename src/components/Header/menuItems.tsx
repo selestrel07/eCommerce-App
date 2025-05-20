@@ -4,7 +4,11 @@ import { Paths } from '../../enums/paths/paths';
 
 type ItemType = Required<MenuProps>['items'][number];
 
-export const getMenuItems = (isSignedIn: boolean, onClick?: () => void): ItemType[] => {
+export const getMenuItems = (
+  isSignedIn: boolean,
+  onClick?: () => void,
+  onLogout?: () => void
+): ItemType[] => {
   const baseItems: ItemType[] = [
     {
       key: '/main',
@@ -28,5 +32,14 @@ export const getMenuItems = (isSignedIn: boolean, onClick?: () => void): ItemTyp
     ]);
   }
 
-  return baseItems;
+  return baseItems.concat([
+    {
+      key: 'logout',
+      label: 'Logout',
+      onClick: () => {
+        if (onLogout) onLogout();
+        if (onClick) onClick();
+      },
+    },
+  ]);
 };
