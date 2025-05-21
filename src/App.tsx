@@ -1,33 +1,64 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.scss";
+import './App.scss';
+import AppRoutes from './routes/AppRoutes.tsx';
+import { Layout, notification } from 'antd';
+import AppHeader from './components/Header/Header';
+import { useState } from 'react';
+import '@ant-design/v5-patch-for-react-19';
+import {
+  deleteCustomerToken,
+  loadCustomerToken,
+  saveCustomerToken,
+} from './services/storage/session-storage.service.ts';
+import { Client } from '@commercetools/sdk-client-v2';
+import { createAnonymousClient, createRefreshTokenClient } from './services/clientBuilder.ts';
+import { getAnonymousId } from './services/authService.ts';
+import { tokenCache } from './services/storage/storage.service.ts';
+import { isTokenStore } from './types/token-store/token-store.ts';
+import { Context } from 'react-responsive';
 
 export const App = () => {
-  const [count, setCount] = useState(0);
+  const token = loadCustomerToken();
+  const [isSignedIn, setSignedIn] = useState<boolean>(token !== null);
+  let defaultClient: Client = createAnonymousClient(getAnonymousId());
+  const [api, contextHolder] = notification.useNotification();
+  const openNotification = () => {
+    api.info({
+      message: 'Success!',
+      description: <Context.Consumer>{() => 'Customer is created successfully.'}</Context.Consumer>,
+      placement: 'bottomRight',
+      showProgress: true,
+      duration: 2,
+    });
+  };
+  if (token) {
+    const tokenStore: unknown = JSON.parse(token);
+    if (isTokenStore(tokenStore)) {
+      tokenCache.set(tokenStore);
+      defaultClient = createRefreshTokenClient(tokenCache);
+      deleteCustomerToken();
+    }
+  }
+
+  const [client, setClient] = useState<Client>(defaultClient);
+  globalThis.addEventListener('beforeunload', () => {
+    if (tokenCache.get().token) {
+      saveCustomerToken();
+    }
+  });
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Layout>
+      <AppHeader isSignedIn={isSignedIn} setSignedIn={setSignedIn} />
+      {contextHolder}
+      <Layout.Content>
+        <AppRoutes
+          isSignedIn={isSignedIn}
+          setSignedIn={setSignedIn}
+          apiClient={client}
+          setApiClient={setClient}
+          openNotification={openNotification}
+        />
+      </Layout.Content>
+    </Layout>
   );
 };
