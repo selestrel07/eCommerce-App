@@ -1,0 +1,76 @@
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin: 0 auto;
+  border: 2px solid rgb(193, 192, 192);
+  border-radius: 10px;
+  padding: 15px;
+
+  .row-name,
+  .row-info {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+  }
+}
+
+.address-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 20px;
+  align-items: start;
+}
+
+
+.address-container > *:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.address-container > *:nth-child(2) {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.address-container > *:nth-child(3) {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  justify-self: center;
+}
+
+.address-container > *:nth-child(4) {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  justify-self: center;
+  padding-top: 20px;
+}
+
+.switch-same-address {
+  margin-top: 20px;
+}
+
+.ant-switch {
+  margin-left: 5px;
+}
+
+@media (max-width: 900px) {
+  .signup-form {
+    margin: 20px auto;
+
+    .row-name,
+    .row-info {
+      flex-direction: column;
+    }
+  }
+
+  .address-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
