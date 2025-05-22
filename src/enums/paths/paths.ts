@@ -5,4 +5,5 @@ export enum Paths {
   SIGN_UP = '/signup',
   NOT_FOUND = '/error',
   ANY = '*',
+  PRODUCT_DETAILS = '/productdetails',
 }

@@ -6,6 +6,7 @@ import NotFound from '../pages/NotFound/NotFound.tsx';
 import { ReactElement } from 'react';
 import { Paths } from '../enums/paths/paths.ts';
 import { Client } from '@commercetools/sdk-client-v2';
+import ProductDetails from '../pages/ProductDetails/ProductDetails.tsx';
 
 export default function AppRoutes({
   isSignedIn,
@@ -49,6 +50,7 @@ export default function AppRoutes({
         }
       />
       <Route path={Paths.MAIN} element={<Home apiClient={apiClient} />} />
+      <Route path={Paths.PRODUCT_DETAILS} element={<ProductDetails />} />
       <Route path={Paths.ANY} element={<NotFound />} />
     </Routes>
   );
