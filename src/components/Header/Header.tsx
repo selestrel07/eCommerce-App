@@ -10,7 +10,7 @@ import { Paths } from '../../enums/paths/paths';
 import { useNavigate } from 'react-router-dom';
 import { emptyTokenStore, tokenCache } from '../../services/storage/storage.service.ts';
 import { revokeToken } from '../../services/authService.ts';
-import { getMenuItems } from './MenuItems.tsx';
+import { getMenuItems } from './NavItems.tsx';
 
 const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
   const location = useLocation();
