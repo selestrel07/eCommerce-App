@@ -50,7 +50,7 @@ export default function AppRoutes({
         }
       />
       <Route path={Paths.MAIN} element={<Home apiClient={apiClient} />} />
-      <Route path={Paths.PRODUCT_DETAILS} element={<ProductDetails />} />
+      <Route path={Paths.PRODUCT_DETAILS} element={<ProductDetails apiClient={apiClient} />} />
       <Route path={Paths.ANY} element={<NotFound />} />
     </Routes>
   );

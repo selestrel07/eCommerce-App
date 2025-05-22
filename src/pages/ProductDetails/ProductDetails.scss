@@ -1,0 +1,30 @@
+.product-container {
+  display: flex;
+  gap: 50px;
+  align-items: flex-start;
+  padding: 50px;
+}
+
+.product-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 50px;
+}
+
+.product-image {
+  width: 300px;
+  height: auto;
+}
+
+.product-description {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 500px;
+
+  p{
+    text-align: justify;
+    line-height: 1.1rem;
+  }
+}
