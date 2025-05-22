@@ -1,8 +1,12 @@
 .product-container {
   display: flex;
   gap: 50px;
-  align-items: flex-start;
+  align-items: center;
   padding: 50px;
+  border: 2px solid rgba(5, 5, 5, 0.08);
+  box-shadow: 4px 4px 18px 3px rgba(9, 60, 99, 0.15);
+  margin: 0px 50px;
+  border-radius: 10px;
 }
 
 .product-main {
@@ -12,19 +16,137 @@
   gap: 50px;
 }
 
-.product-image {
-  width: 300px;
-  height: auto;
-}
-
-.product-description {
+.product-general-description {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  max-width: 500px;
+  gap: 35px;
 
-  p{
-    text-align: justify;
-    line-height: 1.1rem;
+  .product-description {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 500px;
+  
+    p{
+      text-align: justify;
+      line-height: 1.1rem;
+    }
   }
+  
+  .product-price {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: baseline;
+    gap: 10px;
+
+    .price{
+      color: red;
+      font-size: large;
+    }
+  }
+
+  .product-attributes {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+    width: 200px;
+  }
+
+  .attribute-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    // width: 200px;
+
+    svg {
+      height: 1.5em;
+      width: 1.5em;
+      color: rgb(73, 72, 72);
+      margin-right: 15px;
+    }
+    .attribute-description {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      width: 120px;
+    }
+  }
+}
+
+.product-carousel {
+  width: 500px;
+  // max-width: 600px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.carousel-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  height: 400px;
+  overflow: hidden;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ant-carousel .css-dev-only-do-not-override-vrrzze {
+  height: 600px;
+}
+
+:where(.css-dev-only-do-not-override-vrrzze).ant-carousel .slick-dots li button {
+  background: black;
+}
+
+:where(.css-dev-only-do-not-override-vrrzze).ant-carousel .slick-dots li::after {
+  background: black;
+}
+
+.carousel-wrapper {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.8);
+  width: 30px;
+  height: 30px;
+  border: none;
+  // padding: 10px;
+  font-size: 20px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+
+  &:hover {
+    background: #0a66c2;
+    color: white;
+  }
+}
+
+.carousel-arrow.left {
+  left: -30px;
+}
+
+.carousel-arrow.right {
+  right: -30px;
 }
