@@ -15,6 +15,11 @@ export const getMenuItems = (
       label: <Link to={Paths.MAIN}>Main</Link>,
       onClick,
     },
+    {
+      key: '/catalog',
+      label: <Link to={Paths.CATALOG}>Catalog</Link>,
+      onClick,
+    },
   ];
 
   if (!isSignedIn) {
