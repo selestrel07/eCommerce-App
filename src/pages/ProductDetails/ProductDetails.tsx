@@ -6,6 +6,7 @@ import { ProductProjection } from '@commercetools/platform-sdk';
 import { Client } from '@commercetools/sdk-client-v2';
 import { useMemo } from 'react';
 import { getProductPrice } from '../../utils/getProductPrice';
+import { extractAttributes } from '../../utils/getProductAttributes';
 
 const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
   const { key } = useParams();
@@ -47,6 +48,8 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
 
   const priceInfo = getProductPrice(product);
 
+  const attributes = extractAttributes(product);
+
   return (
     <div className="product-container">
       <div className="product-main">
@@ -63,15 +66,31 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
         </div>
       </div>
 
-      <div className="product-description">
-        <h3>Description</h3>
-        <p className="product-description">{productDescription}</p>
-      </div>
-      <div className="product-price">
-        <h4 className="price-text">Price:</h4>
-        <p className="price">
-          {priceInfo?.amount} {priceInfo?.currency}
-        </p>
+      <div className="product-general-description">
+        <div className="product-description">
+          <h3>Description</h3>
+          <p className="product-description">{productDescription}</p>
+        </div>
+        <div className="product-price">
+          <h4 className="price-text">Price:</h4>
+          <p className="price">
+            {priceInfo?.amount} {priceInfo?.currency}
+          </p>
+        </div>
+        <div className="product-attributes">
+          <div className="attribute-group">
+            <h4 className="attribute-name">Sex:</h4>
+            <p className="attribute-value">{attributes.sex}</p>
+          </div>
+          <div className="attribute-group">
+            <h4 className="attribute-name">Color:</h4>
+            <p className="attribute-value">{attributes.color}</p>
+          </div>
+          <div className="attribute-group">
+            <h4 className="attribute-name">Material:</h4>
+            <p className="attribute-value">{attributes.material}</p>
+          </div>
+        </div>
       </div>
     </div>
   );

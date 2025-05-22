@@ -24,3 +24,8 @@ export interface PriceInfo {
   amount: number;
   currency: string;
 }
+
+export interface ProductAttribute {
+  name: string;
+  value: string | Record<string, string>;
+}
