@@ -24,6 +24,7 @@ export default function AppRoutes({
   return (
     <Routes>
       <Route path={Paths.EMPTY} element={<Navigate to={Paths.MAIN} replace />} />
+      <Route path={Paths.ANY} element={<Navigate to={Paths.CATALOG} replace />} />
       <Route
         path={Paths.SIGN_UP}
         element={
