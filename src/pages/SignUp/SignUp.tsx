@@ -266,6 +266,7 @@ export default function SignUp({
               setShippingAddress({ ...shippingAddress, country: value });
               setShippingErrors({ ...shippingErrors, country: null });
             }}
+            fieldNames={false}
           />
         </div>
 
@@ -283,6 +284,7 @@ export default function SignUp({
               setBillingAddress({ ...billingAddress, country: value });
               setBillingErrors({ ...billingErrors, country: null });
             }}
+            fieldNames={false}
           />
         </div>
 
