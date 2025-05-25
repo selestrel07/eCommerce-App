@@ -1,6 +1,7 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { Client } from '@commercetools/sdk-client-v2';
-import { loadProducts, ProductWithPrice } from '../../services/api.service';
+import { loadProducts } from '../../services/api.service';
+import { ProductWithPrice } from '../../interfaces/product/product';
 
 export default function Home({ apiClient }: { apiClient: Client }): ReactElement {
   const [products, setProducts] = useState<ProductWithPrice[]>([]);

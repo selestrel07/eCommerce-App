@@ -3,22 +3,8 @@ import { handleApiError } from './errorHandler.ts';
 import { Client } from '@commercetools/sdk-client-v2';
 import { mapAuthError } from './authService.ts';
 import { ProductProjection } from '@commercetools/platform-sdk';
-
-export interface ProductWithPrice {
-  id: string;
-  name: Record<string, string>;
-  price?: {
-    value: number;
-    currency: string;
-    discountedValue?: number;
-  };
-}
-
-interface PriceInfo {
-  amount: number;
-  currency: string;
-  discountedAmount?: number;
-}
+import { ProductWithPrice } from '../interfaces/product/product.ts';
+import { getProductPrice } from '../utils/productPrice.ts';
 
 export const loadProducts = async (
   client: Client,
@@ -44,40 +30,8 @@ export const loadProducts = async (
 
     const products: ProductProjection[] = httpResponse.body.results;
 
-    const getProductPrice = (product: ProductProjection): PriceInfo | null => {
-      let price;
-
-      price = product.masterVariant.prices?.find((p) =>
-        currency ? p.value.currencyCode === currency : true
-      );
-
-      if (!price && product.variants?.length) {
-        for (const variant of product.variants) {
-          price = variant.prices?.find((p) =>
-            currency ? p.value.currencyCode === currency : true
-          );
-          if (price) break;
-        }
-      }
-      if (!price && product.variants?.length) {
-        for (const variant of product.variants) {
-          price = variant.prices?.[0];
-          if (price) break;
-        }
-      }
-
-      if (!price) return null;
-
-      return {
-        amount: price.value.centAmount / 100,
-        currency: price.value.currencyCode,
-        discountedAmount: price.discounted?.value?.centAmount
-          ? price.discounted.value.centAmount / 100
-          : undefined,
-      };
-    };
     const mappedProducts = products.map((product) => {
-      const priceInfo = getProductPrice(product);
+      const priceInfo = getProductPrice(product, currency);
 
       return {
         id: product.id,
