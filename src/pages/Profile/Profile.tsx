@@ -21,9 +21,11 @@ const successfulNotification = (
 export default function Profile({
   client,
   openNotification,
+  setApiClient,
 }: {
   client: Client;
   openNotification: (message: string, description: string) => void;
+  setApiClient: (client: Client) => void;
 }): ReactElement {
   const [customerData, setCustomerData] = useState<null | Customer>(null);
   const [isLoading, setLoading] = useState<boolean>(true);
@@ -63,7 +65,12 @@ export default function Profile({
           <Divider />
           <PasswordSection
             client={client}
+            version={customerData?.version ?? 0}
             password={getCustomerFieldString(customerData, CustomerFields.PASSWORD)}
+            email={customerData?.email ?? ''}
+            onUpdate={setReload}
+            openNotification={() => successfulNotification(openNotification)}
+            setApiClient={setApiClient}
           />
           <Divider />
           <AddressSection
