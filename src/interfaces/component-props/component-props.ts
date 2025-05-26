@@ -2,6 +2,7 @@ import { Address as AddressSdk } from '@commercetools/platform-sdk/dist/declarat
 import { AddressErrorData } from '../../types/address/address-types.ts';
 import { AddressData } from '../address/address.ts';
 import { ChangeEvent } from 'react';
+import { Client } from '@commercetools/sdk-client-v2';
 
 export interface DatePickerInputProps {
   fieldName?: string;
@@ -13,6 +14,7 @@ export interface DatePickerInputProps {
 }
 
 export interface AddressSectionProps {
+  client: Client;
   addresses: AddressSdk[];
   billingAddressIds: string[];
   shippingAddressIds: string[];
@@ -21,14 +23,19 @@ export interface AddressSectionProps {
 }
 
 export interface PasswordSectionProps {
+  client: Client;
   password: string;
 }
 
 export interface PersonalInfoSectionProps {
+  client: Client;
+  version: number;
   firstName: string;
   lastName: string;
   email: string;
-  dateOfBirth: string;
+  dateOfBirth: string | undefined;
+  onUpdate: (value: boolean) => void;
+  openNotification: () => void;
 }
 
 export interface CountrySelectProps {

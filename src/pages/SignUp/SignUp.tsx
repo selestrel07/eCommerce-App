@@ -38,7 +38,7 @@ export default function SignUp({
   setSignedIn: (value: boolean) => void;
   apiClient: Client;
   setApiClient: (client: Client) => void;
-  openNotification: () => void;
+  openNotification: (message: string, description: string) => void;
 }): ReactElement {
   const [form, setForm] = useState({
     email: '',
@@ -188,7 +188,7 @@ export default function SignUp({
 
       signUpCustomer(customerData, apiClient)
         .then(async () => {
-          openNotification();
+          openNotification('Success', 'Customer is created successfully.');
           const newApiClient = createCustomerClient(form.email, form.password);
           await loginCustomer(form.email, form.password, newApiClient);
           setAnonymousClient(apiClient);
