@@ -55,7 +55,9 @@ export default function AppRoutes({
       <Route path={Paths.CATALOG} element={<Catalog apiClient={apiClient} />} />
       <Route
         path={Paths.PROFILE}
-        element={isSignedIn ? <Profile /> : <Navigate to={Paths.SIGN_IN} replace />}
+        element={
+          isSignedIn ? <Profile client={apiClient} /> : <Navigate to={Paths.SIGN_IN} replace />
+        }
       />
       <Route path={Paths.ANY} element={<NotFound />} />
     </Routes>

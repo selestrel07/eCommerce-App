@@ -1,0 +1,89 @@
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  align-items: start;
+  justify-content: start;
+  width: 100%;
+  min-height: calc(100vh - 64px);
+
+  .ant-divider {
+    margin: 10px 0;
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 10px 30px;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .personal-info-fields,
+  .password-info-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .address-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    .address-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 340px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 15px 10px 0;
+
+      .tags {
+        display: flex;
+        gap: 4px;
+        align-self: start;
+
+        .ant-tag {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .address {
+      margin: 0;
+    }
+  }
+
+  .ant-input[disabled],
+  .anticon.anticon-eye-invisible.ant-input-password-icon,
+  .ant-input-disabled.ant-input-outlined.ant-input-password,
+  .ant-input-disabled .ant-input[disabled],
+  .ant-picker.ant-picker-disabled,
+  .ant-picker.ant-picker-disabled input[disabled],
+  .ant-select,
+  .ant-select.ant-select-selector-disabled,
+  .address-row .ant-select.ant-select-disabled > .ant-select-selector,
+  .ant-select .ant-select-selector .ant-select-selection-wrap {
+    color: rgba(0, 0, 0, 0.48);
+    cursor: default;
+  }
+
+  .password-info-fields,
+  .personal-info-fields {
+
+    .input {
+      height: 100%;
+    }
+  }
+}
+
+@media screen and (width < 450px) {
+  .profile-container {
+    section {
+      padding: 10px min(30px, 5.5vw);
+    }
+  }
+}

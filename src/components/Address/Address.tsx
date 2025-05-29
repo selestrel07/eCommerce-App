@@ -3,7 +3,7 @@ import { CountrySelect } from '../CountrySelect/CountrySelect.tsx';
 import { FC } from 'react';
 import { AddressFields } from '../../enums/address-fields/address-fields.ts';
 import './Address.scss';
-import { AddressProps } from '../../interfaces/address/address.ts';
+import { AddressProps } from '../../interfaces/component-props/component-props.ts';
 
 export const Address: FC<AddressProps> = ({
   value,
@@ -11,6 +11,7 @@ export const Address: FC<AddressProps> = ({
   onChange,
   onCountryChange,
   disabled = false,
+  fieldNames = false,
 }) => {
   const handleCityChange = onChange(AddressFields.CITY);
   const handleStreetChange = onChange(AddressFields.STREET);
@@ -19,8 +20,14 @@ export const Address: FC<AddressProps> = ({
   return (
     <div className="address">
       <div className="address-row">
-        <CountrySelect value={value.country} onChange={onCountryChange} disabled={disabled} />
+        <CountrySelect
+          fieldName={fieldNames ? 'Country:' : undefined}
+          value={value.country}
+          onChange={onCountryChange}
+          disabled={disabled}
+        />
         <Input
+          fieldName={fieldNames ? 'City:' : undefined}
           value={value.city}
           placeholder="City"
           errorMessage={addressErrors.city ?? undefined}
@@ -30,6 +37,7 @@ export const Address: FC<AddressProps> = ({
       </div>
       <div className="address-row">
         <Input
+          fieldName={fieldNames ? 'Street:' : undefined}
           value={value.streetName}
           placeholder="Street"
           errorMessage={addressErrors.streetName ?? undefined}
@@ -37,6 +45,7 @@ export const Address: FC<AddressProps> = ({
           disabled={disabled}
         />
         <Input
+          fieldName={fieldNames ? 'Postal code:' : undefined}
           value={value.postalCode}
           placeholder="Postal code"
           errorMessage={addressErrors.postalCode ?? undefined}
