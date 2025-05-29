@@ -93,7 +93,7 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
             {priceInfo?.amount} {priceInfo?.currency}
           </p>
         </div>
-        <div className="product-description">
+        <div className="product-description-container">
           <h3>About this item:</h3>
           <p className="product-description">{productDescription}</p>
         </div>
