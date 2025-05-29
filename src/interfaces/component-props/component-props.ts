@@ -1,7 +1,7 @@
 import { Address as AddressSdk } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
 import { AddressErrorData } from '../../types/address/address-types.ts';
 import { AddressData } from '../address/address.ts';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, ReactElement } from 'react';
 import { Client } from '@commercetools/sdk-client-v2';
 
 export interface DatePickerInputProps {
@@ -59,4 +59,9 @@ export interface AddressProps {
   disabled?: boolean;
   value: AddressData;
   fieldNames: boolean;
+}
+
+export interface AddressInfoProps {
+  address: AddressSdk;
+  tags: ReactElement[];
 }
