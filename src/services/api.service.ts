@@ -96,3 +96,30 @@ export const updateCustomer = async (
     throw mapAuthError(humanReadableMsg);
   }
 };
+
+export const changePassword = async (
+  client: Client,
+  version: number,
+  currentPassword: string,
+  newPassword: string
+): Promise<Customer> => {
+  const apiRoot = apiRootBuilder(client);
+
+  try {
+    const httpResponse = await apiRoot
+      .me()
+      .password()
+      .post({
+        body: {
+          version,
+          currentPassword,
+          newPassword,
+        },
+      })
+      .execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    const humanReadableMsg = handleApiError(rawError);
+    throw new Error(humanReadableMsg);
+  }
+};

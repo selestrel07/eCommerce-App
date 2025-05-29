@@ -57,7 +57,11 @@ export default function AppRoutes({
         path={Paths.PROFILE}
         element={
           isSignedIn ? (
-            <Profile client={apiClient} openNotification={openNotification} />
+            <Profile
+              client={apiClient}
+              setApiClient={setApiClient}
+              openNotification={openNotification}
+            />
           ) : (
             <Navigate to={Paths.SIGN_IN} replace />
           )
