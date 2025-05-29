@@ -5,7 +5,7 @@ import { mapAuthError } from './authService.ts';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { ProductWithPrice } from '../interfaces/product/product.ts';
 import { getProductPrice } from '../utils/productPrice.ts';
-import { Customer } from '@commercetools/platform-sdk';
+import { Customer, MyCustomerUpdateAction } from '@commercetools/platform-sdk';
 
 export const loadProducts = async (
   client: Client,
@@ -66,6 +66,30 @@ export const loadCustomerData = async (client: Client): Promise<Customer> => {
 
   try {
     const httpResponse = await apiRoot.me().get().execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    const humanReadableMsg = handleApiError(rawError);
+    throw mapAuthError(humanReadableMsg);
+  }
+};
+
+export const updateCustomer = async (
+  client: Client,
+  version: number,
+  actions: MyCustomerUpdateAction[]
+): Promise<Customer> => {
+  const apiRoot = apiRootBuilder(client);
+
+  try {
+    const httpResponse = await apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions,
+        },
+      })
+      .execute();
     return httpResponse.body;
   } catch (rawError: unknown) {
     const humanReadableMsg = handleApiError(rawError);

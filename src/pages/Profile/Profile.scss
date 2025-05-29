@@ -20,11 +20,16 @@
     gap: 10px;
   }
 
+  .profile-buttons,
   .personal-info-fields,
   .password-info-fields {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+  }
+
+  .ant-spin {
+    margin: auto;
   }
 
   .address-list {

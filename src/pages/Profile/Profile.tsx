@@ -1,5 +1,5 @@
 import './Profile.scss';
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { PersonalInfoSection } from '../../components/ProfileSection/PersonalInfoSection.tsx';
 import { loadCustomerData } from '../../services/api.service.ts';
 import { Client } from '@commercetools/sdk-client-v2';
@@ -14,20 +14,35 @@ import {
   getCustomerFieldString,
 } from '../../utils/customer-field.utils.ts';
 
-export default function Profile({ client }: { client: Client }) {
+const successfulNotification = (
+  notificationFunction: (message: string, description: string) => void
+): void => notificationFunction('Success', 'Customer was successfully updated');
+
+export default function Profile({
+  client,
+  openNotification,
+}: {
+  client: Client;
+  openNotification: (message: string, description: string) => void;
+}): ReactElement {
   const [customerData, setCustomerData] = useState<null | Customer>(null);
   const [isLoading, setLoading] = useState<boolean>(true);
+  const [reload, setReload] = useState<boolean>(true);
 
   useEffect(() => {
-    loadCustomerData(client)
-      .then((data) => {
-        setCustomerData(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+    if (reload) {
+      setLoading(true);
+      loadCustomerData(client)
+        .then((data) => {
+          setCustomerData(data);
+          setLoading(false);
+          setReload(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [reload]);
 
   return (
     <div className="profile-container">
@@ -36,17 +51,23 @@ export default function Profile({ client }: { client: Client }) {
       ) : (
         <>
           <PersonalInfoSection
+            client={client}
+            version={customerData?.version ?? 0}
             email={getCustomerFieldString(customerData, CustomerFields.EMAIL)}
             firstName={getCustomerFieldString(customerData, CustomerFields.FIRST_NAME)}
             lastName={getCustomerFieldString(customerData, CustomerFields.LAST_NAME)}
             dateOfBirth={getCustomerFieldString(customerData, CustomerFields.DATE_OF_BIRTH)}
+            onUpdate={setReload}
+            openNotification={() => successfulNotification(openNotification)}
           />
           <Divider />
           <PasswordSection
+            client={client}
             password={getCustomerFieldString(customerData, CustomerFields.PASSWORD)}
           />
           <Divider />
           <AddressSection
+            client={client}
             addresses={getCustomerAddresses(customerData)}
             shippingAddressIds={getCustomerFieldAddressIds(
               customerData,
