@@ -32,7 +32,9 @@ export const loadProducts = async (
 
     const mappedProducts = products.map((product) => {
       const priceInfo = getProductPrice(product, currency);
-
+      const image =
+        product.masterVariant?.images?.find((img) => img.label === 'Main')?.url ??
+        product.masterVariant?.images?.[0]?.url;
       return {
         id: product.id,
         name: product.name,
@@ -43,16 +45,10 @@ export const loadProducts = async (
               discountedValue: priceInfo.discountedAmount,
             }
           : undefined,
+        image,
       };
     });
 
-    products.forEach((product) => {
-      console.log(`Product ID: ${product.id}`);
-      console.log('Published:', product.published);
-      console.log('Name:', product.name);
-      console.log('Master Variant Prices:', product.masterVariant.prices);
-      console.log('First Variant Prices:', product.variants?.[0]?.prices);
-    }); // I leave it for testing purposes only, when you run the next shuffle, delete this code and comments
     return mappedProducts;
   } catch (rawError: unknown) {
     const humanReadableMsg = handleApiError(rawError);

@@ -6,6 +6,7 @@ export interface ProductWithPrice {
     currency: string;
     discountedValue?: number;
   };
+  image?: string;
 }
 
 export interface PriceInfo {

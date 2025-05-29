@@ -2,6 +2,7 @@ import { ReactElement, useEffect, useState } from 'react';
 import { Client } from '@commercetools/sdk-client-v2';
 import { loadProducts } from '../../services/api.service';
 import { ProductWithPrice } from '../../interfaces/product/product';
+import './Catalog.scss';
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
   const [products, setProducts] = useState<ProductWithPrice[]>([]);
@@ -24,46 +25,60 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
   }, [apiClient]);
 
   if (loading) {
-    return <div>Загрузка продуктов...</div>;
+    return (
+      <div className="catalog-container">
+        <h2>Loading products...</h2>
+        <p>Please wait</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Ошибка: {error}</div>;
+    return (
+      <div style={{ color: 'red', textAlign: 'center', padding: '2rem' }}>
+        <h2>Error</h2>
+        <p>{error}</p>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>Список продуктов</h1>
+    <div className="catalog-container">
+      <h1 className="catalog-title">Product List</h1>
+
       {products.length === 0 ? (
-        <p>Продуктов не найдено.</p>
+        <p className="catalog-empty-text">No products found.</p>
       ) : (
-        <ul>
+        <div className="catalog-grid">
           {products.map((product) => {
-            const productName = Object.values(product.name)[0] || 'Без названия';
+            const productName = Object.values(product.name)[0] || 'Unnamed product';
+            const imageUrl = product.image;
 
             return (
-              <li key={product.id}>
-                <h2>{productName}</h2>
-                {product.price ? (
-                  <>
-                    <p>
-                      Цена: {product.price.value} {product.price.currency}
-                    </p>
-                    {product.price.discountedValue && (
-                      <p style={{ color: 'green' }}>
-                        Скидочная цена: {product.price.discountedValue} {product.price.currency}
+              <div key={product.id} className="catalog-card">
+                <img src={imageUrl} alt={productName} className="catalog-image" />
+                <div className="catalog-info">
+                  <h3 className="catalog-product-name">{productName}</h3>
+                  {product.price ? (
+                    <>
+                      <p className="catalog-price">
+                        Price: {product.price.value} {product.price.currency}
                       </p>
-                    )}
-                  </>
-                ) : (
-                  <p>Цена не указана</p>
-                )}
-                <hr />
-              </li>
+                      {product.price.discountedValue && (
+                        <p className="catalog-discounted-price">
+                          Discounted Price: {product.price.discountedValue} {product.price.currency}
+                        </p>
+                      )}
+                    </>
+                  ) : (
+                    <p className="catalog-no-price">Price not available</p>
+                  )}
+                </div>
+              </div>
             );
           })}
-        </ul>
+        </div>
       )}
     </div>
-  ); // I leave it for testing purposes only, when you run the next shuffle, delete this code and comments
+  );
 }
