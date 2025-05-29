@@ -2,20 +2,60 @@ import { apiRootBuilder } from './clientBuilder.ts';
 import { handleApiError } from './errorHandler.ts';
 import { Client } from '@commercetools/sdk-client-v2';
 import { mapAuthError } from './authService.ts';
+import { ProductProjection } from '@commercetools/platform-sdk';
+import { ProductWithPrice } from '../interfaces/product/product.ts';
+import { getProductPrice } from '../utils/productPrice.ts';
 import { Customer } from '@commercetools/platform-sdk';
 
-export const loadProducts = async (client: Client) => {
+export const loadProducts = async (
+  client: Client,
+  currency = 'EUR',
+  country?: string,
+  customerGroupId?: string,
+  channelId?: string
+): Promise<ProductWithPrice[]> => {
   const apiRoot = apiRootBuilder(client);
 
   try {
     const httpResponse = await apiRoot
       .productProjections()
-      .get({ queryArgs: { limit: 1 } })
+      .get({
+        queryArgs: {
+          priceCurrency: currency,
+          ...(country && { priceCountry: country }),
+          ...(customerGroupId && { priceCustomerGroup: customerGroupId }),
+          ...(channelId && { priceChannel: channelId }),
+        },
+      })
       .execute();
-    //Here response.body contains CustomerSignInResult with accessToken, refreshToken and customer
-    return httpResponse.body;
+
+    const products: ProductProjection[] = httpResponse.body.results;
+
+    const mappedProducts = products.map((product) => {
+      const priceInfo = getProductPrice(product, currency);
+
+      return {
+        id: product.id,
+        name: product.name,
+        price: priceInfo
+          ? {
+              value: priceInfo.amount,
+              currency: priceInfo.currency,
+              discountedValue: priceInfo.discountedAmount,
+            }
+          : undefined,
+      };
+    });
+
+    products.forEach((product) => {
+      console.log(`Product ID: ${product.id}`);
+      console.log('Published:', product.published);
+      console.log('Name:', product.name);
+      console.log('Master Variant Prices:', product.masterVariant.prices);
+      console.log('First Variant Prices:', product.variants?.[0]?.prices);
+    }); // I leave it for testing purposes only, when you run the next shuffle, delete this code and comments
+    return mappedProducts;
   } catch (rawError: unknown) {
-    // Convert CommerceTools errors to readable ones
     const humanReadableMsg = handleApiError(rawError);
     throw mapAuthError(humanReadableMsg);
   }
