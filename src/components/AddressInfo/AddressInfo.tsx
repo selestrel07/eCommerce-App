@@ -8,11 +8,15 @@ import { Address as AddressSdk } from '@commercetools/platform-sdk/dist/declarat
 import { AddressData } from '../../interfaces/address/address.ts';
 import { AddressErrorData } from '../../types/address/address-types.ts';
 import Alert from 'antd/es/alert/Alert';
-import { validatePostalCode, validateStringField } from '../../utils/validation.ts';
+import {
+  validateAddressTypes,
+  validatePostalCode,
+  validateStringField,
+} from '../../utils/validation.ts';
 
 const CheckboxGroup = Checkbox.Group;
 
-const tagValues = Object.values(AddressType);
+const addressTypes = Object.values(AddressType);
 const getTagValues = (tags: ReactElement[]): string[] => {
   return tags
     .map((tag): unknown => {
@@ -46,9 +50,9 @@ export const AddressInfo: FC<AddressInfoProps> = ({
   tags,
 }: AddressInfoProps): ReactElement => {
   const initialAddressData = getAddressData(address);
-  const initialTagValues = tagValues.filter((tag) => getTagValues(tags).includes(tag));
+  const initialTagValues = addressTypes.filter((tag) => getTagValues(tags).includes(tag));
   const [isEdit, setEdit] = useState(false);
-  const [checked, setChecked] = useState<string[]>([...initialTagValues]);
+  const [tagValues, setTagValues] = useState<string[]>([...initialTagValues]);
   const [addressData, setAddressData] = useState<AddressData>({ ...initialAddressData });
   const [addressErrors, setAddressErrors] = useState<AddressErrorData>(emptyAddressErrors);
   const [responseError, setResponseError] = useState<string | null>(null);
@@ -60,7 +64,7 @@ export const AddressInfo: FC<AddressInfoProps> = ({
   };
 
   const onChange = (value: string[]) => {
-    setChecked(value);
+    setTagValues(value);
   };
 
   const handleUpdate = () => {
@@ -71,9 +75,15 @@ export const AddressInfo: FC<AddressInfoProps> = ({
       postalCode: validatePostalCode(addressData.postalCode, addressData.country),
     };
 
-    setAddressErrors(addressDataErrors);
+    const addressTypeError = validateAddressTypes(initialTagValues, tagValues);
 
-    if (Object.values(addressDataErrors).every((value) => value === null)) {
+    setAddressErrors(addressDataErrors);
+    setResponseError(addressTypeError);
+
+    if (
+      Object.values(addressDataErrors).every((value) => value === null) &&
+      addressTypeError === null
+    ) {
       setEdit(false);
     }
   };
@@ -91,7 +101,7 @@ export const AddressInfo: FC<AddressInfoProps> = ({
             <StopTwoTone
               onClick={() => {
                 setAddressData({ ...initialAddressData });
-                setChecked([...initialTagValues]);
+                setTagValues([...initialTagValues]);
                 setAddressErrors(emptyAddressErrors);
                 setResponseError(null);
                 setEdit(false);
@@ -107,12 +117,15 @@ export const AddressInfo: FC<AddressInfoProps> = ({
       </div>
       {isEdit ? (
         <>
-          <CheckboxGroup options={tagValues} value={checked} onChange={onChange}></CheckboxGroup>
+          <CheckboxGroup
+            options={addressTypes}
+            value={tagValues}
+            onChange={onChange}
+          ></CheckboxGroup>
         </>
       ) : (
         <div className="tags">{...tags}</div>
       )}
-
       <Address
         value={addressData}
         addressErrors={addressErrors}
