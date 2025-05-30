@@ -1,12 +1,9 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { Client } from '@commercetools/sdk-client-v2';
-import { Card, Typography } from 'antd';
 import { loadProducts } from '../../services/api.service';
 import { ProductWithPrice } from '../../interfaces/product/product';
 import './Catalog.scss';
-
-const { Meta } = Card;
-const { Paragraph } = Typography;
+import { ProductCard } from '../../components/ProductCard/ProductCard';
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
   const [products, setProducts] = useState<ProductWithPrice[]>([]);
@@ -58,34 +55,17 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
         <div className="catalog-grid">
           {products.map((product) => {
             const productName = Object.values(product.name)[0] || 'Unnamed product';
-            const imageUrl = product.image;
+            const productDescription = Object.values(product.description ?? {})[0];
 
             return (
-              <Card
+              <ProductCard
                 key={product.id}
-                className="catalog-card"
-                cover={<img alt={productName} src={imageUrl} className="catalog-card-image" />}
-              >
-                <Meta
-                  title={productName}
-                  description={
-                    product.price ? (
-                      <>
-                        <Paragraph className="catalog-card-price">
-                          Price: {product.price.value} {product.price.currency}
-                        </Paragraph>
-                        {product.price.discountedValue && (
-                          <Paragraph className="catalog-card-discounted-price">
-                            Discounted: {product.price.discountedValue} {product.price.currency}
-                          </Paragraph>
-                        )}
-                      </>
-                    ) : (
-                      <Paragraph className="catalog-card-no-price">Price not available</Paragraph>
-                    )
-                  }
-                />
-              </Card>
+                id={product.id}
+                name={productName}
+                image={product.image}
+                price={product.price}
+                description={productDescription}
+              />
             );
           })}
         </div>

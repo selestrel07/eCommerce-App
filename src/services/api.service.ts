@@ -35,9 +35,11 @@ export const loadProducts = async (
       const image =
         product.masterVariant?.images?.find((img) => img.label === 'Main')?.url ??
         product.masterVariant?.images?.[0]?.url;
+
       return {
         id: product.id,
         name: product.name,
+        description: product.description,
         price: priceInfo
           ? {
               value: priceInfo.amount,
