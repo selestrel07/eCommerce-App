@@ -1,8 +1,12 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { Client } from '@commercetools/sdk-client-v2';
+import { Card, Typography } from 'antd';
 import { loadProducts } from '../../services/api.service';
 import { ProductWithPrice } from '../../interfaces/product/product';
 import './Catalog.scss';
+
+const { Meta } = Card;
+const { Paragraph } = Typography;
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
   const [products, setProducts] = useState<ProductWithPrice[]>([]);
@@ -35,9 +39,11 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
 
   if (error) {
     return (
-      <div style={{ color: 'red', textAlign: 'center', padding: '2rem' }}>
-        <h2>Error</h2>
-        <p>{error}</p>
+      <div className="catalog-container">
+        <div className="catalog-error">
+          <h2>Error</h2>
+          <p>{error}</p>
+        </div>
       </div>
     );
   }
@@ -55,26 +61,31 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
             const imageUrl = product.image;
 
             return (
-              <div key={product.id} className="catalog-card">
-                <img src={imageUrl} alt={productName} className="catalog-image" />
-                <div className="catalog-info">
-                  <h3 className="catalog-product-name">{productName}</h3>
-                  {product.price ? (
-                    <>
-                      <p className="catalog-price">
-                        Price: {product.price.value} {product.price.currency}
-                      </p>
-                      {product.price.discountedValue && (
-                        <p className="catalog-discounted-price">
-                          Discounted Price: {product.price.discountedValue} {product.price.currency}
-                        </p>
-                      )}
-                    </>
-                  ) : (
-                    <p className="catalog-no-price">Price not available</p>
-                  )}
-                </div>
-              </div>
+              <Card
+                key={product.id}
+                className="catalog-card"
+                cover={<img alt={productName} src={imageUrl} className="catalog-card-image" />}
+              >
+                <Meta
+                  title={productName}
+                  description={
+                    product.price ? (
+                      <>
+                        <Paragraph className="catalog-card-price">
+                          Price: {product.price.value} {product.price.currency}
+                        </Paragraph>
+                        {product.price.discountedValue && (
+                          <Paragraph className="catalog-card-discounted-price">
+                            Discounted: {product.price.discountedValue} {product.price.currency}
+                          </Paragraph>
+                        )}
+                      </>
+                    ) : (
+                      <Paragraph className="catalog-card-no-price">Price not available</Paragraph>
+                    )
+                  }
+                />
+              </Card>
             );
           })}
         </div>

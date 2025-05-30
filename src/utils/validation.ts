@@ -46,7 +46,6 @@ export const validateRepeatPassword = (
   if (repeatPassword !== originalPassword) {
     return 'Passwords do not match.';
   }
-
   return null;
 };
 
