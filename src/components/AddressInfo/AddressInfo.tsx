@@ -2,7 +2,7 @@ import { FC, ReactElement, useState } from 'react';
 import { CheckOutlined, DeleteTwoTone, EditTwoTone, StopTwoTone } from '@ant-design/icons';
 import { Address } from '../Address/Address.tsx';
 import { AddressInfoProps } from '../../interfaces/component-props/component-props.ts';
-import { Checkbox } from 'antd';
+import { Checkbox, Modal } from 'antd';
 import { AddressType } from '../../enums/address-types/address-types.ts';
 import { AddressData } from '../../interfaces/address/address.ts';
 import { AddressErrorData } from '../../types/address/address-types.ts';
@@ -12,9 +12,10 @@ import {
   validatePostalCode,
   validateStringField,
 } from '../../utils/validation.ts';
-import { composeAddressActions } from '../../utils/edit-action.utils.ts';
+import { composeAction, composeAddressActions } from '../../utils/edit-action.utils.ts';
 import { updateCustomer } from '../../services/api.service.ts';
 import { addressToAddressData, updateAddressWithData } from '../../utils/address-converter.ts';
+import { EditAction } from '../../enums/edit-actions/edit-actions.ts';
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -54,6 +55,24 @@ export const AddressInfo: FC<AddressInfoProps> = ({
   const [addressData, setAddressData] = useState<AddressData>({ ...initialAddressData });
   const [addressErrors, setAddressErrors] = useState<AddressErrorData>(emptyAddressErrors);
   const [responseError, setResponseError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    const action = composeAction(EditAction.REMOVE_ADDRESS, address.id);
+    if (action) {
+      updateCustomer(client, version, [action])
+        .then(() => {
+          setIsModalOpen(false);
+          onUpdate(true);
+          openNotification();
+        })
+        .catch((error: Error) => setResponseError(error.message));
+    }
+  };
 
   const handleChange = <K extends keyof AddressData>(field: K, value: string | undefined) => {
     setAddressData((prev) => ({ ...prev, [field]: value }));
@@ -61,7 +80,7 @@ export const AddressInfo: FC<AddressInfoProps> = ({
     setResponseError(null);
   };
 
-  const onChange = (value: AddressType[]) => {
+  const onAddressTypeChange = (value: AddressType[]) => {
     setTagValues(value);
   };
 
@@ -124,7 +143,7 @@ export const AddressInfo: FC<AddressInfoProps> = ({
         ) : (
           <>
             <EditTwoTone onClick={() => setEdit(true)} />
-            <DeleteTwoTone />
+            <DeleteTwoTone onClick={openModal} />
           </>
         )}
       </div>
@@ -133,7 +152,7 @@ export const AddressInfo: FC<AddressInfoProps> = ({
           <CheckboxGroup
             options={addressTypes}
             value={tagValues}
-            onChange={onChange}
+            onChange={onAddressTypeChange}
           ></CheckboxGroup>
         </>
       ) : (
@@ -154,6 +173,16 @@ export const AddressInfo: FC<AddressInfoProps> = ({
         fieldNames={true}
       />
       {responseError ? <Alert type="error" message={responseError} /> : undefined}
+      <Modal
+        title="Address deletion"
+        closable={{ 'aria-label': 'Custom Close Button' }}
+        open={isModalOpen}
+        onOk={handleCancel}
+        onCancel={() => setIsModalOpen(false)}
+      >
+        <p>You will not be able to undo address deletion</p>
+        <p>Do you really want to delete the address?</p>
+      </Modal>
     </>
   );
 };
