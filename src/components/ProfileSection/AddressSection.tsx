@@ -31,11 +31,15 @@ const getAddressTags = (
 };
 
 export const AddressSection: FC<AddressSectionProps> = ({
+  client,
+  version,
   addresses,
   billingAddressIds,
   shippingAddressIds,
   defaultShippingAddress,
   defaultBillingAddress,
+  onUpdate,
+  openNotification,
 }: AddressSectionProps): ReactElement => {
   return (
     <section className="address-section">
@@ -60,7 +64,14 @@ export const AddressSection: FC<AddressSectionProps> = ({
             );
             return (
               <div className="address-container" key={address.id}>
-                <AddressInfo address={address} tags={tags} />
+                <AddressInfo
+                  client={client}
+                  version={version}
+                  address={address}
+                  tags={tags}
+                  onUpdate={onUpdate}
+                  openNotification={openNotification}
+                />
               </div>
             );
           })}

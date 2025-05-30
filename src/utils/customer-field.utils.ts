@@ -41,9 +41,9 @@ export const addressComparator = (
 ): number => {
   if (defaultBillingAddress.length === 0 && defaultShippingAddress.length === 0) {
     return 0;
-  } else if (address1.id === defaultBillingAddress) {
-    return -1;
   } else if (address1.id === defaultShippingAddress) {
+    return 1;
+  } else if (address1.id === defaultBillingAddress) {
     return -1;
   } else if (address2.id === defaultShippingAddress) {
     return 1;

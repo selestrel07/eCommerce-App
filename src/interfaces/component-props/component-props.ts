@@ -15,11 +15,15 @@ export interface DatePickerInputProps {
 
 export interface AddressSectionProps {
   client: Client;
+  version: number;
+  fieldName?: string;
   addresses: AddressSdk[];
   billingAddressIds: string[];
   shippingAddressIds: string[];
   defaultBillingAddress?: string;
   defaultShippingAddress?: string;
+  onUpdate: (value: boolean) => void;
+  openNotification: () => void;
 }
 
 export interface PasswordSectionProps {
@@ -62,6 +66,10 @@ export interface AddressProps {
 }
 
 export interface AddressInfoProps {
+  client: Client;
+  version: number;
   address: AddressSdk;
   tags: ReactElement[];
+  onUpdate: (value: boolean) => void;
+  openNotification: () => void;
 }

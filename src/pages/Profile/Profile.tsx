@@ -75,6 +75,7 @@ export default function Profile({
           <Divider />
           <AddressSection
             client={client}
+            version={customerData?.version ?? 0}
             addresses={getCustomerAddresses(customerData)}
             shippingAddressIds={getCustomerFieldAddressIds(
               customerData,
@@ -92,6 +93,8 @@ export default function Profile({
               customerData,
               CustomerFields.DEFAULT_SHIPPING_ADDRESS_ID
             )}
+            onUpdate={setReload}
+            openNotification={() => successfulNotification(openNotification)}
           />
         </>
       )}

@@ -4,7 +4,6 @@ import { Address } from '../Address/Address.tsx';
 import { AddressInfoProps } from '../../interfaces/component-props/component-props.ts';
 import { Checkbox } from 'antd';
 import { AddressType } from '../../enums/address-types/address-types.ts';
-import { Address as AddressSdk } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
 import { AddressData } from '../../interfaces/address/address.ts';
 import { AddressErrorData } from '../../types/address/address-types.ts';
 import Alert from 'antd/es/alert/Alert';
@@ -13,10 +12,14 @@ import {
   validatePostalCode,
   validateStringField,
 } from '../../utils/validation.ts';
+import { composeAddressActions } from '../../utils/edit-action.utils.ts';
+import { updateCustomer } from '../../services/api.service.ts';
+import { addressToAddressData, updateAddressWithData } from '../../utils/address-converter.ts';
 
 const CheckboxGroup = Checkbox.Group;
 
 const addressTypes = Object.values(AddressType);
+
 const getTagValues = (tags: ReactElement[]): string[] => {
   return tags
     .map((tag): unknown => {
@@ -29,15 +32,6 @@ const getTagValues = (tags: ReactElement[]): string[] => {
     .filter((value) => typeof value === 'string');
 };
 
-const getAddressData = (address: AddressSdk): AddressData => {
-  return {
-    city: address.city ?? '',
-    country: address.country ?? '',
-    streetName: address.streetName ?? '',
-    postalCode: address.postalCode ?? '',
-  };
-};
-
 const emptyAddressErrors = {
   country: null,
   city: null,
@@ -46,13 +40,17 @@ const emptyAddressErrors = {
 };
 
 export const AddressInfo: FC<AddressInfoProps> = ({
+  client,
+  version,
   address,
   tags,
+  onUpdate,
+  openNotification,
 }: AddressInfoProps): ReactElement => {
-  const initialAddressData = getAddressData(address);
+  const initialAddressData = addressToAddressData(address);
   const initialTagValues = addressTypes.filter((tag) => getTagValues(tags).includes(tag));
   const [isEdit, setEdit] = useState(false);
-  const [tagValues, setTagValues] = useState<string[]>([...initialTagValues]);
+  const [tagValues, setTagValues] = useState<AddressType[]>([...initialTagValues]);
   const [addressData, setAddressData] = useState<AddressData>({ ...initialAddressData });
   const [addressErrors, setAddressErrors] = useState<AddressErrorData>(emptyAddressErrors);
   const [responseError, setResponseError] = useState<string | null>(null);
@@ -63,7 +61,7 @@ export const AddressInfo: FC<AddressInfoProps> = ({
     setResponseError(null);
   };
 
-  const onChange = (value: string[]) => {
+  const onChange = (value: AddressType[]) => {
     setTagValues(value);
   };
 
@@ -84,7 +82,22 @@ export const AddressInfo: FC<AddressInfoProps> = ({
       Object.values(addressDataErrors).every((value) => value === null) &&
       addressTypeError === null
     ) {
-      setEdit(false);
+      const actions = composeAddressActions(
+        address,
+        updateAddressWithData(address, addressData),
+        initialTagValues,
+        tagValues
+      );
+      if (actions.length > 0) {
+        updateCustomer(client, version, actions)
+          .then(() => {
+            onUpdate(true);
+            openNotification();
+          })
+          .catch((error: Error) => setResponseError(error.message));
+      } else {
+        setResponseError('There is no changes');
+      }
     }
   };
 
