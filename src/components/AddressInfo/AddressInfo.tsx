@@ -4,6 +4,11 @@ import { Address } from '../Address/Address.tsx';
 import { AddressInfoProps } from '../../interfaces/component-props/component-props.ts';
 import { Checkbox } from 'antd';
 import { AddressType } from '../../enums/address-types/address-types.ts';
+import { Address as AddressSdk } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
+import { AddressData } from '../../interfaces/address/address.ts';
+import { AddressErrorData } from '../../types/address/address-types.ts';
+import Alert from 'antd/es/alert/Alert';
+import { validatePostalCode, validateStringField } from '../../utils/validation.ts';
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -20,17 +25,57 @@ const getTagValues = (tags: ReactElement[]): string[] => {
     .filter((value) => typeof value === 'string');
 };
 
+const getAddressData = (address: AddressSdk): AddressData => {
+  return {
+    city: address.city ?? '',
+    country: address.country ?? '',
+    streetName: address.streetName ?? '',
+    postalCode: address.postalCode ?? '',
+  };
+};
+
+const emptyAddressErrors = {
+  country: null,
+  city: null,
+  streetName: null,
+  postalCode: null,
+};
+
 export const AddressInfo: FC<AddressInfoProps> = ({
   address,
   tags,
 }: AddressInfoProps): ReactElement => {
+  const initialAddressData = getAddressData(address);
+  const initialTagValues = tagValues.filter((tag) => getTagValues(tags).includes(tag));
   const [isEdit, setEdit] = useState(false);
-  const [checked, setChecked] = useState<string[]>(
-    tagValues.filter((tag) => getTagValues(tags).includes(tag))
-  );
+  const [checked, setChecked] = useState<string[]>([...initialTagValues]);
+  const [addressData, setAddressData] = useState<AddressData>({ ...initialAddressData });
+  const [addressErrors, setAddressErrors] = useState<AddressErrorData>(emptyAddressErrors);
+  const [responseError, setResponseError] = useState<string | null>(null);
+
+  const handleChange = <K extends keyof AddressData>(field: K, value: string | undefined) => {
+    setAddressData((prev) => ({ ...prev, [field]: value }));
+    setAddressErrors((prev) => ({ ...prev, [field]: null }));
+    setResponseError(null);
+  };
 
   const onChange = (value: string[]) => {
     setChecked(value);
+  };
+
+  const handleUpdate = () => {
+    const addressDataErrors: AddressErrorData = {
+      country: null,
+      city: validateStringField(addressData.city, 'city'),
+      streetName: validateStringField(addressData.streetName, 'street'),
+      postalCode: validatePostalCode(addressData.postalCode, addressData.country),
+    };
+
+    setAddressErrors(addressDataErrors);
+
+    if (Object.values(addressDataErrors).every((value) => value === null)) {
+      setEdit(false);
+    }
   };
 
   return (
@@ -38,8 +83,20 @@ export const AddressInfo: FC<AddressInfoProps> = ({
       <div className="address-container-controls">
         {isEdit ? (
           <>
-            <CheckOutlined onClick={() => setEdit(false)} />
-            <StopTwoTone onClick={() => setEdit(false)} />
+            <CheckOutlined
+              onClick={() => {
+                handleUpdate();
+              }}
+            />
+            <StopTwoTone
+              onClick={() => {
+                setAddressData({ ...initialAddressData });
+                setChecked([...initialTagValues]);
+                setAddressErrors(emptyAddressErrors);
+                setResponseError(null);
+                setEdit(false);
+              }}
+            />
           </>
         ) : (
           <>
@@ -57,27 +114,20 @@ export const AddressInfo: FC<AddressInfoProps> = ({
       )}
 
       <Address
-        value={{
-          city: address.city ?? '',
-          streetName: address.streetName ?? '',
-          postalCode: address.postalCode ?? '',
-          country: address.country,
+        value={addressData}
+        addressErrors={addressErrors}
+        onChange={(field) => (e) => {
+          handleChange(field, e.target.value);
         }}
-        addressErrors={{
-          streetName: null,
-          country: null,
-          city: null,
-          postalCode: null,
-        }}
-        onChange={(field: string) => (e) => {
-          console.log(e, field);
-        }}
-        onCountryChange={(value: string) => {
-          console.log(value);
+        onCountryChange={(value) => {
+          setAddressData({ ...addressData, country: value });
+          setAddressErrors({ ...addressErrors, country: null });
+          setResponseError(null);
         }}
         disabled={!isEdit}
         fieldNames={true}
       />
+      {responseError ? <Alert type="error" message={responseError} /> : undefined}
     </>
   );
 };
