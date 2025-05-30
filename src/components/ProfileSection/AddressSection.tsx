@@ -5,6 +5,7 @@ import { ProfileSectionNames } from '../../enums/profile-section-names/profile-s
 import { addressComparator } from '../../utils/customer-field.utils.ts';
 import { AddressSectionProps } from '../../interfaces/component-props/component-props.ts';
 import { AddressInfo } from '../AddressInfo/AddressInfo.tsx';
+import { AddressType } from '../../enums/address-types/address-types.ts';
 
 const getAddressTags = (
   address: AddressSdk,
@@ -15,16 +16,16 @@ const getAddressTags = (
 ): ReactElement[] => {
   const tags: ReactElement[] = [];
   if (defaultShippingAddress === address.id) {
-    tags.push(<Tag color="processing">Default shipping</Tag>);
+    tags.push(<Tag color="processing">{AddressType.DEFAULT_SHIPPING}</Tag>);
   }
   if (defaultBillingAddress === address.id) {
-    tags.push(<Tag color="processing">Default billing</Tag>);
-  }
-  if (address.id && billingAddressIds.includes(address.id)) {
-    tags.push(<Tag>Billing</Tag>);
+    tags.push(<Tag color="processing">{AddressType.DEFAULT_BILLING}</Tag>);
   }
   if (address.id && shippingAddressIds.includes(address.id)) {
-    tags.push(<Tag>Shipping</Tag>);
+    tags.push(<Tag>{AddressType.SHIPPING}</Tag>);
+  }
+  if (address.id && billingAddressIds.includes(address.id)) {
+    tags.push(<Tag>{AddressType.BILLING}</Tag>);
   }
   return tags;
 };
