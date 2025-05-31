@@ -1,9 +1,8 @@
-import { FC, ReactElement, useState } from 'react';
+import { Context, FC, ReactElement, use, useState } from 'react';
 import { Input } from '../Input/Input.tsx';
 import { Button } from 'antd';
 import { ProfileSectionNames } from '../../enums/profile-section-names/profile-section-names.ts';
 import { DatePickerInput } from '../DatePickerInput/DatePickerInput.tsx';
-import { PersonalInfoSectionProps } from '../../interfaces/component-props/component-props.ts';
 import { emptyPersonalInfoErrors } from '../../data/component-states/personal-info-states.ts';
 import { validateDate, validateEmail, validateStringField } from '../../utils/validation.ts';
 import { EditAction } from '../../enums/edit-actions/edit-actions.ts';
@@ -12,6 +11,14 @@ import { MyCustomerUpdateAction } from '@commercetools/platform-sdk';
 import Alert from 'antd/es/alert/Alert';
 import { PersonalInfoFields } from '../../types/profile-sections/personal-info-fields.ts';
 import { composeAction } from '../../utils/edit-action.utils.ts';
+import {
+  ProfileContextData,
+  ProfileContextEditMode,
+} from '../../contexts/profile-context/ProfileContexts.tsx';
+import {
+  ProfileContextDataType,
+  ProfileContextEditModeType,
+} from '../../interfaces/context/profile-context.ts';
 
 const composeActions = (
   initialValues: PersonalInfoFields,
@@ -47,23 +54,19 @@ const composeActions = (
   return actions.filter((action) => action !== undefined);
 };
 
-export const PersonalInfoSection: FC<PersonalInfoSectionProps> = ({
-  client,
-  version,
-  firstName,
-  lastName,
-  email,
-  dateOfBirth,
-  onUpdate,
-  openNotification,
-}: PersonalInfoSectionProps): ReactElement => {
+export const PersonalInfoSection: FC = (): ReactElement => {
+  const { profileEditMode, setProfileEditMode, editComponent, setEditComponent } = use(
+    ProfileContextEditMode as Context<ProfileContextEditModeType>
+  );
+  const { client, customerData, showNotification, setReload } = use(
+    ProfileContextData as Context<ProfileContextDataType>
+  );
   const initialPersonalInfo = {
-    firstName,
-    lastName,
-    email,
-    dateOfBirth,
+    firstName: customerData?.firstName ?? '',
+    lastName: customerData?.lastName ?? '',
+    email: customerData?.email ?? '',
+    dateOfBirth: customerData?.dateOfBirth ?? '',
   };
-  const [editMode, setEditMode] = useState(false);
   const [personalInfo, setPersonalInfo] = useState<PersonalInfoFields>(initialPersonalInfo);
   const [errorMessages, setErrorMessages] =
     useState<{ [key in keyof typeof emptyPersonalInfoErrors]: string | null }>(
@@ -94,11 +97,12 @@ export const PersonalInfoSection: FC<PersonalInfoSectionProps> = ({
 
     if (Object.values(validationErrorMessages).every((error) => error === null)) {
       if (actions.length > 0) {
-        updateCustomer(client, version, actions)
+        updateCustomer(client, customerData?.version ?? 0, actions)
           .then((): void => {
-            setEditMode(false);
-            onUpdate(true);
-            openNotification();
+            setProfileEditMode(false);
+            setEditComponent('');
+            setReload(true);
+            showNotification();
           })
           .catch((error: Error): void => {
             setResponseError(error.message);
@@ -118,32 +122,44 @@ export const PersonalInfoSection: FC<PersonalInfoSectionProps> = ({
           value={personalInfo.firstName}
           errorMessage={errorMessages.firstName ?? undefined}
           onChange={(e) => handleChange('firstName', e.target.value)}
-          disabled={!editMode}
+          disabled={
+            !profileEditMode ||
+            editComponent !== ProfileSectionNames.PERSONAL_INFORMATION.toString()
+          }
         />
         <Input
           fieldName="Last Name: "
           value={personalInfo.lastName}
           errorMessage={errorMessages.lastName ?? undefined}
           onChange={(e) => handleChange('lastName', e.target.value)}
-          disabled={!editMode}
+          disabled={
+            !profileEditMode ||
+            editComponent !== ProfileSectionNames.PERSONAL_INFORMATION.toString()
+          }
         />
         <Input
           fieldName="Email: "
           value={personalInfo.email}
           errorMessage={errorMessages.email ?? undefined}
           onChange={(e) => handleChange('email', e.target.value)}
-          disabled={!editMode}
+          disabled={
+            !profileEditMode ||
+            editComponent !== ProfileSectionNames.PERSONAL_INFORMATION.toString()
+          }
         />
         <DatePickerInput
           fieldName="Date of Birth: "
           value={personalInfo.dateOfBirth}
           errorMessage={errorMessages.dateOfBirth ?? undefined}
           onChange={(selectedDate: string | undefined) => handleChange('dateOfBirth', selectedDate)}
-          disabled={!editMode}
+          disabled={
+            !profileEditMode ||
+            editComponent !== ProfileSectionNames.PERSONAL_INFORMATION.toString()
+          }
         />
       </div>
       {responseError ? <Alert type="error" message={responseError} /> : undefined}
-      {editMode ? (
+      {profileEditMode && editComponent === ProfileSectionNames.PERSONAL_INFORMATION.toString() ? (
         <div className="profile-buttons">
           <Button type="primary" onClick={handleSubmit}>
             Save
@@ -151,7 +167,8 @@ export const PersonalInfoSection: FC<PersonalInfoSectionProps> = ({
           <Button
             type="primary"
             onClick={() => {
-              setEditMode(false);
+              setProfileEditMode(false);
+              setEditComponent('');
               setPersonalInfo(initialPersonalInfo);
               setErrorMessages(emptyPersonalInfoErrors);
               setResponseError(null);
@@ -161,7 +178,16 @@ export const PersonalInfoSection: FC<PersonalInfoSectionProps> = ({
           </Button>
         </div>
       ) : (
-        <Button type="primary" onClick={() => setEditMode(true)}>
+        <Button
+          type="primary"
+          onClick={() => {
+            setProfileEditMode(true);
+            setEditComponent(ProfileSectionNames.PERSONAL_INFORMATION);
+          }}
+          disabled={
+            profileEditMode && editComponent !== ProfileSectionNames.PERSONAL_INFORMATION.toString()
+          }
+        >
           Edit
         </Button>
       )}
