@@ -4,10 +4,8 @@ import { PersonalInfoSection } from '../../components/ProfileSection/PersonalInf
 import { loadCustomerData } from '../../services/api.service.ts';
 import { Customer } from '@commercetools/platform-sdk';
 import { Divider, Spin } from 'antd';
-import { CustomerFields } from '../../enums/customer-fields/customer-fields.ts';
 import { PasswordSection } from '../../components/ProfileSection/PasswordSection.tsx';
 import { AddressSection } from '../../components/ProfileSection/AddressSection.tsx';
-import { getCustomerFieldString } from '../../utils/customer-field.utils.ts';
 import {
   ProfileContextData,
   ProfileProviderEditMode,
@@ -60,26 +58,9 @@ export default function Profile({
             <Spin></Spin>
           ) : (
             <>
-              <PersonalInfoSection
-                client={client}
-                version={customerData?.version ?? 0}
-                email={getCustomerFieldString(customerData, CustomerFields.EMAIL)}
-                firstName={getCustomerFieldString(customerData, CustomerFields.FIRST_NAME)}
-                lastName={getCustomerFieldString(customerData, CustomerFields.LAST_NAME)}
-                dateOfBirth={getCustomerFieldString(customerData, CustomerFields.DATE_OF_BIRTH)}
-                onUpdate={setReload}
-                openNotification={() => successfulNotification(openNotification)}
-              />
+              <PersonalInfoSection />
               <Divider />
-              <PasswordSection
-                client={client}
-                version={customerData?.version ?? 0}
-                password={getCustomerFieldString(customerData, CustomerFields.PASSWORD)}
-                email={customerData?.email ?? ''}
-                onUpdate={setReload}
-                openNotification={() => successfulNotification(openNotification)}
-                setApiClient={setApiClient}
-              />
+              <PasswordSection setApiClient={setApiClient} />
               <Divider />
               <AddressSection />
             </>

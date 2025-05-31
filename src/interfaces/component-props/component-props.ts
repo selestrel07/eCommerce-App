@@ -15,12 +15,6 @@ export interface DatePickerInputProps {
 }
 
 export interface PasswordSectionProps {
-  client: Client;
-  version: number;
-  password: string;
-  email: string;
-  onUpdate: (value: boolean) => void;
-  openNotification: () => void;
   setApiClient: (client: Client) => void;
 }
 
