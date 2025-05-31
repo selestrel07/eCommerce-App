@@ -39,7 +39,7 @@ export const getMenuItems = (
 
   return baseItems.concat([
     {
-      key: 'profile',
+      key: '/profile',
       label: <Link to={Paths.PROFILE}>Profile</Link>,
       onClick: () => {
         if (onClick) onClick();

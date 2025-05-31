@@ -57,7 +57,10 @@
         right: -5px;
         padding: 3px;
 
-        .anticon-check {
+        .anticon-check,
+        .anticon-edit,
+        .anticon-delete,
+        .anticon-stop {
           color: #1677ff;
         }
 
@@ -67,6 +70,25 @@
 
         span:hover {
           scale: 1.2;
+        }
+      }
+
+      .disabled {
+        cursor: not-allowed;
+
+        .anticon-check,
+        .anticon-edit,
+        .anticon-delete {
+          color: gray;
+        }
+
+        span {
+          pointer-events: none;
+          transition: none;
+        }
+
+        span:hover {
+          scale: 1;
         }
       }
 

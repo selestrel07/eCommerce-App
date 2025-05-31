@@ -1,6 +1,9 @@
 import { EditAction } from '../enums/edit-actions/edit-actions.ts';
-import { Address, MyCustomerUpdateAction } from '@commercetools/platform-sdk';
-import { Address as AddressSdk } from '@commercetools/platform-sdk';
+import {
+  Address,
+  Address as AddressSdk,
+  MyCustomerUpdateAction,
+} from '@commercetools/platform-sdk';
 import { AddressType } from '../enums/address-types/address-types.ts';
 
 export const composeAction = (
@@ -69,28 +72,39 @@ export const composeAction = (
 
 export const composeAddressActions = (
   initialAddress: AddressSdk,
-  updatedAddress: AddressSdk,
-  initialAddressTypes: AddressType[],
-  updatedAddressTypes: AddressType[]
+  updatedAddress: AddressSdk
 ): MyCustomerUpdateAction[] => {
   const actions: (MyCustomerUpdateAction | undefined)[] = [];
   actions.push(
     composeAction(
       EditAction.CHANGE_ADDRESS,
-      initialAddress.country !== updatedAddress.country ||
-        initialAddress.city !== updatedAddress.city ||
-        initialAddress.streetName !== updatedAddress.streetName ||
-        initialAddress.postalCode !== updatedAddress.postalCode
+      initialAddress.city &&
+        (initialAddress.country !== updatedAddress.country ||
+          initialAddress.city !== updatedAddress.city ||
+          initialAddress.streetName !== updatedAddress.streetName ||
+          initialAddress.postalCode !== updatedAddress.postalCode)
         ? updatedAddress
         : undefined
     )
   );
   actions.push(
+    composeAction(EditAction.ADD_ADDRESS, !initialAddress.city ? updatedAddress : undefined)
+  );
+  return actions.filter((action) => action !== undefined);
+};
+
+export const composeAddressTypeActions = (
+  initialAddressTypes: AddressType[],
+  updatedAddressTypes: AddressType[],
+  addressId: string
+): MyCustomerUpdateAction[] => {
+  const actions: (MyCustomerUpdateAction | undefined)[] = [];
+  actions.push(
     composeAction(
       EditAction.SET_DEFAULT_SHIPPING_ADDRESS,
       !initialAddressTypes.includes(AddressType.DEFAULT_SHIPPING) &&
         updatedAddressTypes.includes(AddressType.DEFAULT_SHIPPING)
-        ? initialAddress.id
+        ? addressId
         : undefined
     )
   );
@@ -99,7 +113,7 @@ export const composeAddressActions = (
       EditAction.SET_DEFAULT_BILLING_ADDRESS,
       !initialAddressTypes.includes(AddressType.DEFAULT_BILLING) &&
         updatedAddressTypes.includes(AddressType.DEFAULT_BILLING)
-        ? initialAddress.id
+        ? addressId
         : undefined
     )
   );
@@ -108,7 +122,7 @@ export const composeAddressActions = (
       EditAction.ADD_SHIPPING_ADDRESS_ID,
       !initialAddressTypes.includes(AddressType.SHIPPING) &&
         updatedAddressTypes.includes(AddressType.SHIPPING)
-        ? initialAddress.id
+        ? addressId
         : undefined
     )
   );
@@ -117,7 +131,7 @@ export const composeAddressActions = (
       EditAction.ADD_BILLING_ADDRESS_ID,
       !initialAddressTypes.includes(AddressType.BILLING) &&
         updatedAddressTypes.includes(AddressType.BILLING)
-        ? initialAddress.id
+        ? addressId
         : undefined
     )
   );
@@ -126,7 +140,7 @@ export const composeAddressActions = (
       EditAction.REMOVE_SHIPPING_ADDRESS_ID,
       initialAddressTypes.includes(AddressType.SHIPPING) &&
         !updatedAddressTypes.includes(AddressType.SHIPPING)
-        ? initialAddress.id
+        ? addressId
         : undefined
     )
   );
@@ -135,7 +149,7 @@ export const composeAddressActions = (
       EditAction.REMOVE_BILLING_ADDRESS_ID,
       initialAddressTypes.includes(AddressType.BILLING) &&
         !updatedAddressTypes.includes(AddressType.BILLING)
-        ? initialAddress.id
+        ? addressId
         : undefined
     )
   );
