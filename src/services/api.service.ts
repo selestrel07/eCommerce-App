@@ -40,6 +40,7 @@ export const loadProducts = async (
         id: product.id,
         name: product.name,
         description: product.description,
+        searchKeywords: product.searchKeywords ?? {},
         price: priceInfo
           ? {
               value: priceInfo.amount,

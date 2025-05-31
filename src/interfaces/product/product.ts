@@ -8,6 +8,7 @@ export interface ProductWithPrice {
     discountedValue?: number;
   };
   image?: string;
+  searchKeywords?: Record<string, SearchKeyword[]>;
 }
 
 export interface PriceInfo {
@@ -26,4 +27,18 @@ export interface ProductCardProps {
     discountedValue?: number;
   };
   description?: string;
+}
+
+interface SearchKeyword {
+  text: string;
+  suggestTokenizer?: {
+    type: 'whitespace' | 'custom';
+    inputs?: string[];
+  };
+}
+
+export interface ProductSearchProps {
+  onSearch: (query: string) => void;
+  placeholder?: string;
+  defaultValue?: string;
 }

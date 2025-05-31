@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import React, { ReactElement, useState, useEffect } from 'react';
 import { Input } from '../../components/Input/Input';
 import {

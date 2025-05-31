@@ -9,14 +9,7 @@ import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 
 export default tseslint.config(
-  { ignores: [
-    'dist',
-    'coverage',
-    'node_modules',
-    'public',
-    '.eslintrc.*',
-    '*.config.ts',
-    ] },
+  { ignores: ['dist', 'coverage', 'node_modules', 'public', '.eslintrc.*', '*.config.ts'] },
   {
     extends: [
       // Without js.configs.recommended
@@ -76,6 +69,10 @@ export default tseslint.config(
       'eol-last': ['error', 'always'],
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'prettier/prettier': 'error',
+    },
+    files: ['**/page/**/*.{ts,tsx}'],
+    rules: {
+      'max-lines-per-function': 'off',
     },
   }
 );
