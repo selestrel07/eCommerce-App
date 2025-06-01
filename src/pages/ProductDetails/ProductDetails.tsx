@@ -1,17 +1,21 @@
 import './ProductDetails.scss';
-import { useEffect, useState, useMemo, useRef } from 'react';
-import { useParams } from 'react-router-dom';
-import { apiRootBuilder } from '../../services/clientBuilder';
-import { ProductProjection } from '@commercetools/platform-sdk';
+import { useEffect, useState, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import {
+  ProductProjection,
+  ProductProjectionPagedQueryResponse,
+} from '@commercetools/platform-sdk';
 import { Client } from '@commercetools/sdk-client-v2';
-import { getProductPrice } from '../../utils/getProductPrice';
-import { extractAttributes } from '../../utils/getProductAttributes';
+import { getProductPrice } from '../../utils/product-price.utils';
+import { extractAttributes } from '../../utils/product-attribites.utils';
 import { IoIosPeople, IoIosColorPalette } from 'react-icons/io';
 import { GiRolledCloth } from 'react-icons/gi';
 import { Carousel } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
 import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs';
 import { Modal } from 'antd';
+import { Paths } from '../../enums/paths/paths';
+import { getProductByKey } from '../../services/api.service';
 
 // eslint-disable-next-line max-lines-per-function
 const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
@@ -20,38 +24,33 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const apiRoot = useMemo(() => apiRootBuilder(apiClient), [apiClient]);
-
   const carouselRef = useRef<CarouselRef>(null);
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [modalSlideIndex, setModalSlideIndex] = useState(0);
   const modalCarouselRef = useRef<CarouselRef>(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (!key) return;
-    apiRoot
-      .productProjections()
-      .get({
-        queryArgs: {
-          where: `masterVariant(key="${key}") or variants(key="${key}") or key="${key}"`,
-        },
-      })
-      .execute()
-      .then((response) => {
-        if (response.body.results.length > 0) {
-          setProduct(response.body.results[0]);
+
+    getProductByKey(apiClient, key)
+      .then((body: ProductProjectionPagedQueryResponse) => {
+        if (body.results.length > 0) {
+          setProduct(body.results[0]);
         } else {
-          setError('Product not found!');
+          void navigate(Paths.NOT_FOUND);
         }
-        setLoading(false);
       })
       .catch((err) => {
         console.error('Failed to fetch product data:', err);
         setError('Failed to fetch product data');
+      })
+      .finally(() => {
         setLoading(false);
       });
-  }, [key, apiRoot]);
+  }, [key, apiClient, navigate]);
 
   const findVariantByKey = (product: ProductProjection, key: string) => {
     if (product.masterVariant.key === key) {
