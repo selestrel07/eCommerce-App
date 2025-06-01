@@ -1,11 +1,14 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { ProductAttribute } from '../interfaces/interfaces';
 
-export const extractAttributes = (product: ProductProjection): Record<string, string> => {
+export const extractAttributes = (
+  product: ProductProjection,
+  variant = product.masterVariant
+): Record<string, string> => {
   const attrs: Record<string, string> = {};
   const locale = 'en-US';
 
-  const attributes = product.masterVariant.attributes as ProductAttribute[] | undefined;
+  const attributes = variant.attributes as ProductAttribute[] | undefined;
 
   attributes?.forEach((attr) => {
     if (typeof attr.value === 'string') {

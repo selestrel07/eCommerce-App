@@ -73,9 +73,9 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
   const productName = name[locale];
   const productDescription = description?.[locale] ?? Object.values(description ?? {})[0];
 
-  const priceInfo = getProductPrice(product);
+  const priceInfo = getProductPrice(product, selectedVariant);
 
-  const attributes = extractAttributes(product);
+  const attributes = extractAttributes(product, selectedVariant);
 
   return (
     <>
@@ -157,9 +157,20 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
         <div className="product-general-description">
           <div className="product-price">
             <h2 className="price-text">Price:</h2>
-            <p className="price">
-              {priceInfo?.amount} {priceInfo?.currency}
-            </p>
+            {priceInfo?.originalAmount ? (
+              <>
+                <p className="price old-price">
+                  {priceInfo.originalAmount} {priceInfo.currency}
+                </p>
+                <p className="price discounted-price">
+                  {priceInfo.amount} {priceInfo.currency}
+                </p>
+              </>
+            ) : (
+              <p className="price">
+                {priceInfo?.amount} {priceInfo?.currency}
+              </p>
+            )}
           </div>
           <div className="product-description-container">
             <h3>About this item:</h3>

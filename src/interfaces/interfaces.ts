@@ -23,6 +23,7 @@ export interface FieldValidationObject {
 export interface PriceInfo {
   amount: number;
   currency: string;
+  originalAmount?: number | null;
 }
 
 export interface ProductAttribute {

@@ -49,6 +49,16 @@
       color: red;
       font-size: large;
     }
+
+    .old-price {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    .discounted-price {
+      color: red;
+      font-weight: bold;
+    }
   }
 
   .product-attributes {
