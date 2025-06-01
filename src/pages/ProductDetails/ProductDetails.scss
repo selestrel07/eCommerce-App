@@ -4,7 +4,6 @@
   align-items: center;
   padding: 50px;
   border: 2px solid rgba(5, 5, 5, 0.08);
-  // border-top: 0;
   box-shadow: 4px 4px 18px 3px rgba(9, 60, 99, 0.15);
   margin: 0px 50px;
   border-radius: 10px;
@@ -93,7 +92,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 500px;
+  width: 300px;
   height: 500px;
   overflow: hidden;
 }
@@ -101,7 +100,7 @@
 .carousel-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .ant-carousel .css-dev-only-do-not-override-vrrzze {
@@ -157,6 +156,64 @@
   right: -30px;
 }
 
+.product-modal .ant-modal-content {
+  max-width: 90vw;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.product-modal .carousel-image {
+  width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+}
+
+.modal-carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-modal .carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.9);
+  width: 30px;
+  height: 30px;
+  border: none;
+  font-size: 20px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  &:hover {
+    background: #0a66c2;
+    color: white;
+  }
+}
+
+.product-modal .carousel-arrow.left {
+  left: -70px;
+}
+
+.product-modal .carousel-arrow.right {
+  right: -70px;
+}
+
+.product-modal {
+  width: 1000px;
+}
+
 @media (max-width: 900px) {
   #root main {
     justify-content: flex-start;
@@ -179,7 +236,23 @@
   .carousel-image {
     width: 300px;
     height: 300px;
-    object-fit: cover;
+    object-fit: contain;
+  }
+
+  .product-modal .ant-modal-content {
+    max-width: 95vw;
+  }
+
+  .product-modal .carousel-image {
+    max-height: 50vh;
+  }
+
+  .product-modal .carousel-arrow.left {
+    left: -25px;
+  }
+
+  .product-modal .carousel-arrow.right {
+    right: -25px;
   }
 }
 
@@ -196,6 +269,22 @@
   .carousel-image {
     width: 200px;
     height: 200px;
-    object-fit: cover;
+    object-fit: contain;
+  }
+
+  .product-modal .ant-modal-content {
+    max-width: 98vw;
+  }
+
+  .product-modal .carousel-image {
+    max-height: 40vh;
+  }
+
+  .product-modal .carousel-arrow.left {
+    left: -25px;
+  }
+
+  .product-modal .carousel-arrow.right {
+    right: -25px;
   }
 }
