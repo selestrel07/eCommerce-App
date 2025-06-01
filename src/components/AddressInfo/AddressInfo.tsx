@@ -109,7 +109,9 @@ export const AddressInfo: FC<AddressInfoProps> = ({
           .then(async (response) => {
             if (mainActions.length > 0) {
               const addressId: string =
-                address.id ?? response.addresses[response.addresses.length - 1].id ?? '';
+                address.id === ''
+                  ? (response.addresses[response.addresses.length - 1].id ?? '')
+                  : (address.id ?? '');
               const typeActions = composeAddressTypeActions(initialTagValues, tagValues, addressId);
               await updateCustomer(client, response.version, typeActions);
             }

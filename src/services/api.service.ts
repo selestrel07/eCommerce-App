@@ -93,7 +93,7 @@ export const updateCustomer = async (
     return httpResponse.body;
   } catch (rawError: unknown) {
     const humanReadableMsg = handleApiError(rawError);
-    throw mapAuthError(humanReadableMsg);
+    throw new Error(humanReadableMsg);
   }
 };
 
