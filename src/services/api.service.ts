@@ -2,34 +2,33 @@ import { apiRootBuilder } from './clientBuilder';
 import { handleApiError } from './errorHandler';
 import { Client } from '@commercetools/sdk-client-v2';
 import { mapAuthError } from './authService';
-import { ProductProjection } from '@commercetools/platform-sdk';
+import { Customer, MyCustomerUpdateAction, ProductProjection } from '@commercetools/platform-sdk';
 import { ProductWithPrice } from '../interfaces/product/product';
 import { getProductPrice } from '../utils/productPrice';
 import { extractAttributes } from '../utils/extractAttributes';
 
-
 export const loadProducts = async (
   client: Client,
-  currency = 'EUR',
-  country?: string,
-  customerGroupId?: string,
-  channelId?: string
+  searchQuery?: string,
+  currency = 'EUR'
 ): Promise<ProductWithPrice[]> => {
   const apiRoot = apiRootBuilder(client);
 
   try {
-    const httpResponse = await apiRoot
+    const requestBuilder = apiRoot
       .productProjections()
+      .search()
       .get({
         queryArgs: {
+          ...(searchQuery && { ['text.en-US']: searchQuery }),
           priceCurrency: currency,
-          ...(country && { priceCountry: country }),
-          ...(customerGroupId && { priceCustomerGroup: customerGroupId }),
-          ...(channelId && { priceChannel: channelId }),
           expand: ['masterVariant.attributes', 'variants.attributes'],
+          limit: 50,
+          staged: false,
         },
-      })
-      .execute();
+      });
+
+    const httpResponse = await requestBuilder.execute();
 
     const products: ProductProjection[] = httpResponse.body.results;
 
@@ -87,7 +86,6 @@ export const loadProducts = async (
     throw mapAuthError(humanReadableMsg);
   }
 };
-
 export const loadCustomerData = async (client: Client): Promise<Customer> => {
   const apiRoot = apiRootBuilder(client);
 

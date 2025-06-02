@@ -4,16 +4,20 @@ import { loadProducts } from '../../services/api.service';
 import { ProductWithPrice } from '../../interfaces/product/product';
 import './Catalog.scss';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
+import { Input } from 'antd';
+
+const { Search } = Input;
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
   const [products, setProducts] = useState<ProductWithPrice[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const productList = await loadProducts(apiClient);
+        const productList = await loadProducts(apiClient, searchQuery);
         setProducts(productList);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
@@ -23,7 +27,7 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     };
 
     void fetchProducts();
-  }, [apiClient]);
+  }, [apiClient, searchQuery]);
 
   if (loading) {
     return (
@@ -55,6 +59,17 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
   return (
     <div className="catalog-container">
       <h1 className="catalog-title">List Products</h1>
+
+      <div className="catalog-search">
+        <Search
+          placeholder="Search products..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          enterButton
+          size="large"
+          loading={loading}
+        />
+      </div>
 
       {allVariants.length === 0 ? (
         <p className="catalog-empty-text">No product variations found.</p>
