@@ -7,7 +7,6 @@ import {
   MyCustomerUpdateAction,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
-// import { mapAuthError } from './authService';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { ProductWithPrice } from '../interfaces/product/product';
 import { getProductPrice } from '../utils/productPrice';

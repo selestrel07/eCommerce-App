@@ -1,9 +1,11 @@
+/* eslint-disable max-lines-per-function */
 import { ReactElement, useEffect, useState } from 'react';
 import { Client } from '@commercetools/sdk-client-v2';
 import { loadProducts } from '../../services/api.service';
 import { ProductWithPrice } from '../../interfaces/product/product';
 import './Catalog.scss';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
+import { Select } from 'antd';
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
   const [products, setProducts] = useState<ProductWithPrice[]>([]);
@@ -12,8 +14,8 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
 
   const [sortOption, setSortOption] = useState<string>('');
 
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortOption(e.target.value);
+  const handleSortChange = (value: string) => {
+    setSortOption(value);
   };
 
   useEffect(() => {
@@ -66,17 +68,26 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     }))
   );
 
+  const { Option } = Select;
+
   return (
     <div className="catalog-container">
       <h1 className="catalog-title">List Products</h1>
-
-      <select className="catalog-sort" value={sortOption} onChange={handleSortChange}>
-        <option value="">Sort by:</option>
-        <option value="price asc">Price: Low to High</option>
-        <option value="price desc">Price: High to Low</option>
-        <option value="name.en-US asc">Name: A-Z</option>
-        <option value="name.en-US desc">Name: Z-A</option>
-      </select>
+      <div className="sort-container">
+        <p className="sort-text">Sort by:</p>
+        <Select<string>
+          className="catalog-sort"
+          value={sortOption}
+          onChange={handleSortChange}
+          placeholder="Sort by:"
+        >
+          <Option value="">Default</Option>
+          <Option value="price asc">Price: Low to High</Option>
+          <Option value="price desc">Price: High to Low</Option>
+          <Option value="name.en-US asc">Name: A-Z</Option>
+          <Option value="name.en-US desc">Name: Z-A</Option>
+        </Select>
+      </div>
 
       {allVariants.length === 0 ? (
         <p className="catalog-empty-text">No product variations found.</p>
