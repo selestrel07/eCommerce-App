@@ -74,7 +74,6 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    // width: 200px;
 
     svg {
       height: 1.5em;
@@ -93,7 +92,6 @@
 
 .product-carousel {
   width: 500px;
-  // max-width: 600px;
   margin: 0 auto;
   overflow: hidden;
 }
@@ -123,6 +121,14 @@
 }
 
 :where(.css-dev-only-do-not-override-vrrzze).ant-carousel .slick-dots li::after {
+  background: black;
+}
+
+:where(.css-vrrzze).ant-carousel .slick-dots li button {
+  background: black;
+}
+
+:where(.css-vrrzze).ant-carousel .slick-dots li::after {
   background: black;
 }
 
@@ -264,6 +270,13 @@
 
   .product-modal .carousel-arrow.right {
     right: -25px;
+  }
+
+  .product-modal .carousel-arrow {
+    position: static;
+    transform: none;
+    display: inline-block;
+    margin: 10px 5px 0px 5px;
   }
 }
 

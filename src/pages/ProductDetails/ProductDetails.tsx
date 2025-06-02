@@ -52,6 +52,12 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
       });
   }, [key, apiClient, navigate]);
 
+  useEffect(() => {
+    if (isModalOpen && modalCarouselRef.current) {
+      modalCarouselRef.current.goTo(modalSlideIndex);
+    }
+  }, [isModalOpen, modalSlideIndex]);
+
   const findVariantByKey = (product: ProductProjection, key: string) => {
     if (product.masterVariant.key === key) {
       return product.masterVariant;
