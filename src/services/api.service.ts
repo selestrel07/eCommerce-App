@@ -7,7 +7,7 @@ import {
   MyCustomerUpdateAction,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
-import { mapAuthError } from './authService';
+// import { mapAuthError } from './authService';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { ProductWithPrice } from '../interfaces/product/product';
 import { getProductPrice } from '../utils/productPrice';
@@ -18,19 +18,22 @@ export const loadProducts = async (
   currency = 'EUR',
   country?: string,
   customerGroupId?: string,
-  channelId?: string
+  channelId?: string,
+  sort?: string
 ): Promise<ProductWithPrice[]> => {
   const apiRoot = apiRootBuilder(client);
 
   try {
     const httpResponse = await apiRoot
       .productProjections()
+      .search()
       .get({
         queryArgs: {
           priceCurrency: currency,
           ...(country && { priceCountry: country }),
           ...(customerGroupId && { priceCustomerGroup: customerGroupId }),
           ...(channelId && { priceChannel: channelId }),
+          ...(sort && { sort: [sort] }),
           expand: ['masterVariant.attributes', 'variants.attributes'],
         },
       })
