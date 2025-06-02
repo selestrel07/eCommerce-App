@@ -121,6 +121,22 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
             <BsArrowRightShort />
           </button>
         </div>
+        <div className="mobile-arrows">
+          <button
+            type="button"
+            className="mobile-arrow left"
+            onClick={() => modalCarouselRef.current?.prev()}
+          >
+            <BsArrowLeftShort />
+          </button>
+          <button
+            type="button"
+            className="mobile-arrow rigth"
+            onClick={() => modalCarouselRef.current?.next()}
+          >
+            <BsArrowRightShort />
+          </button>
+        </div>
       </Modal>
 
       <div className="product-container">

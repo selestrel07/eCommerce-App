@@ -147,7 +147,6 @@
   width: 30px;
   height: 30px;
   border: none;
-  // padding: 10px;
   font-size: 20px;
   border-radius: 50%;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -231,6 +230,10 @@
   width: 1000px;
 }
 
+.mobile-arrows {
+  display: none;
+}
+
 @media (max-width: 900px) {
   #root main {
     justify-content: flex-start;
@@ -272,13 +275,51 @@
     right: -25px;
   }
 
-  .product-modal .carousel-arrow {
-    position: static;
-    transform: none;
-    display: inline-block;
-    margin: 10px 5px 0px 5px;
+  .product-modal {
+    .carousel-arrow.left {
+      display: none;
+    }
+  }
+  
+
+  .product-modal {
+    .carousel-arrow.right {
+      display: none;
+    }
+  }
+
+  .mobile-arrows {
+    position: relative;
+    top: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 50px;
+  }
+
+  .mobile-arrow {
+    background: rgba(255, 255, 255, 0.9);
+    width: 30px;
+    height: 30px;
+    border: none;
+    font-size: 20px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background 0.3s ease;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    &:hover {
+      background: #0a66c2;
+      color: white;
+    }
   }
 }
+
 
 @media (max-width: 450px) {
   .product-carousel {
