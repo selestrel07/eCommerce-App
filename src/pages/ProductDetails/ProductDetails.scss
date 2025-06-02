@@ -5,7 +5,7 @@
   padding: 50px;
   border: 2px solid rgba(5, 5, 5, 0.08);
   box-shadow: 4px 4px 18px 3px rgba(9, 60, 99, 0.15);
-  margin: 0px 50px;
+  margin: 0 50px;
   border-radius: 10px;
 }
 
@@ -29,13 +29,13 @@
     max-width: 500px;
     border-bottom: 1px solid rgba(5, 5, 5, 0.2);
     padding-bottom: 20px;
-  
+
     p{
       text-align: justify;
       line-height: 1.1rem;
     }
   }
-  
+
   .product-price {
     display: flex;
     flex-direction: row;
@@ -280,7 +280,7 @@
       display: none;
     }
   }
-  
+
 
   .product-modal {
     .carousel-arrow.right {

@@ -51,6 +51,10 @@ export interface TypedMoney {
   fractionDigits: number;
 }
 
+export interface ProductVariantWithPriceAndName extends ProductVariantWithPrice {
+  productName: Record<string, string>;
+}
+
 export interface Props {
   variant: ProductVariantWithPrice;
   name: string;

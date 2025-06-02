@@ -1,20 +1,26 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { Client } from '@commercetools/sdk-client-v2';
-import { loadProducts } from '../../services/api.service';
-import { ProductWithPrice } from '../../interfaces/product/product';
+import { loadProducts, searchProducts } from '../../services/api.service';
 import './Catalog.scss';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
+import { CategoryList } from '../../components/CategoryList/CategoryList.tsx';
+import { CatalogContext, CategoryProvider } from '../../contexts/CatalogContexts.tsx';
+import { CatalogBreadcrumbs } from '../../components/CatalogBreadcrumbs/CatalogBreadcrumbs.tsx';
+import { ProductVariantWithPriceAndName } from '../../interfaces/product/product.ts';
+import { getVariants } from '../../utils/map-product.ts';
+import { QueryParams } from '../../interfaces/query-params/query-params.ts';
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
-  const [products, setProducts] = useState<ProductWithPrice[]>([]);
+  const [products, setProducts] = useState<ProductVariantWithPriceAndName[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState<QueryParams>({});
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const productList = await loadProducts(apiClient);
-        setProducts(productList);
+        setProducts(getVariants(productList));
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
       } finally {
@@ -24,6 +30,16 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
 
     void fetchProducts();
   }, [apiClient]);
+
+  useEffect(() => {
+    searchProducts(apiClient, filters)
+      .then((response) => {
+        setProducts(getVariants(response));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [filters]);
 
   if (loading) {
     return (
@@ -45,29 +61,37 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     );
   }
 
-  const allVariants = products.flatMap((product) =>
-    [product.masterVariant, ...product.variants].map((variant) => ({
-      ...variant,
-      productName: product.name,
-    }))
-  );
-
   return (
-    <div className="catalog-container">
-      <h1 className="catalog-title">List Products</h1>
+    <CatalogContext.Provider
+      value={{
+        filters,
+        setFilters,
+      }}
+    >
+      <CategoryProvider>
+        <div className="catalog-container">
+          <CategoryList client={apiClient} />
+          <div className="catalog-products">
+            <CatalogBreadcrumbs />
+            <div className="product-list">
+              <h1 className="catalog-title">Product List</h1>
 
-      {allVariants.length === 0 ? (
-        <p className="catalog-empty-text">No product variations found.</p>
-      ) : (
-        <div className="catalog-grid">
-          {allVariants.map((variant) => {
-            const productName = Object.values(variant.productName)[0] || 'Unnamed Product';
-            const productKey = variant.key ?? `variant-${variant.id}`;
+              {products.length === 0 ? (
+                <p className="catalog-empty-text">No product variations found.</p>
+              ) : (
+                <div className="catalog-grid">
+                  {products.map((variant) => {
+                    const productName = Object.values(variant.productName)[0] || 'Unnamed Product';
+                    const productKey = variant.key ?? `variant-${variant.id}`;
 
-            return <ProductCard key={productKey} variant={variant} name={productName} />;
-          })}
+                    return <ProductCard key={productKey} variant={variant} name={productName} />;
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-      )}
-    </div>
+      </CategoryProvider>
+    </CatalogContext.Provider>
   );
 }
