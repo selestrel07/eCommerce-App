@@ -14,8 +14,8 @@ import { Carousel } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
 import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs';
 import { Modal } from 'antd';
-import { Paths } from '../../enums/paths/paths';
 import { getProductByKey } from '../../services/api.service';
+import NotFound from '../NotFound/NotFound';
 
 // eslint-disable-next-line max-lines-per-function
 const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
@@ -28,6 +28,7 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [modalSlideIndex, setModalSlideIndex] = useState(0);
+  const [isNotFound, setIsNotFound] = useState(false);
   const modalCarouselRef = useRef<CarouselRef>(null);
 
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
         if (body.results.length > 0) {
           setProduct(body.results[0]);
         } else {
-          void navigate(Paths.NOT_FOUND);
+          setIsNotFound(true);
         }
       })
       .catch((err) => {
@@ -68,6 +69,7 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
+  if (isNotFound) return <NotFound />;
   if (!product) return null;
 
   const { name, description } = product;
