@@ -21,10 +21,10 @@ export const App = () => {
   const [isSignedIn, setSignedIn] = useState<boolean>(token !== null);
   let defaultClient: Client = createAnonymousClient(getAnonymousId());
   const [api, contextHolder] = notification.useNotification();
-  const openNotification = () => {
+  const openNotification = (message: string, description: string) => {
     api.info({
-      message: 'Success!',
-      description: <Context.Consumer>{() => 'Customer is created successfully.'}</Context.Consumer>,
+      message,
+      description: <Context.Consumer>{() => description}</Context.Consumer>,
       placement: 'bottomRight',
       showProgress: true,
       duration: 2,
