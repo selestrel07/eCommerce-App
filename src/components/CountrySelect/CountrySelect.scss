@@ -1,0 +1,10 @@
+.input-country {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 60px;
+
+  p {
+    text-align: start;
+  }
+}
