@@ -1,11 +1,12 @@
-import { apiRootBuilder } from './clientBuilder.ts';
-import { handleApiError } from './errorHandler.ts';
+import { apiRootBuilder } from './clientBuilder';
+import { handleApiError } from './errorHandler';
 import { Client } from '@commercetools/sdk-client-v2';
-import { mapAuthError } from './authService.ts';
+import { mapAuthError } from './authService';
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { ProductWithPrice } from '../interfaces/product/product.ts';
-import { getProductPrice } from '../utils/productPrice.ts';
-import { Customer, MyCustomerUpdateAction } from '@commercetools/platform-sdk';
+import { ProductWithPrice } from '../interfaces/product/product';
+import { getProductPrice } from '../utils/productPrice';
+import { extractAttributes } from '../utils/extractAttributes';
+
 
 export const loadProducts = async (
   client: Client,
@@ -25,36 +26,62 @@ export const loadProducts = async (
           ...(country && { priceCountry: country }),
           ...(customerGroupId && { priceCustomerGroup: customerGroupId }),
           ...(channelId && { priceChannel: channelId }),
+          expand: ['masterVariant.attributes', 'variants.attributes'],
         },
       })
       .execute();
 
     const products: ProductProjection[] = httpResponse.body.results;
 
-    const mappedProducts = products.map((product) => {
-      const priceInfo = getProductPrice(product, currency);
+    return products.map((product) => {
+      const masterVariant = product.masterVariant;
+
+      const getVariantPrice = (variant: typeof masterVariant) =>
+        getProductPrice(
+          {
+            ...product,
+            masterVariant: variant,
+          },
+          currency
+        );
+
+      const masterPrice = getVariantPrice(masterVariant);
+      const image =
+        masterVariant?.images?.find((img) => img.label === 'Main')?.url ??
+        masterVariant?.images?.[0]?.url;
 
       return {
         id: product.id,
+        key: product.key!,
         name: product.name,
-        price: priceInfo
-          ? {
-              value: priceInfo.amount,
-              currency: priceInfo.currency,
-              discountedValue: priceInfo.discountedAmount,
-            }
-          : undefined,
+        description: product.description,
+        image,
+        price: masterPrice,
+        masterVariant: {
+          id: masterVariant.id,
+          key: masterVariant.key ?? undefined,
+          sku: masterVariant.sku ?? undefined,
+          price: masterPrice,
+          images: masterVariant.images ?? [],
+          attributes: extractAttributes(product, masterVariant),
+        },
+        variants: (product.variants || []).map((variant) => {
+          const variantPrice = getProductPrice({
+            ...product,
+            masterVariant: variant,
+          });
+
+          return {
+            id: variant.id,
+            key: variant.key ?? undefined,
+            sku: variant.sku ?? undefined,
+            price: variantPrice ?? undefined,
+            images: variant.images ?? [],
+            attributes: extractAttributes(product, variant),
+          };
+        }),
       };
     });
-
-    products.forEach((product) => {
-      console.log(`Product ID: ${product.id}`);
-      console.log('Published:', product.published);
-      console.log('Name:', product.name);
-      console.log('Master Variant Prices:', product.masterVariant.prices);
-      console.log('First Variant Prices:', product.variants?.[0]?.prices);
-    }); // I leave it for testing purposes only, when you run the next shuffle, delete this code and comments
-    return mappedProducts;
   } catch (rawError: unknown) {
     const humanReadableMsg = handleApiError(rawError);
     throw mapAuthError(humanReadableMsg);
