@@ -2,13 +2,16 @@ import { apiRootBuilder } from './clientBuilder';
 import { handleApiError } from './errorHandler';
 import { Client } from '@commercetools/sdk-client-v2';
 import { mapAuthError } from './authService.ts';
-import { ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
+import {
+  Customer,
+  MyCustomerUpdateAction,
+  ProductProjectionPagedQueryResponse,
+} from '@commercetools/platform-sdk';
 import { mapAuthError } from './authService';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { ProductWithPrice } from '../interfaces/product/product';
 import { getProductPrice } from '../utils/productPrice';
 import { extractAttributes } from '../utils/extractAttributes';
-
 
 export const loadProducts = async (
   client: Client,
@@ -124,7 +127,9 @@ export const getProductByKey = async (
   } catch (error) {
     console.error('Failed to fetch product data:', error);
     throw error;
-    
+  }
+};
+
 export const updateCustomer = async (
   client: Client,
   version: number,
