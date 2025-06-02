@@ -1,33 +1,35 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { PriceInfo } from '../interfaces/product/product';
 
-export const getProductPrice = (product: ProductProjection, currency: string): PriceInfo | null => {
-  let price;
+export const getProductPrice = (
+  product: Pick<ProductProjection, 'masterVariant'>,
+  currency?: string
+): PriceInfo | undefined => {
+  const effectiveCurrency = currency ?? 'EUR';
 
-  price = product.masterVariant.prices?.find((p) =>
-    currency ? p.value.currencyCode === currency : true
+  const price = product.masterVariant.prices?.find(
+    (p) => p.value.currencyCode === effectiveCurrency
+  )?.value;
+
+  if (!price || price.type !== 'centPrecision') return undefined;
+
+  let discountedValue: number | null = null;
+
+  const priceWithDiscount = product.masterVariant.prices?.find(
+    (p) => p.value.currencyCode === effectiveCurrency && p.discounted
   );
 
-  if (!price && product.variants?.length) {
-    for (const variant of product.variants) {
-      price = variant.prices?.find((p) => (currency ? p.value.currencyCode === currency : true));
-      if (price) break;
-    }
-  }
-  if (!price && product.variants?.length) {
-    for (const variant of product.variants) {
-      price = variant.prices?.[0];
-      if (price) break;
-    }
+  if (priceWithDiscount?.discounted?.value) {
+    const { centAmount, fractionDigits } = priceWithDiscount.discounted.value;
+    discountedValue = centAmount / Math.pow(10, fractionDigits);
   }
 
-  if (!price) return null;
+  const amount = price.centAmount / Math.pow(10, price.fractionDigits);
 
   return {
-    amount: price.value.centAmount / 100,
-    currency: price.value.currencyCode,
-    discountedAmount: price.discounted?.value?.centAmount
-      ? price.discounted.value.centAmount / 100
-      : undefined,
+    amount,
+    currency: price.currencyCode,
+    originalAmount: amount,
+    discountedValue,
   };
 };

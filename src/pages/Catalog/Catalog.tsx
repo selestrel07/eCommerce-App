@@ -45,28 +45,26 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     );
   }
 
+  const allVariants = products.flatMap((product) =>
+    [product.masterVariant, ...product.variants].map((variant) => ({
+      ...variant,
+      productName: product.name,
+    }))
+  );
+
   return (
     <div className="catalog-container">
-      <h1 className="catalog-title">Product List</h1>
+      <h1 className="catalog-title">List Products</h1>
 
-      {products.length === 0 ? (
-        <p className="catalog-empty-text">No products found.</p>
+      {allVariants.length === 0 ? (
+        <p className="catalog-empty-text">No product variations found.</p>
       ) : (
         <div className="catalog-grid">
-          {products.map((product) => {
-            const productName = Object.values(product.name)[0] || 'Unnamed product';
-            const productDescription = Object.values(product.description ?? {})[0];
+          {allVariants.map((variant) => {
+            const productName = Object.values(variant.productName)[0] || 'Unnamed Product';
+            const productKey = variant.key ?? `variant-${variant.id}`;
 
-            return (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={productName}
-                image={product.image}
-                price={product.price}
-                description={productDescription}
-              />
-            );
+            return <ProductCard key={productKey} variant={variant} name={productName} />;
           })}
         </div>
       )}
