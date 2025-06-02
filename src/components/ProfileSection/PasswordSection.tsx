@@ -1,4 +1,4 @@
-import { FC, ReactElement, useState } from 'react';
+import { Context, FC, ReactElement, use, useState } from 'react';
 import { Button } from 'antd';
 import { ProfileSectionNames } from '../../enums/profile-section-names/profile-section-names.ts';
 import { Input } from '../Input/Input.tsx';
@@ -13,17 +13,24 @@ import Alert from 'antd/es/alert/Alert';
 import { loginCustomer } from '../../services/authService.ts';
 import { emptyTokenStore, tokenCache } from '../../services/storage/storage.service.ts';
 import { createCustomerClient } from '../../services/clientBuilder.ts';
+import {
+  ProfileContextData,
+  ProfileContextEditMode,
+} from '../../contexts/profile-context/ProfileContexts.tsx';
+import {
+  ProfileContextDataType,
+  ProfileContextEditModeType,
+} from '../../interfaces/context/profile-context.ts';
 
 export const PasswordSection: FC<PasswordSectionProps> = ({
-  client,
-  version,
-  password,
-  email,
-  onUpdate,
-  openNotification,
   setApiClient,
 }: PasswordSectionProps): ReactElement => {
-  const [editMode, setEditMode] = useState(false);
+  const { profileEditMode, setProfileEditMode, editComponent, setEditComponent } = use(
+    ProfileContextEditMode as Context<ProfileContextEditModeType>
+  );
+  const { client, customerData, showNotification, setReload } = use(
+    ProfileContextData as Context<ProfileContextDataType>
+  );
   const [passwordData, setPasswordData] = useState(emptyPasswords);
   const [errorMessages, setErrorMessages] = useState<{
     [K in keyof typeof emptyPasswordErrorMessages]: string | null;
@@ -55,17 +62,29 @@ export const PasswordSection: FC<PasswordSectionProps> = ({
       if (passwordData.newPassword === passwordData.currentPassword) {
         setResponseError('Current and new passwords are the same');
       } else {
-        changePassword(client, version, passwordData.currentPassword, passwordData.newPassword)
+        changePassword(
+          client,
+          customerData?.version ?? 0,
+          passwordData.currentPassword,
+          passwordData.newPassword
+        )
           .then(async () => {
             tokenCache.set(emptyTokenStore);
-            const newApiClient = createCustomerClient(email, passwordData.newPassword);
-            await loginCustomer(email, passwordData.newPassword, newApiClient).then(() =>
-              setApiClient(newApiClient)
+            const newApiClient = createCustomerClient(
+              customerData?.email ?? '',
+              passwordData.newPassword
             );
+            await loginCustomer(
+              customerData?.email ?? '',
+              passwordData.newPassword,
+              newApiClient
+            ).then(() => setApiClient(newApiClient));
           })
           .then(() => {
-            onUpdate(true);
-            openNotification();
+            setReload(true);
+            setEditComponent('');
+            setProfileEditMode(false);
+            showNotification();
           })
           .catch((error: Error): void => {
             setResponseError(error.message);
@@ -78,7 +97,7 @@ export const PasswordSection: FC<PasswordSectionProps> = ({
     <section>
       <h2>{ProfileSectionNames.PASSWORD}</h2>
       <div className="password-info-fields">
-        {editMode ? (
+        {profileEditMode && editComponent === ProfileSectionNames.PASSWORD.toString() ? (
           <>
             <Input
               fieldName="Current Password:"
@@ -100,12 +119,17 @@ export const PasswordSection: FC<PasswordSectionProps> = ({
             />
           </>
         ) : (
-          <Input fieldName="Current Password:" value={password} isPassword disabled />
+          <Input
+            fieldName="Current Password:"
+            value={customerData?.password ?? ''}
+            isPassword
+            disabled
+          />
         )}
       </div>
       {responseError ? <Alert type="error" message={responseError} /> : undefined}
       <div className="profile-buttons">
-        {editMode ? (
+        {profileEditMode && editComponent === ProfileSectionNames.PASSWORD.toString() ? (
           <>
             <Button type="primary" onClick={() => handleSubmit()}>
               Update Password
@@ -113,7 +137,8 @@ export const PasswordSection: FC<PasswordSectionProps> = ({
             <Button
               type="primary"
               onClick={() => {
-                setEditMode(false);
+                setProfileEditMode(false);
+                setEditComponent('');
                 setPasswordData(emptyPasswords);
                 setErrorMessages(emptyPasswordErrorMessages);
                 setResponseError(null);
@@ -123,7 +148,14 @@ export const PasswordSection: FC<PasswordSectionProps> = ({
             </Button>
           </>
         ) : (
-          <Button type="primary" onClick={() => setEditMode(true)}>
+          <Button
+            type="primary"
+            onClick={() => {
+              setProfileEditMode(true);
+              setEditComponent(ProfileSectionNames.PASSWORD);
+            }}
+            disabled={profileEditMode && editComponent !== ProfileSectionNames.PASSWORD.toString()}
+          >
             Edit
           </Button>
         )}
