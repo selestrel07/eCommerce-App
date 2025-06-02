@@ -2,7 +2,12 @@ import { apiRootBuilder } from './clientBuilder';
 import { handleApiError } from './errorHandler';
 import { Client } from '@commercetools/sdk-client-v2';
 import { mapAuthError } from './authService';
-import { Customer, MyCustomerUpdateAction, ProductProjection } from '@commercetools/platform-sdk';
+import {
+  Customer,
+  MyCustomerUpdateAction,
+  ProductProjection,
+  ProductProjectionPagedQueryResponse,
+} from '@commercetools/platform-sdk';
 import { QueryParams } from '../interfaces/query-params/query-params.ts';
 
 export const loadProducts = async (
@@ -47,6 +52,31 @@ export const loadCustomerData = async (client: Client): Promise<Customer> => {
   }
 };
 
+export const getApiRoot = (client: Client) => apiRootBuilder(client);
+
+export const getProductByKey = async (
+  client: Client,
+  key: string
+): Promise<ProductProjectionPagedQueryResponse> => {
+  const apiRoot = getApiRoot(client);
+
+  try {
+    const response = await apiRoot
+      .productProjections()
+      .get({
+        queryArgs: {
+          where: `masterVariant(key="${key}") or variants(key="${key}") or key="${key}"`,
+        },
+      })
+      .execute();
+
+    return response.body;
+  } catch (error) {
+    console.error('Failed to fetch product data:', error);
+    throw error;
+  }
+};
+
 export const updateCustomer = async (
   client: Client,
   version: number,
@@ -67,7 +97,7 @@ export const updateCustomer = async (
     return httpResponse.body;
   } catch (rawError: unknown) {
     const humanReadableMsg = handleApiError(rawError);
-    throw mapAuthError(humanReadableMsg);
+    throw new Error(humanReadableMsg);
   }
 };
 

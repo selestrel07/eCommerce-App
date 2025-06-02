@@ -7,4 +7,5 @@ export enum Paths {
   CATALOG = '/catalog',
   NOT_FOUND = '/error',
   ANY = '*',
+  PRODUCT_DETAILS = '/productdetails/:key',
 }
