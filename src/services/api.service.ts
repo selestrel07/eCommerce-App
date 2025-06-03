@@ -16,16 +16,18 @@ export const loadProducts = async (
   customerGroupId?: string,
   channelId?: string,
   sort?: string,
-  filterQueries?: string[]
+  filterQueries?: string[],
+  searchQuery?: string
 ): Promise<ProductProjection[]> => {
   const apiRoot = apiRootBuilder(client);
 
   try {
-    const httpResponse = await apiRoot
+    const requestBuilder = apiRoot
       .productProjections()
       .search()
       .get({
         queryArgs: {
+          ...(searchQuery && { ['text.en-US']: searchQuery }),
           priceCurrency: currency,
           ...(country && { priceCountry: country }),
           ...(customerGroupId && { priceCustomerGroup: customerGroupId }),
@@ -33,9 +35,12 @@ export const loadProducts = async (
           ...(sort && { sort: [sort] }),
           ...(filterQueries && { 'filter.query': filterQueries }),
           expand: ['masterVariant.attributes', 'variants.attributes'],
+          limit: 50,
+          staged: false,
         },
-      })
-      .execute();
+      });
+
+    const httpResponse = await requestBuilder.execute();
 
     return httpResponse.body.results;
   } catch (rawError: unknown) {
@@ -43,7 +48,6 @@ export const loadProducts = async (
     throw mapAuthError(humanReadableMsg);
   }
 };
-
 export const loadCustomerData = async (client: Client): Promise<Customer> => {
   const apiRoot = apiRootBuilder(client);
 

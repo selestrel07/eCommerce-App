@@ -10,14 +10,16 @@ import { CatalogBreadcrumbs } from '../../components/CatalogBreadcrumbs/CatalogB
 import { ProductVariantWithPriceAndName } from '../../interfaces/product/product.ts';
 import { getVariants } from '../../utils/map-product.ts';
 import { QueryParams } from '../../interfaces/query-params/query-params.ts';
-import { Select } from 'antd';
+import { Input, Select } from 'antd';
+
+const { Search } = Input;
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
   const [products, setProducts] = useState<ProductVariantWithPriceAndName[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<QueryParams>({});
-
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [sortOption, setSortOption] = useState<string>('');
 
   const handleSortChange = (value: string) => {
@@ -35,7 +37,8 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
           undefined,
           undefined,
           sortOption,
-          filters['filter.query']
+          filters['filter.query'],
+          searchQuery
         );
         setProducts(getVariants(productList));
       } catch (err) {
@@ -46,7 +49,7 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     };
 
     void fetchProducts();
-  }, [apiClient]);
+  }, [apiClient, searchQuery]);
 
   useEffect(() => {
     loadProducts(
@@ -89,7 +92,7 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
   const { Option } = Select;
 
   return (
-    <CatalogContext.Provider
+    <CatalogContext
       value={{
         filters,
         setFilters,
@@ -118,6 +121,17 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                 </Select>
               </div>
 
+              <div className="catalog-search">
+                <Search
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  enterButton
+                  size="large"
+                  loading={loading}
+                />
+              </div>
+
               {products.length === 0 ? (
                 <p className="catalog-empty-text">No product variations found.</p>
               ) : (
@@ -134,6 +148,6 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
           </div>
         </div>
       </CategoryProvider>
-    </CatalogContext.Provider>
+    </CatalogContext>
   );
 }
