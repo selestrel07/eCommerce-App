@@ -8,7 +8,6 @@ import {
   ProductProjection,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
-import { QueryParams } from '../interfaces/query-params/query-params.ts';
 
 export const loadProducts = async (
   client: Client,
@@ -16,7 +15,8 @@ export const loadProducts = async (
   country?: string,
   customerGroupId?: string,
   channelId?: string,
-  sort?: string
+  sort?: string,
+  filterQueries?: string[]
 ): Promise<ProductProjection[]> => {
   const apiRoot = apiRootBuilder(client);
 
@@ -31,6 +31,7 @@ export const loadProducts = async (
           ...(customerGroupId && { priceCustomerGroup: customerGroupId }),
           ...(channelId && { priceChannel: channelId }),
           ...(sort && { sort: [sort] }),
+          ...(filterQueries && { 'filter.query': filterQueries }),
           expand: ['masterVariant.attributes', 'variants.attributes'],
         },
       })
@@ -138,21 +139,5 @@ export const loadCategories = async (client: Client) => {
   } catch (rawError: unknown) {
     const humanReadableMsg = handleApiError(rawError);
     throw new Error(humanReadableMsg);
-  }
-};
-
-export const searchProducts = async (client: Client, args: QueryParams) => {
-  const apiRoot = apiRootBuilder(client);
-  try {
-    const httpResponse = await apiRoot
-      .productProjections()
-      .search()
-      .get({
-        queryArgs: args,
-      })
-      .execute();
-    return httpResponse.body.results;
-  } catch (rawError: unknown) {
-    throw new Error(handleApiError(rawError));
   }
 };

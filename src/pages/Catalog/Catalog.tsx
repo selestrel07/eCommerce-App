@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import { ReactElement, useEffect, useState } from 'react';
 import { Client } from '@commercetools/sdk-client-v2';
-import { loadProducts, searchProducts } from '../../services/api.service';
+import { loadProducts } from '../../services/api.service';
 import './Catalog.scss';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
 import { CategoryList } from '../../components/CategoryList/CategoryList.tsx';
@@ -34,7 +34,8 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
           undefined,
           undefined,
           undefined,
-          sortOption
+          sortOption,
+          filters['filter.query']
         );
         setProducts(getVariants(productList));
       } catch (err) {
@@ -45,17 +46,25 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     };
 
     void fetchProducts();
-  }, [apiClient, sortOption]);
+  }, [apiClient]);
 
   useEffect(() => {
-    searchProducts(apiClient, filters)
+    loadProducts(
+      apiClient,
+      'EUR',
+      undefined,
+      undefined,
+      undefined,
+      sortOption,
+      filters['filter.query']
+    )
       .then((response) => {
         setProducts(getVariants(response));
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [filters]);
+  }, [filters, sortOption]);
 
   if (loading) {
     return (
