@@ -65,6 +65,7 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
       });
     })
     .filter((v) => v.isMatchingVariant);
+
   return (
     <div className="catalog-container">
       <h1 className="catalog-title">List Products</h1>
@@ -83,40 +84,42 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
       <div className="catalog-filters">
         <h3>Filters</h3>
 
-        <div>
-          <label>Color:</label>
-          <Select
-            style={{ width: '100%' }}
-            placeholder="Choose a color"
-            onChange={handleColorChange}
-            value={filters.color}
-            allowClear
-          >
-            <Option value="red">Red</Option>
-            <Option value="white">White</Option>
-            <Option value="orange">Orange</Option>
-            <Option value="denim">Denim</Option>
-            <Option value="yellow">Yellow</Option>
-            <Option value="brown">Brown</Option>
-            <Option value="pink">Pink</Option>
-            <Option value="green">Green</Option>
-            <Option value="black">Black</Option>
-          </Select>
-        </div>
+        <div className="catalog-filters-row">
+          <div>
+            <label>Color:</label>
+            <Select
+              style={{ width: '100%' }}
+              placeholder="Choose a color"
+              onChange={handleColorChange}
+              value={filters.color}
+              allowClear
+            >
+              <Option value="red">Red</Option>
+              <Option value="white">White</Option>
+              <Option value="orange">Orange</Option>
+              <Option value="denim">Denim</Option>
+              <Option value="yellow">Yellow</Option>
+              <Option value="brown">Brown</Option>
+              <Option value="pink">Pink</Option>
+              <Option value="green">Green</Option>
+              <Option value="black">Black</Option>
+            </Select>
+          </div>
 
-        <div>
-          <label>Gender:</label>
-          <Select
-            style={{ width: '100%' }}
-            placeholder="Choose gender"
-            onChange={handleSexChange}
-            value={filters.sex}
-            allowClear
-          >
-            <Option value="men">Male</Option>
-            <Option value="women">Female</Option>
-            <Option value="unisex">Unisex</Option>
-          </Select>
+          <div>
+            <label>Gender:</label>
+            <Select
+              style={{ width: '100%' }}
+              placeholder="Choose gender"
+              onChange={handleSexChange}
+              value={filters.sex}
+              allowClear
+            >
+              <Option value="men">Male</Option>
+              <Option value="women">Female</Option>
+              <Option value="unisex">Unisex</Option>
+            </Select>
+          </div>
         </div>
 
         <Button type="default" onClick={resetFilters} block style={{ marginTop: '16px' }}>
