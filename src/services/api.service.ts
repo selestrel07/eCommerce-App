@@ -15,19 +15,22 @@ export const loadProducts = async (
   currency = 'EUR',
   country?: string,
   customerGroupId?: string,
-  channelId?: string
+  channelId?: string,
+  sort?: string
 ): Promise<ProductProjection[]> => {
   const apiRoot = apiRootBuilder(client);
 
   try {
     const httpResponse = await apiRoot
       .productProjections()
+      .search()
       .get({
         queryArgs: {
           priceCurrency: currency,
           ...(country && { priceCountry: country }),
           ...(customerGroupId && { priceCustomerGroup: customerGroupId }),
           ...(channelId && { priceChannel: channelId }),
+          ...(sort && { sort: [sort] }),
           expand: ['masterVariant.attributes', 'variants.attributes'],
         },
       })

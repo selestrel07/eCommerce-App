@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { ReactElement, useEffect, useState } from 'react';
 import { Client } from '@commercetools/sdk-client-v2';
 import { loadProducts, searchProducts } from '../../services/api.service';
@@ -9,6 +10,7 @@ import { CatalogBreadcrumbs } from '../../components/CatalogBreadcrumbs/CatalogB
 import { ProductVariantWithPriceAndName } from '../../interfaces/product/product.ts';
 import { getVariants } from '../../utils/map-product.ts';
 import { QueryParams } from '../../interfaces/query-params/query-params.ts';
+import { Select } from 'antd';
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
   const [products, setProducts] = useState<ProductVariantWithPriceAndName[]>([]);
@@ -16,10 +18,24 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<QueryParams>({});
 
+  const [sortOption, setSortOption] = useState<string>('');
+
+  const handleSortChange = (value: string) => {
+    setSortOption(value);
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       try {
-        const productList = await loadProducts(apiClient);
+        const productList = await loadProducts(
+          apiClient,
+          'EUR',
+          undefined,
+          undefined,
+          undefined,
+          sortOption
+        );
         setProducts(getVariants(productList));
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
@@ -29,7 +45,7 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     };
 
     void fetchProducts();
-  }, [apiClient]);
+  }, [apiClient, sortOption]);
 
   useEffect(() => {
     searchProducts(apiClient, filters)
@@ -61,6 +77,8 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     );
   }
 
+  const { Option } = Select;
+
   return (
     <CatalogContext.Provider
       value={{
@@ -75,6 +93,21 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
             <CatalogBreadcrumbs />
             <div className="product-list">
               <h1 className="catalog-title">Product List</h1>
+              <div className="sort-container">
+                <p className="sort-text">Sort by:</p>
+                <Select<string>
+                  className="catalog-sort"
+                  value={sortOption}
+                  onChange={handleSortChange}
+                  placeholder="Sort by:"
+                >
+                  <Option value="">Default</Option>
+                  <Option value="price asc">Price: Low to High</Option>
+                  <Option value="price desc">Price: High to Low</Option>
+                  <Option value="name.en-US asc">Name: A-Z</Option>
+                  <Option value="name.en-US desc">Name: Z-A</Option>
+                </Select>
+              </div>
 
               {products.length === 0 ? (
                 <p className="catalog-empty-text">No product variations found.</p>
