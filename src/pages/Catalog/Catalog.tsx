@@ -156,16 +156,11 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
               </div>
 
               {loading ? (
-                <div className="catalog-container">
-                  <h2>Loading products...</h2>
-                  <p>Please wait</p>
-                </div>
+                <h2>Loading products...</h2>
               ) : error ? (
-                <div className="catalog-container">
-                  <div className="catalog-error">
-                    <h2>Error</h2>
-                    <p>{error}</p>
-                  </div>
+                <div className="catalog-error">
+                  <h2>Error</h2>
+                  <p>{error}</p>
                 </div>
               ) : products.length === 0 ? (
                 <p className="catalog-empty-text">No product variations found.</p>

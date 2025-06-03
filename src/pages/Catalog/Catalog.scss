@@ -17,6 +17,9 @@
   }
 
   .catalog-products {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
     padding: 1rem;
 
     .ant-breadcrumb {
@@ -66,10 +69,6 @@
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
-}
-
-.catalog-sort {
-  min-width: 150px;
 }
 
 @media screen and (width < 600px) {
