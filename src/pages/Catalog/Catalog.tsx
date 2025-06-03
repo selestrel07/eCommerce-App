@@ -1,53 +1,61 @@
+/* eslint-disable max-lines-per-function */
 import { ReactElement, useEffect, useState } from 'react';
 import { Client } from '@commercetools/sdk-client-v2';
 import { loadProducts } from '../../services/api.service';
 import { ProductWithPrice } from '../../interfaces/product/product';
 import './Catalog.scss';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
-import { Input } from 'antd';
+import { Input, Slider, Select, Button } from 'antd';
+import { FilterState } from '../../interfaces/filter/filter';
 
 const { Search } = Input;
+const { Option } = Select;
+
+const MAX_COST = 1000;
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
   const [products, setProducts] = useState<ProductWithPrice[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [filters, setFilters] = useState<FilterState>({});
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const productList = await loadProducts(apiClient, searchQuery, 'EUR', filters);
+      setProducts(productList);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const productList = await loadProducts(apiClient, searchQuery);
-        setProducts(productList);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : String(err));
-      } finally {
-        setLoading(false);
-      }
-    };
-
     void fetchProducts();
-  }, [apiClient, searchQuery]);
+  }, [apiClient, searchQuery, filters]);
 
-  if (loading) {
-    return (
-      <div className="catalog-container">
-        <h2>Loading products...</h2>
-        <p>Please wait</p>
-      </div>
-    );
-  }
+  const handleColorChange = (value: string) => {
+    setFilters((prev) => ({ ...prev, color: value }));
+  };
 
-  if (error) {
-    return (
-      <div className="catalog-container">
-        <div className="catalog-error">
-          <h2>Error</h2>
-          <p>{error}</p>
-        </div>
-      </div>
-    );
-  }
+  const handleSexChange = (value: string) => {
+    setFilters((prev) => ({ ...prev, sex: value }));
+  };
+
+  const handlePriceChange = (values: number[]) => {
+    setFilters((prev) => ({
+      ...prev,
+      minPrice: values[0],
+      maxPrice: values[1],
+    }));
+  };
+
+  const resetFilters = () => {
+    setFilters({});
+    setSearchQuery('');
+  };
 
   const allVariants = products.flatMap((product) =>
     [product.masterVariant, ...product.variants].map((variant) => ({
@@ -71,7 +79,72 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
         />
       </div>
 
-      {allVariants.length === 0 ? (
+      <div className="catalog-filters">
+        <h3>Filters</h3>
+
+        <div>
+          <label>Color:</label>
+          <Select
+            style={{ width: '100%' }}
+            placeholder="Choose a color"
+            onChange={handleColorChange}
+            value={filters.color}
+            allowClear
+          >
+            <Option value="red">Red</Option>
+            <Option value="white">White</Option>
+            <Option value="orange">Orange</Option>
+            <Option value="denim">Denim</Option>
+            <Option value="yellow">Yellow</Option>
+            <Option value="brown">Brown</Option>
+            <Option value="pink">Pink</Option>
+            <Option value="green">Green</Option>
+            <Option value="black">Black</Option>
+          </Select>
+        </div>
+
+        <div>
+          <label>Gender:</label>
+          <Select
+            style={{ width: '100%' }}
+            placeholder="Choose gender"
+            onChange={handleSexChange}
+            value={filters.sex}
+            allowClear
+          >
+            <Option value="men">Male</Option>
+            <Option value="women">Female</Option>
+            <Option value="unisex">Unisex</Option>
+          </Select>
+        </div>
+
+        <div>
+          <label>Price Range:</label>
+          <Slider
+            range
+            min={0}
+            max={10000}
+            defaultValue={[0, MAX_COST]}
+            onChange={handlePriceChange}
+          />
+          <div style={{ textAlign: 'center' }}>
+            {filters.minPrice ?? 0} € - {filters.maxPrice ?? MAX_COST} €
+          </div>
+        </div>
+
+        <Button type="default" onClick={resetFilters} block style={{ marginTop: '16px' }}>
+          Reset Filters
+        </Button>
+      </div>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <div className="catalog-error">
+          <h2>Error</h2>
+          <p>{error}</p>
+        </div>
+      ) : allVariants.length === 0 ? (
         <p className="catalog-empty-text">No product variations found.</p>
       ) : (
         <div className="catalog-grid">

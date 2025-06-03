@@ -7,14 +7,37 @@ import { ProductWithPrice } from '../interfaces/product/product';
 import { getProductPrice } from '../utils/productPrice';
 import { extractAttributes } from '../utils/extractAttributes';
 
+// eslint-disable-next-line max-lines-per-function
 export const loadProducts = async (
   client: Client,
   searchQuery?: string,
-  currency = 'EUR'
+  currency = 'EUR',
+  filters: {
+    color?: string;
+    sex?: string;
+    minPrice?: number;
+    maxPrice?: number;
+  } = {}
 ): Promise<ProductWithPrice[]> => {
   const apiRoot = apiRootBuilder(client);
 
   try {
+    const filterExpressions: string[] = [];
+
+    if (filters.color) {
+      filterExpressions.push(`variants.attributes.color:"${filters.color}"`);
+    }
+
+    if (filters.sex) {
+      filterExpressions.push(`variants.attributes.sex.key:"${filters.sex}"`);
+    }
+
+    if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
+      const min = filters.minPrice ?? '*';
+      const max = filters.maxPrice ?? '*';
+      filterExpressions.push(`variants.price.centAmount:range(${min} to ${max})`);
+    }
+
     const requestBuilder = apiRoot
       .productProjections()
       .search()
@@ -25,6 +48,7 @@ export const loadProducts = async (
           expand: ['masterVariant.attributes', 'variants.attributes'],
           limit: 50,
           staged: false,
+          ...(filterExpressions.length > 0 && { filter: filterExpressions }),
         },
       });
 
