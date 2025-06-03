@@ -15,8 +15,6 @@ export const loadProducts = async (
   filters: {
     color?: string;
     sex?: string;
-    minPrice?: number;
-    maxPrice?: number;
   } = {}
 ): Promise<ProductWithPrice[]> => {
   const apiRoot = apiRootBuilder(client);
@@ -32,12 +30,6 @@ export const loadProducts = async (
       filterExpressions.push(`variants.attributes.sex.key:"${filters.sex}"`);
     }
 
-    if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
-      const min = filters.minPrice ?? '*';
-      const max = filters.maxPrice ?? '*';
-      filterExpressions.push(`variants.price.centAmount:range(${min} to ${max})`);
-    }
-
     const requestBuilder = apiRoot
       .productProjections()
       .search()
@@ -45,15 +37,19 @@ export const loadProducts = async (
         queryArgs: {
           ...(searchQuery && { ['text.en-US']: searchQuery }),
           priceCurrency: currency,
-          expand: ['masterVariant.attributes', 'variants.attributes'],
+          expand: ['variants.attributes'],
+          markMatchingVariants: true,
           limit: 50,
           staged: false,
+          variantFilter: [
+            filters.color ? `attributes.color:"${filters.color}"` : null,
+            filters.sex ? `attributes.sex.key:"${filters.sex}"` : null,
+          ].filter((item): item is string => Boolean(item)),
           ...(filterExpressions.length > 0 && { filter: filterExpressions }),
         },
       });
 
     const httpResponse = await requestBuilder.execute();
-
     const products: ProductProjection[] = httpResponse.body.results;
 
     return products.map((product) => {
@@ -110,6 +106,7 @@ export const loadProducts = async (
     throw mapAuthError(humanReadableMsg);
   }
 };
+
 export const loadCustomerData = async (client: Client): Promise<Customer> => {
   const apiRoot = apiRootBuilder(client);
 

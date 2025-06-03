@@ -17,6 +17,7 @@ export interface ProductVariantWithPrice {
   price?: PriceInfo;
   images: Image[];
   attributes: Record<string, string>;
+  isMatchingVariant?: boolean;
 }
 
 export interface ProductWithPrice {

@@ -5,20 +5,18 @@ import { loadProducts } from '../../services/api.service';
 import { ProductWithPrice } from '../../interfaces/product/product';
 import './Catalog.scss';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
-import { Input, Slider, Select, Button } from 'antd';
+import { Input, Select, Button } from 'antd';
 import { FilterState } from '../../interfaces/filter/filter';
 
 const { Search } = Input;
 const { Option } = Select;
-
-const MAX_COST = 1000;
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
   const [products, setProducts] = useState<ProductWithPrice[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [filters, setFilters] = useState<FilterState>({});
+  const [filters, setFilters] = useState<Omit<FilterState, 'minPrice' | 'maxPrice'>>({});
 
   const fetchProducts = async () => {
     try {
@@ -44,26 +42,28 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     setFilters((prev) => ({ ...prev, sex: value }));
   };
 
-  const handlePriceChange = (values: number[]) => {
-    setFilters((prev) => ({
-      ...prev,
-      minPrice: values[0],
-      maxPrice: values[1],
-    }));
-  };
-
   const resetFilters = () => {
     setFilters({});
     setSearchQuery('');
   };
 
-  const allVariants = products.flatMap((product) =>
-    [product.masterVariant, ...product.variants].map((variant) => ({
-      ...variant,
-      productName: product.name,
-    }))
-  );
+  const allVariants = products
+    .flatMap((product) => {
+      return [product.masterVariant, ...product.variants].map((variant) => {
+        const colorAttr = variant.attributes?.color;
+        const sexAttr = variant.attributes?.sex;
 
+        const matchesColor = !filters.color || colorAttr === filters.color;
+        const matchesSex = !filters.sex || sexAttr === filters.sex;
+
+        return {
+          ...variant,
+          productName: product.name,
+          isMatchingVariant: !!(matchesColor && matchesSex),
+        };
+      });
+    })
+    .filter((v) => v.isMatchingVariant);
   return (
     <div className="catalog-container">
       <h1 className="catalog-title">List Products</h1>
@@ -116,20 +116,6 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
             <Option value="women">Female</Option>
             <Option value="unisex">Unisex</Option>
           </Select>
-        </div>
-
-        <div>
-          <label>Price Range:</label>
-          <Slider
-            range
-            min={0}
-            max={10000}
-            defaultValue={[0, MAX_COST]}
-            onChange={handlePriceChange}
-          />
-          <div style={{ textAlign: 'center' }}>
-            {filters.minPrice ?? 0} € - {filters.maxPrice ?? MAX_COST} €
-          </div>
         </div>
 
         <Button type="default" onClick={resetFilters} block style={{ marginTop: '16px' }}>
