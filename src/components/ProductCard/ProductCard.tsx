@@ -1,11 +1,14 @@
 import { Card, Typography } from 'antd';
 import './ProductCard.scss';
 import { Props } from '../../interfaces/product/product';
+import { useNavigate } from 'react-router-dom';
+import { Paths } from '../../enums/paths/paths';
 
 const { Meta } = Card;
 const { Paragraph } = Typography;
 
 export const ProductCard = ({ variant, name }: Props) => {
+  const navigate = useNavigate();
   const mainImage =
     variant.images.find((img) => img.label === 'Main')?.url ?? variant.images[0]?.url;
 
@@ -35,6 +38,9 @@ export const ProductCard = ({ variant, name }: Props) => {
     <Card
       className="product-card"
       cover={mainImage ? <img alt={name} src={mainImage} className="product-card-image" /> : null}
+      onClick={() => {
+        void navigate(Paths.PRODUCT_DETAILS.replace(':key', String(variant.key ?? variant.id)));
+      }}
     >
       <Meta
         title={name}
