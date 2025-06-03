@@ -6,4 +6,10 @@ export enum EditAction {
   CHANGE_ADDRESS = 'changeAddress',
   REMOVE_ADDRESS = 'removeAddress',
   SET_DATE_OF_BIRTH = 'setDateOfBirth',
+  SET_DEFAULT_SHIPPING_ADDRESS = 'setDefaultShippingAddress',
+  ADD_SHIPPING_ADDRESS_ID = 'addShippingAddressId',
+  REMOVE_SHIPPING_ADDRESS_ID = 'removeShippingAddressId',
+  SET_DEFAULT_BILLING_ADDRESS = 'setDefaultBillingAddress',
+  ADD_BILLING_ADDRESS_ID = 'addBillingAddressId',
+  REMOVE_BILLING_ADDRESS_ID = 'removeBillingAddressId',
 }

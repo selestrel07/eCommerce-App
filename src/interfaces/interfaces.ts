@@ -19,3 +19,14 @@ export interface FieldValidationObject {
   validationFunction: (value: string) => string | null;
   errorSetter: (error: string) => void;
 }
+
+export interface PriceInfo {
+  amount: number;
+  currency: string;
+  originalAmount?: number | null;
+}
+
+export interface ProductAttribute {
+  name: string;
+  value: string | Record<string, string>;
+}
