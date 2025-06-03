@@ -1,24 +1,46 @@
+/* eslint-disable max-lines-per-function */
 import { ReactElement, useEffect, useState } from 'react';
 import { Client } from '@commercetools/sdk-client-v2';
 import { loadProducts } from '../../services/api.service';
-import { ProductWithPrice } from '../../interfaces/product/product';
 import './Catalog.scss';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
-import { Input } from 'antd';
+import { CategoryList } from '../../components/CategoryList/CategoryList.tsx';
+import { CatalogContext, CategoryProvider } from '../../contexts/CatalogContexts.tsx';
+import { CatalogBreadcrumbs } from '../../components/CatalogBreadcrumbs/CatalogBreadcrumbs.tsx';
+import { ProductVariantWithPriceAndName } from '../../interfaces/product/product.ts';
+import { getVariants } from '../../utils/map-product.ts';
+import { QueryParams } from '../../interfaces/query-params/query-params.ts';
+import { Input, Select } from 'antd';
 
 const { Search } = Input;
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
-  const [products, setProducts] = useState<ProductWithPrice[]>([]);
+  const [products, setProducts] = useState<ProductVariantWithPriceAndName[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState<QueryParams>({});
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [sortOption, setSortOption] = useState<string>('');
+
+  const handleSortChange = (value: string) => {
+    setSortOption(value);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       try {
-        const productList = await loadProducts(apiClient, searchQuery);
-        setProducts(productList);
+        const productList = await loadProducts(
+          apiClient,
+          'EUR',
+          undefined,
+          undefined,
+          undefined,
+          sortOption,
+          filters['filter.query'],
+          searchQuery
+        );
+        setProducts(getVariants(productList));
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
       } finally {
@@ -28,6 +50,24 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
 
     void fetchProducts();
   }, [apiClient, searchQuery]);
+
+  useEffect(() => {
+    loadProducts(
+      apiClient,
+      'EUR',
+      undefined,
+      undefined,
+      undefined,
+      sortOption,
+      filters['filter.query']
+    )
+      .then((response) => {
+        setProducts(getVariants(response));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [filters, sortOption]);
 
   if (loading) {
     return (
@@ -49,40 +89,65 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     );
   }
 
-  const allVariants = products.flatMap((product) =>
-    [product.masterVariant, ...product.variants].map((variant) => ({
-      ...variant,
-      productName: product.name,
-    }))
-  );
+  const { Option } = Select;
 
   return (
-    <div className="catalog-container">
-      <h1 className="catalog-title">List Products</h1>
+    <CatalogContext
+      value={{
+        filters,
+        setFilters,
+      }}
+    >
+      <CategoryProvider>
+        <div className="catalog-container">
+          <CategoryList client={apiClient} />
+          <div className="catalog-products">
+            <CatalogBreadcrumbs />
+            <div className="product-list">
+              <h1 className="catalog-title">Product List</h1>
+              <div className="sort-container">
+                <p className="sort-text">Sort by:</p>
+                <Select<string>
+                  className="catalog-sort"
+                  value={sortOption}
+                  onChange={handleSortChange}
+                  placeholder="Sort by:"
+                >
+                  <Option value="">Default</Option>
+                  <Option value="price asc">Price: Low to High</Option>
+                  <Option value="price desc">Price: High to Low</Option>
+                  <Option value="name.en-US asc">Name: A-Z</Option>
+                  <Option value="name.en-US desc">Name: Z-A</Option>
+                </Select>
+              </div>
 
-      <div className="catalog-search">
-        <Search
-          placeholder="Search products..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          enterButton
-          size="large"
-          loading={loading}
-        />
-      </div>
+              <div className="catalog-search">
+                <Search
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  enterButton
+                  size="large"
+                  loading={loading}
+                />
+              </div>
 
-      {allVariants.length === 0 ? (
-        <p className="catalog-empty-text">No product variations found.</p>
-      ) : (
-        <div className="catalog-grid">
-          {allVariants.map((variant) => {
-            const productName = Object.values(variant.productName)[0] || 'Unnamed Product';
-            const productKey = variant.key ?? `variant-${variant.id}`;
+              {products.length === 0 ? (
+                <p className="catalog-empty-text">No product variations found.</p>
+              ) : (
+                <div className="catalog-grid">
+                  {products.map((variant) => {
+                    const productName = Object.values(variant.productName)[0] || 'Unnamed Product';
+                    const productKey = variant.key ?? `variant-${variant.id}`;
 
-            return <ProductCard key={productKey} variant={variant} name={productName} />;
-          })}
+                    return <ProductCard key={productKey} variant={variant} name={productName} />;
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-      )}
-    </div>
+      </CategoryProvider>
+    </CatalogContext>
   );
 }

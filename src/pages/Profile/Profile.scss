@@ -22,7 +22,9 @@
 
   .profile-buttons,
   .personal-info-fields,
-  .password-info-fields {
+  .password-info-fields,
+  .address-list,
+  .address-container {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -33,18 +35,62 @@
   }
 
   .address-list {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    row-gap: 15px;
 
     .address-container {
-      display: flex;
+      position: relative;
       flex-direction: column;
-      gap: 10px;
+      justify-content: center;
       width: 340px;
       border: 1px solid #ccc;
       border-radius: 5px;
-      padding: 15px 10px 0;
+      padding: 15px 10px 5px;
+
+      .address-container-controls {
+        position: absolute;
+        display: flex;
+        justify-content: end;
+        align-self: end;
+        background-color: rgba(241, 241, 239, 0.58);
+        gap: 5px;
+        top: -10px;
+        right: -5px;
+        padding: 3px;
+
+        .anticon-check,
+        .anticon-edit,
+        .anticon-delete,
+        .anticon-stop {
+          color: #1677ff;
+        }
+
+        span {
+          transition: all 0.3s linear;
+        }
+
+        span:hover {
+          scale: 1.2;
+        }
+      }
+
+      .disabled {
+        cursor: not-allowed;
+
+        .anticon-check,
+        .anticon-edit,
+        .anticon-delete {
+          color: gray;
+        }
+
+        span {
+          pointer-events: none;
+          transition: none;
+        }
+
+        span:hover {
+          scale: 1;
+        }
+      }
 
       .tags {
         display: flex;
@@ -54,6 +100,10 @@
         .ant-tag {
           margin-right: 0;
         }
+      }
+
+      .ant-alert {
+        padding-top: 1px;
       }
     }
 
@@ -77,7 +127,8 @@
   }
 
   .password-info-fields,
-  .personal-info-fields {
+  .personal-info-fields,
+  .address-list {
 
     .input {
       height: 100%;

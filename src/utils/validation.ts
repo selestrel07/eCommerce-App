@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { FieldValidationObject } from '../interfaces/interfaces.ts';
 import { CountriesData } from '../data/countries/countries.ts';
+import { AddressType } from '../enums/address-types/address-types.ts';
 
 const PASSWORD_MIN_LENGTH = 8;
 const MINIMUM_AGE = 13;
@@ -132,6 +133,47 @@ export const validatePostalCode = (value: string, country: string): string | nul
   const regex = Object.entries(CountriesData).find((key) => key[0] === country);
   if (regex && !new RegExp(regex[1]).test(value)) {
     return 'Invalid postal code format.';
+  }
+
+  return null;
+};
+
+export const validateAddressTypes = (
+  initialTypes: string[],
+  updatedTypes: string[]
+): string | null => {
+  if (!updatedTypes.includes(AddressType.BILLING) && !updatedTypes.includes(AddressType.SHIPPING)) {
+    return 'Address must be marked as Billing or Shipping Address';
+  }
+
+  if (
+    updatedTypes.includes(AddressType.DEFAULT_BILLING) &&
+    !updatedTypes.includes(AddressType.BILLING)
+  ) {
+    return 'Address must be marked as Billing Address to be the Default Billing Address';
+  }
+
+  if (
+    updatedTypes.includes(AddressType.DEFAULT_SHIPPING) &&
+    !updatedTypes.includes(AddressType.SHIPPING)
+  ) {
+    return 'Address must be marked as Shipping Address to be the Default Shipping Address';
+  }
+
+  if (
+    initialTypes.includes(AddressType.DEFAULT_SHIPPING) &&
+    !updatedTypes.includes(AddressType.DEFAULT_SHIPPING) &&
+    updatedTypes.includes(AddressType.SHIPPING)
+  ) {
+    return 'To unmark the address as Default Shipping Address please mark an other address as Default Shipping Address or unmark the address as Shipping Address';
+  }
+
+  if (
+    initialTypes.includes(AddressType.DEFAULT_BILLING) &&
+    !updatedTypes.includes(AddressType.DEFAULT_BILLING) &&
+    updatedTypes.includes(AddressType.BILLING)
+  ) {
+    return 'To unmark the address as Default Billing Address please mark an other address as Default Billing Address or unmark the address as Billing Address';
   }
 
   return null;
