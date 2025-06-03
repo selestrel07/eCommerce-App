@@ -81,42 +81,39 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
           <div className="catalog-products">
             <CatalogBreadcrumbs />
             <div className="product-list">
-              <h1 className="catalog-title">Product List</h1>
-              <div className="sort-container">
-                <p className="sort-text">Sort by:</p>
-                <Select<string>
-                  className="catalog-sort"
-                  value={sortOption}
-                  onChange={handleSortChange}
-                  placeholder="Sort by:"
-                >
-                  <Option value="">Default</Option>
-                  <Option value="price asc">Price: Low to High</Option>
-                  <Option value="price desc">Price: High to Low</Option>
-                  <Option value="name.en-US asc">Name: A-Z</Option>
-                  <Option value="name.en-US desc">Name: Z-A</Option>
-                </Select>
-              </div>
-
               <div className="catalog-search">
+                <div className="sort-container">
+                  <p className="sort-text">Sort by:</p>
+                  <Select<string>
+                    className="catalog-sort"
+                    value={sortOption}
+                    onChange={handleSortChange}
+                    placeholder="Sort by:"
+                  >
+                    <Option value="">Default</Option>
+                    <Option value="price asc">Price: Low to High</Option>
+                    <Option value="price desc">Price: High to Low</Option>
+                    <Option value="name.en-US asc">Name: A-Z</Option>
+                    <Option value="name.en-US desc">Name: Z-A</Option>
+                  </Select>
+                </div>
                 <Search
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   enterButton
-                  size="large"
+                  size="middle"
                   loading={loading}
                 />
               </div>
 
               <div className="catalog-filters">
-                <h3>Filters</h3>
+                <p>Filter by:</p>
 
                 <div className="catalog-filters-row">
                   <div>
                     <label>Color:</label>
                     <Select
-                      style={{ width: '100%' }}
                       placeholder="Choose a color"
                       onChange={handleColorChange}
                       value={filters.color}
@@ -137,7 +134,6 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                   <div>
                     <label>Gender:</label>
                     <Select
-                      style={{ width: '100%' }}
                       placeholder="Choose gender"
                       onChange={handleSexChange}
                       value={filters.sex}
@@ -150,7 +146,7 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                   </div>
                 </div>
 
-                <Button type="default" onClick={resetFilters} block style={{ marginTop: '16px' }}>
+                <Button type="default" onClick={resetFilters}>
                   Reset Filters
                 </Button>
               </div>
