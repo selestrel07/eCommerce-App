@@ -15,6 +15,7 @@ import { getAnonymousId } from './services/authService.ts';
 import { tokenCache } from './services/storage/storage.service.ts';
 import { isTokenStore } from './types/token-store/token-store.ts';
 import { Context } from 'react-responsive';
+import { CartProvider } from './contexts/cart-context/CartContexts.tsx';
 
 export const App = () => {
   const token = loadCustomerToken();
@@ -47,18 +48,20 @@ export const App = () => {
   });
 
   return (
-    <Layout>
-      <AppHeader isSignedIn={isSignedIn} setSignedIn={setSignedIn} />
-      {contextHolder}
-      <Layout.Content>
-        <AppRoutes
-          isSignedIn={isSignedIn}
-          setSignedIn={setSignedIn}
-          apiClient={client}
-          setApiClient={setClient}
-          openNotification={openNotification}
-        />
-      </Layout.Content>
-    </Layout>
+    <CartProvider>
+      <Layout>
+        <AppHeader isSignedIn={isSignedIn} setSignedIn={setSignedIn} />
+        {contextHolder}
+        <Layout.Content>
+          <AppRoutes
+            isSignedIn={isSignedIn}
+            setSignedIn={setSignedIn}
+            apiClient={client}
+            setApiClient={setClient}
+            openNotification={openNotification}
+          />
+        </Layout.Content>
+      </Layout>
+    </CartProvider>
   );
 };

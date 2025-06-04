@@ -11,11 +11,14 @@ import { useNavigate } from 'react-router-dom';
 import { emptyTokenStore, tokenCache } from '../../services/storage/storage.service.ts';
 import { revokeToken } from '../../services/authService.ts';
 import { getMenuItems } from './NavItems.tsx';
+import { useCart } from '../../contexts/cart-context/UseCart.ts';
 
 const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
   const location = useLocation();
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [drawerVisible, setDrawerVisible] = useState(false);
+
+  const { cartItemsCount } = useCart();
 
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -45,7 +48,12 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
                   className="menu"
                   mode="vertical"
                   selectedKeys={[location.pathname]}
-                  items={getMenuItems(isSignedIn, () => setDrawerVisible(false), handleLogout)}
+                  items={getMenuItems(
+                    isSignedIn,
+                    cartItemsCount,
+                    () => setDrawerVisible(false),
+                    handleLogout
+                  )}
                 />
               </Drawer>
             )}
@@ -56,7 +64,7 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
               className="menu"
               mode="horizontal"
               selectedKeys={[location.pathname]}
-              items={getMenuItems(isSignedIn, undefined, handleLogout)}
+              items={getMenuItems(isSignedIn, cartItemsCount, undefined, handleLogout)}
             />
           </>
         )}

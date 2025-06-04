@@ -7,6 +7,7 @@ type ItemType = Required<MenuProps>['items'][number];
 
 export const getMenuItems = (
   isSignedIn: boolean,
+  cartItemsCount: number,
   onClick?: () => void,
   onLogout?: () => void
 ): ItemType[] => {
@@ -39,7 +40,10 @@ export const getMenuItems = (
         key: '/cart',
         label: (
           <Link to={Paths.CART} className="cart-link">
-            <TiShoppingCart className="cart-icon" />
+            <div className="cart-icon-wrapper">
+              <TiShoppingCart className="cart-icon" />
+              {cartItemsCount >= 0 && <span className="cart-badge">{cartItemsCount}</span>}
+            </div>
           </Link>
         ),
         onClick,
