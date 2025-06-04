@@ -20,6 +20,8 @@ export interface QueryParams {
   priceChannel?: string;
   localeProjection?: string | string[];
   storeProjection?: string;
+  sex?: string;
+  color?: string;
 
   [key: string]: QueryParam;
 }

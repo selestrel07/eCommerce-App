@@ -8,10 +8,12 @@ import {
   ProductProjection,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
+import { QueryParams } from '../interfaces/query-params/query-params';
 
 export const loadProducts = async (
   client: Client,
   currency = 'EUR',
+  filters: QueryParams,
   country?: string,
   customerGroupId?: string,
   channelId?: string,
@@ -22,6 +24,16 @@ export const loadProducts = async (
   const apiRoot = apiRootBuilder(client);
 
   try {
+    const filterExpressions: string[] = [];
+
+    if (filters.color) {
+      filterExpressions.push(`variants.attributes.color:"${filters.color}"`);
+    }
+
+    if (filters.sex) {
+      filterExpressions.push(`variants.attributes.sex.key:"${filters.sex}"`);
+    }
+
     const requestBuilder = apiRoot
       .productProjections()
       .search()
@@ -29,14 +41,20 @@ export const loadProducts = async (
         queryArgs: {
           ...(searchQuery && { ['text.en-US']: searchQuery }),
           priceCurrency: currency,
+          markMatchingVariants: true,
+          limit: 50,
+          staged: false,
+          variantFilter: [
+            filters.color ? `attributes.color:"${filters.color}"` : null,
+            filters.sex ? `attributes.sex.key:"${filters.sex}"` : null,
+          ].filter((item): item is string => Boolean(item)),
+          ...(filterExpressions.length > 0 && { filter: filterExpressions }),
           ...(country && { priceCountry: country }),
           ...(customerGroupId && { priceCustomerGroup: customerGroupId }),
           ...(channelId && { priceChannel: channelId }),
           ...(sort && { sort: [sort] }),
           ...(filterQueries && { 'filter.query': filterQueries }),
           expand: ['masterVariant.attributes', 'variants.attributes'],
-          limit: 50,
-          staged: false,
         },
       });
 
@@ -48,6 +66,7 @@ export const loadProducts = async (
     throw mapAuthError(humanReadableMsg);
   }
 };
+
 export const loadCustomerData = async (client: Client): Promise<Customer> => {
   const apiRoot = apiRootBuilder(client);
 

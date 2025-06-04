@@ -2,6 +2,7 @@ import { ProductProjection } from '@commercetools/platform-sdk';
 import { getProductPrice } from './productPrice.ts';
 import { extractAttributes } from './extractAttributes.ts';
 import { ProductVariantWithPriceAndName } from '../interfaces/product/product.ts';
+import { QueryParams } from '../interfaces/query-params/query-params.ts';
 
 export const mapProducts = (products: ProductProjection[]) =>
   products.map((product) => {
@@ -54,11 +55,25 @@ export const mapProducts = (products: ProductProjection[]) =>
     };
   });
 
-export const getVariants = (products: ProductProjection[]): ProductVariantWithPriceAndName[] => {
-  return mapProducts(products).flatMap((product) =>
-    [product.masterVariant, ...product.variants].map((variant) => ({
-      ...variant,
-      productName: product.name,
-    }))
-  );
+export const getVariants = (
+  products: ProductProjection[],
+  filters: QueryParams
+): ProductVariantWithPriceAndName[] => {
+  return mapProducts(products)
+    .flatMap((product) =>
+      [product.masterVariant, ...product.variants].map((variant) => {
+        const colorAttr = variant.attributes?.color;
+        const sexAttr = variant.attributes?.sex;
+
+        const matchesColor = !filters.color || colorAttr === filters.color;
+        const matchesSex = !filters.sex || sexAttr === filters.sex;
+
+        return {
+          ...variant,
+          productName: product.name,
+          isMatchingVariant: !!(matchesColor && matchesSex),
+        };
+      })
+    )
+    .filter((v) => v.isMatchingVariant);
 };
