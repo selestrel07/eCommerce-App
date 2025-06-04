@@ -12,6 +12,7 @@ import { emptyTokenStore, tokenCache } from '../../services/storage/storage.serv
 import { revokeToken } from '../../services/authService.ts';
 import { getMenuItems } from './NavItems.tsx';
 import { useCart } from '../../contexts/cart-context/UseCart.ts';
+import { TiShoppingCart } from 'react-icons/ti';
 
 const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
   const location = useLocation();
@@ -50,7 +51,7 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
                   selectedKeys={[location.pathname]}
                   items={getMenuItems(
                     isSignedIn,
-                    cartItemsCount,
+                    // cartItemsCount,
                     () => setDrawerVisible(false),
                     handleLogout
                   )}
@@ -64,11 +65,17 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
               className="menu"
               mode="horizontal"
               selectedKeys={[location.pathname]}
-              items={getMenuItems(isSignedIn, cartItemsCount, undefined, handleLogout)}
+              items={getMenuItems(isSignedIn, undefined, handleLogout)}
             />
           </>
         )}
       </div>
+      <Link to={Paths.CART} className="cart-link">
+        <div className="cart-icon-wrapper">
+          <TiShoppingCart className="cart-icon" />
+          {cartItemsCount >= 0 && <span className="cart-badge">{cartItemsCount}</span>}
+        </div>
+      </Link>
     </Layout.Header>
   );
 };
