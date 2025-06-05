@@ -1,0 +1,355 @@
+.product-container {
+  display: flex;
+  gap: 50px;
+  align-items: center;
+  padding: 50px;
+  border: 2px solid rgba(5, 5, 5, 0.08);
+  box-shadow: 4px 4px 18px 3px rgba(9, 60, 99, 0.15);
+  margin: auto 50px;
+  border-radius: 10px;
+}
+
+.product-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 50px;
+}
+
+.product-general-description {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+  max-width: 400px;
+
+  .product-description-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 500px;
+    border-bottom: 1px solid rgba(5, 5, 5, 0.2);
+    padding-bottom: 20px;
+
+    p{
+      text-align: justify;
+      line-height: 1.1rem;
+    }
+  }
+
+  .product-price {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: baseline;
+    gap: 10px;
+    border-bottom: 1px solid rgba(5, 5, 5, 0.2);
+    padding-bottom: 20px;
+
+    .price{
+      color: rgb(35, 34, 34);
+      font-size: large;
+    }
+
+    .old-price {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    .discounted-price {
+      color: red;
+      font-weight: bold;
+    }
+  }
+
+  .product-attributes {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+  }
+
+  .attribute-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    svg {
+      height: 1.5em;
+      width: 1.5em;
+      color: rgb(73, 72, 72);
+      margin-right: 15px;
+    }
+    .attribute-description {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      align-items: center;
+      width: 100%;
+    }
+  }
+}
+
+.product-carousel {
+  width: 500px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.carousel-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.ant-carousel .css-dev-only-do-not-override-vrrzze {
+  height: 600px;
+}
+
+:where(.css-dev-only-do-not-override-vrrzze).ant-carousel .slick-dots li button {
+  background: black;
+}
+
+:where(.css-dev-only-do-not-override-vrrzze).ant-carousel .slick-dots li::after {
+  background: black;
+}
+
+:where(.css-vrrzze).ant-carousel .slick-dots li button {
+  background: black;
+}
+
+:where(.css-vrrzze).ant-carousel .slick-dots li::after {
+  background: black;
+}
+
+.carousel-wrapper {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.8);
+  width: 30px;
+  height: 30px;
+  border: none;
+  font-size: 20px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+
+  &:hover {
+    background: #0a66c2;
+    color: white;
+  }
+}
+
+.carousel-arrow.left {
+  left: -30px;
+}
+
+.carousel-arrow.right {
+  right: -30px;
+}
+
+.product-modal .ant-modal-content {
+  max-width: 90vw;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.product-modal .carousel-image {
+  width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+}
+
+.modal-carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-modal .carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.9);
+  width: 30px;
+  height: 30px;
+  border: none;
+  font-size: 20px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  &:hover {
+    background: #0a66c2;
+    color: white;
+  }
+}
+
+.product-modal .carousel-arrow.left {
+  left: -70px;
+}
+
+.product-modal .carousel-arrow.right {
+  right: -70px;
+}
+
+.product-modal {
+  width: 1000px;
+}
+
+.mobile-arrows {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  #root main {
+    justify-content: flex-start;
+  }
+
+  .product-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 700px) {
+  .product-carousel {
+    width: 300px;
+    height: 300px;
+  }
+
+  .product-name {
+    font-size: 2rem;
+  }
+  .carousel-image {
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+  }
+
+  .product-modal .ant-modal-content {
+    max-width: 95vw;
+  }
+
+  .product-modal .carousel-image {
+    max-height: 50vh;
+  }
+
+  .product-modal .carousel-arrow.left {
+    left: -25px;
+  }
+
+  .product-modal .carousel-arrow.right {
+    right: -25px;
+  }
+
+  .product-modal {
+    .carousel-arrow.left {
+      display: none;
+    }
+  }
+
+
+  .product-modal {
+    .carousel-arrow.right {
+      display: none;
+    }
+  }
+
+  .mobile-arrows {
+    position: relative;
+    top: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 50px;
+  }
+
+  .mobile-arrow {
+    background: rgba(255, 255, 255, 0.9);
+    width: 30px;
+    height: 30px;
+    border: none;
+    font-size: 20px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background 0.3s ease;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    &:hover {
+      background: #0a66c2;
+      color: white;
+    }
+  }
+}
+
+
+@media (max-width: 450px) {
+  .product-carousel {
+    width: 200px;
+    height: 200px;
+  }
+
+  .product-name {
+    font-size: 1.8rem;
+  }
+
+  .carousel-image {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+  }
+
+  .product-modal .ant-modal-content {
+    max-width: 98vw;
+  }
+
+  .product-modal .carousel-image {
+    max-height: 40vh;
+  }
+
+  .product-modal .carousel-arrow.left {
+    left: -25px;
+  }
+
+  .product-modal .carousel-arrow.right {
+    right: -25px;
+  }
+}

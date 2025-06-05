@@ -15,6 +15,11 @@ export const getMenuItems = (
       label: <Link to={Paths.MAIN}>Main</Link>,
       onClick,
     },
+    {
+      key: '/catalog',
+      label: <Link to={Paths.CATALOG}>Catalog</Link>,
+      onClick,
+    },
   ];
 
   if (!isSignedIn) {
@@ -33,6 +38,13 @@ export const getMenuItems = (
   }
 
   return baseItems.concat([
+    {
+      key: '/profile',
+      label: <Link to={Paths.PROFILE}>Profile</Link>,
+      onClick: () => {
+        if (onClick) onClick();
+      },
+    },
     {
       key: 'logout',
       label: 'Logout',

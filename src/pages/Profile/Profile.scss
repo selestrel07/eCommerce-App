@@ -1,0 +1,145 @@
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  align-items: start;
+  justify-content: start;
+  width: 100%;
+  min-height: calc(100vh - 64px);
+
+  .ant-divider {
+    margin: 10px 0;
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 10px 30px;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .profile-buttons,
+  .personal-info-fields,
+  .password-info-fields,
+  .address-list,
+  .address-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .ant-spin {
+    margin: auto;
+  }
+
+  .address-list {
+    row-gap: 15px;
+
+    .address-container {
+      position: relative;
+      flex-direction: column;
+      justify-content: center;
+      width: 340px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 15px 10px 5px;
+
+      .address-container-controls {
+        position: absolute;
+        display: flex;
+        justify-content: end;
+        align-self: end;
+        background-color: rgba(241, 241, 239, 0.58);
+        gap: 5px;
+        top: -10px;
+        right: -5px;
+        padding: 3px;
+
+        .anticon-check,
+        .anticon-edit,
+        .anticon-delete,
+        .anticon-stop {
+          color: #1677ff;
+        }
+
+        span {
+          transition: all 0.3s linear;
+        }
+
+        span:hover {
+          scale: 1.2;
+        }
+      }
+
+      .disabled {
+        cursor: not-allowed;
+
+        .anticon-check,
+        .anticon-edit,
+        .anticon-delete {
+          color: gray;
+        }
+
+        span {
+          pointer-events: none;
+          transition: none;
+        }
+
+        span:hover {
+          scale: 1;
+        }
+      }
+
+      .tags {
+        display: flex;
+        gap: 4px;
+        align-self: start;
+
+        .ant-tag {
+          margin-right: 0;
+        }
+      }
+
+      .ant-alert {
+        padding-top: 1px;
+      }
+    }
+
+    .address {
+      margin: 0;
+    }
+  }
+
+  .ant-input[disabled],
+  .anticon.anticon-eye-invisible.ant-input-password-icon,
+  .ant-input-disabled.ant-input-outlined.ant-input-password,
+  .ant-input-disabled .ant-input[disabled],
+  .ant-picker.ant-picker-disabled,
+  .ant-picker.ant-picker-disabled input[disabled],
+  .ant-select,
+  .ant-select.ant-select-selector-disabled,
+  .address-row .ant-select.ant-select-disabled > .ant-select-selector,
+  .ant-select .ant-select-selector .ant-select-selection-wrap {
+    color: rgba(0, 0, 0, 0.48);
+    cursor: default;
+  }
+
+  .password-info-fields,
+  .personal-info-fields,
+  .address-list {
+
+    .input {
+      height: 100%;
+    }
+  }
+}
+
+@media screen and (width < 450px) {
+  .profile-container {
+    section {
+      padding: 10px min(30px, 5.5vw);
+    }
+  }
+}

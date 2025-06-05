@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { MenuOutlined } from '@ant-design/icons';
 import { useMediaQuery } from 'react-responsive';
 import { useState } from 'react';
-import { getMenuItems } from './menuItems';
 import { AppHeaderProps } from '../../interfaces/interfaces';
 import logo from '../../assets/logo.png';
 import './Header.scss';
@@ -11,6 +10,7 @@ import { Paths } from '../../enums/paths/paths';
 import { useNavigate } from 'react-router-dom';
 import { emptyTokenStore, tokenCache } from '../../services/storage/storage.service.ts';
 import { revokeToken } from '../../services/authService.ts';
+import { getMenuItems } from './NavItems.tsx';
 
 const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
   const location = useLocation();
