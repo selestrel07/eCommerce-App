@@ -6,11 +6,10 @@ import { useState } from 'react';
 import { AppHeaderProps } from '../../interfaces/interfaces';
 import logo from '../../assets/logo.png';
 import './Header.scss';
-import { Paths } from '../../enums/paths/paths';
+import { Paths } from '@enums';
 import { useNavigate } from 'react-router-dom';
-import { emptyTokenStore, tokenCache } from '../../services/storage/storage.service.ts';
-import { revokeToken } from '../../services/authService.ts';
-import { getMenuItems } from './NavItems.tsx';
+import { emptyTokenStore, tokenCache, revokeToken } from '@services';
+import { getMenuItems } from '@components';
 
 const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
   const location = useLocation();

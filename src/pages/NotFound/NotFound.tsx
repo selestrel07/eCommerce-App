@@ -1,6 +1,6 @@
 import { Button, Empty } from 'antd';
 import { Link } from 'react-router-dom';
-import { Paths } from '../../enums/paths/paths.ts';
+import { Paths } from '@enums';
 
 export default function NotFound() {
   return (

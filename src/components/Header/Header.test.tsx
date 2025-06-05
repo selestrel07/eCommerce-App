@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import AppHeader from './Header';
-import { Paths } from '../../enums/paths/paths';
+import { Paths } from '@enums';
 
 // change useNavigate a fake function
 vi.mock('react-router-dom', async () => {

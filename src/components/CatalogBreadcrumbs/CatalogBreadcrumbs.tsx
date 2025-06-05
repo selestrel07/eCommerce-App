@@ -1,8 +1,8 @@
 import { Context, FC, ReactElement, use, useEffect, useState } from 'react';
 import { BreadcrumbItemType } from 'antd/es/breadcrumb/Breadcrumb';
-import { CategoryContext } from '../../contexts/CatalogContexts.tsx';
+import { CategoryContext } from '@contexts';
 import { Breadcrumb } from 'antd';
-import { CategoryContextType } from '../../interfaces/context/catalog-context.ts';
+import { CategoryContextType } from '@interfaces';
 
 const convertSelectedCategoriesToBreadcrumbs = (
   selectedCategories: string[],

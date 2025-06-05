@@ -1,24 +1,16 @@
 import { Context, FC, ReactElement, use, useState } from 'react';
 import { Input } from '../Input/Input.tsx';
 import { Button } from 'antd';
-import { ProfileSectionNames } from '../../enums/profile-section-names/profile-section-names.ts';
+import { ProfileSectionNames, EditAction } from '@enums';
 import { DatePickerInput } from '../DatePickerInput/DatePickerInput.tsx';
-import { emptyPersonalInfoErrors } from '../../data/component-states/personal-info-states.ts';
-import { validateDate, validateEmail, validateStringField } from '../../utils/validation.ts';
-import { EditAction } from '../../enums/edit-actions/edit-actions.ts';
-import { updateCustomer } from '../../services/api.service.ts';
+import { emptyPersonalInfoErrors } from '@data';
+import { validateDate, validateEmail, validateStringField, composeAction } from '@utils';
+import { updateCustomer } from '@services';
 import { MyCustomerUpdateAction } from '@commercetools/platform-sdk';
 import Alert from 'antd/es/alert/Alert';
-import { PersonalInfoFields } from '../../types/profile-sections/personal-info-fields.ts';
-import { composeAction } from '../../utils/edit-action.utils.ts';
-import {
-  ProfileContextData,
-  ProfileContextEditMode,
-} from '../../contexts/profile-context/ProfileContexts.tsx';
-import {
-  ProfileContextDataType,
-  ProfileContextEditModeType,
-} from '../../interfaces/context/profile-context.ts';
+import { PersonalInfoFields } from '@types';
+import { ProfileContextData, ProfileContextEditMode } from '@contexts';
+import { ProfileContextDataType, ProfileContextEditModeType } from '@interfaces';
 
 const composeActions = (
   initialValues: PersonalInfoFields,

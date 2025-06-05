@@ -1,6 +1,6 @@
 import { Switch } from 'antd';
 import React, { useState } from 'react';
-import { SwitchAddressProps } from '../../interfaces/address/switch-address';
+import { SwitchAddressProps } from '@interfaces';
 import './switchAddress.scss';
 
 const SwitchAddress: React.FC<SwitchAddressProps> = ({ onChange }) => {

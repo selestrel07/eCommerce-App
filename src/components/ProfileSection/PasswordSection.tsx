@@ -1,26 +1,23 @@
 import { Context, FC, ReactElement, use, useState } from 'react';
 import { Button } from 'antd';
-import { ProfileSectionNames } from '../../enums/profile-section-names/profile-section-names.ts';
-import { Input } from '../Input/Input.tsx';
-import { PasswordSectionProps } from '../../interfaces/component-props/component-props.ts';
+import { ProfileSectionNames } from '@enums';
+import { Input } from '@components';
 import {
-  emptyPasswordErrorMessages,
-  emptyPasswords,
-} from '../../data/component-states/password-states.ts';
-import { validatePassword, validateRepeatPassword } from '../../utils/validation.ts';
-import { changePassword } from '../../services/api.service.ts';
-import Alert from 'antd/es/alert/Alert';
-import { loginCustomer } from '../../services/authService.ts';
-import { emptyTokenStore, tokenCache } from '../../services/storage/storage.service.ts';
-import { createCustomerClient } from '../../services/clientBuilder.ts';
-import {
-  ProfileContextData,
-  ProfileContextEditMode,
-} from '../../contexts/profile-context/ProfileContexts.tsx';
-import {
+  PasswordSectionProps,
   ProfileContextDataType,
   ProfileContextEditModeType,
-} from '../../interfaces/context/profile-context.ts';
+} from '@interfaces';
+import { emptyPasswordErrorMessages, emptyPasswords } from '@data';
+import { validatePassword, validateRepeatPassword } from '@utils';
+import {
+  changePassword,
+  loginCustomer,
+  emptyTokenStore,
+  tokenCache,
+  createCustomerClient,
+} from '@services';
+import Alert from 'antd/es/alert/Alert';
+import { ProfileContextData, ProfileContextEditMode } from '@contexts';
 
 export const PasswordSection: FC<PasswordSectionProps> = ({
   setApiClient,

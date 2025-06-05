@@ -1,19 +1,17 @@
-import { ReactElement, useState } from 'react';
-import { Input } from '../../components/Input/Input';
+import { FormEvent, ReactElement, useState } from 'react';
+import { Input } from '@components';
 import {
   validatePassword,
   validateEmail,
   validateFields,
   composeFieldValidationObject,
-} from '../../utils/validation';
+  composeFieldHandler,
+} from '@utils';
 import { Button } from 'antd';
-import { loginCustomer } from '../../services/authService.ts';
+import { loginCustomer, createCustomerClient, setAnonymousClient } from '@services';
 import Alert from 'antd/es/alert/Alert';
 import './SignIn.scss';
-import { composeFieldHandler } from '../../utils/handlers.ts';
 import { Client } from '@commercetools/sdk-client-v2';
-import { createCustomerClient } from '../../services/clientBuilder.ts';
-import { setAnonymousClient } from '../../services/storage/storage.service.ts';
 
 export default function SignIn({
   setSignedIn,
@@ -43,7 +41,7 @@ export default function SignIn({
       composeFieldValidationObject(password, validatePassword, setPasswordError),
     ]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     const errors: string[] = getErrors();

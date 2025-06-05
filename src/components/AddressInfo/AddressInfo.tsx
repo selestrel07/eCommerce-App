@@ -1,36 +1,29 @@
 import { Context, FC, ReactElement, use, useState } from 'react';
-import { Address } from '../Address/Address.tsx';
-import { AddressInfoProps } from '../../interfaces/component-props/component-props.ts';
 import { Checkbox } from 'antd';
-import { AddressType } from '../../enums/address-types/address-types.ts';
-import { AddressData } from '../../interfaces/address/address.ts';
-import { AddressErrorData } from '../../types/address/address-types.ts';
+import { AddressType, EditAction } from '@enums';
+import {
+  AddressData,
+  AddressInfoProps,
+  ProfileContextDataType,
+  ProfileContextEditModeType,
+} from '@interfaces';
+import { AddressErrorData } from '@types';
 import Alert from 'antd/es/alert/Alert';
 import {
   validateAddressTypes,
   validatePostalCode,
   validateStringField,
-} from '../../utils/validation.ts';
-import {
   composeAction,
   composeAddressActions,
   composeAddressTypeActions,
-} from '../../utils/edit-action.utils.ts';
-import { updateCustomer } from '../../services/api.service.ts';
-import { addressToAddressData, updateAddressWithData } from '../../utils/address-converter.ts';
-import { EditAction } from '../../enums/edit-actions/edit-actions.ts';
-import {
-  ProfileContextData,
-  ProfileContextEditMode,
-} from '../../contexts/profile-context/ProfileContexts.tsx';
-import {
-  ProfileContextDataType,
-  ProfileContextEditModeType,
-} from '../../interfaces/context/profile-context.ts';
-import { ProfileModal } from '../ProfileModal/ProfileModal.tsx';
-import { AddressInfoControls } from '../AddressInfoControls/AddressInfoControls.tsx';
-import { getAddressTagValues } from '../../utils/profile.utils.tsx';
-import { emptyAddressErrors } from '../../data/component-states/address-info-states.ts';
+  addressToAddressData,
+  updateAddressWithData,
+  getAddressTagValues,
+} from '@utils';
+import { updateCustomer } from '@services';
+import { ProfileContextData, ProfileContextEditMode } from '@contexts';
+import { ProfileModal, AddressInfoControls, Address } from '@components';
+import { emptyAddressErrors } from '@data';
 
 const CheckboxGroup = Checkbox.Group;
 

@@ -8,7 +8,7 @@ import {
   ProductProjection,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
-import { QueryParams } from '../interfaces/query-params/query-params';
+import { QueryParams } from '@interfaces';
 
 export const loadProducts = async (
   client: Client,
