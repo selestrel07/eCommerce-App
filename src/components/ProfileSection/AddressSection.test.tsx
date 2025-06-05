@@ -1,12 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { AddressSection } from './AddressSection.tsx';
-import { ProfileSectionNames } from '../../enums/profile-section-names/profile-section-names.ts';
-import {
-  ProfileContextData,
-  ProfileProviderEditMode,
-} from '../../contexts/profile-context/ProfileContexts.tsx';
-import { getAnonymousClient } from '../../services/storage/storage.service.ts';
+import { AddressSection } from '@components';
+import { ProfileSectionNames } from '@enums';
+import { ProfileContextData, ProfileProviderEditMode } from '@contexts';
+import { getAnonymousClient } from '@services';
 
 const client = getAnonymousClient()!;
 const setCustomerData = vi.fn();

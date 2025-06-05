@@ -6,15 +6,14 @@ import {
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { Client } from '@commercetools/sdk-client-v2';
-import { getProductPrice } from '../../utils/product-price.utils';
-import { extractAttributes } from '../../utils/product-attribites.utils';
+import { getProductPrice, extractAttributes } from '@utils';
 import { IoIosPeople, IoIosColorPalette } from 'react-icons/io';
 import { GiRolledCloth } from 'react-icons/gi';
 import { Carousel } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
 import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs';
 import { Modal } from 'antd';
-import { getProductByKey } from '../../services/api.service';
+import { getProductByKey } from '@services';
 import NotFound from '../NotFound/NotFound';
 
 // eslint-disable-next-line max-lines-per-function

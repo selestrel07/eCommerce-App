@@ -1,9 +1,8 @@
 import { Context, FC, use } from 'react';
 import { CheckOutlined, DeleteOutlined, EditOutlined, StopOutlined } from '@ant-design/icons';
-import { ProfileContextEditMode } from '../../contexts/profile-context/ProfileContexts.tsx';
-import { ProfileContextEditModeType } from '../../interfaces/context/profile-context.ts';
-import { emptyAddressErrors } from '../../data/component-states/address-info-states.ts';
-import { AddressInfoControlsProps } from '../../interfaces/component-props/component-props.ts';
+import { ProfileContextEditMode } from '@contexts';
+import { ProfileContextEditModeType, AddressInfoControlsProps } from '@interfaces';
+import { emptyAddressErrors } from '@data';
 
 export const AddressInfoControls: FC<AddressInfoControlsProps> = ({
   addressId,

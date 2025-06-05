@@ -1,9 +1,9 @@
 import { Address as AddressSdk } from '@commercetools/platform-sdk';
-import { AddressErrorData } from '../../types/address/address-types.ts';
+import { AddressErrorData } from '@types';
 import { AddressData } from '../address/address.ts';
 import { ChangeEvent, ReactElement } from 'react';
 import { Client } from '@commercetools/sdk-client-v2';
-import { AddressType } from '../../enums/address-types/address-types.ts';
+import { AddressType } from '@enums';
 
 export interface DatePickerInputProps {
   fieldName?: string;

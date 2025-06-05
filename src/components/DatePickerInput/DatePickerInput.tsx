@@ -2,7 +2,7 @@ import { DatePicker as AntDatePicker } from 'antd';
 import { FC } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import Alert from 'antd/es/alert/Alert';
-import { DatePickerInputProps } from '../../interfaces/component-props/component-props.ts';
+import { DatePickerInputProps } from '@interfaces';
 
 export const DatePickerInput: FC<DatePickerInputProps> = ({
   fieldName,

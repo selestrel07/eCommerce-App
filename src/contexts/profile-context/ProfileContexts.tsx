@@ -1,8 +1,5 @@
 import { createContext, FC, ReactNode, useState } from 'react';
-import {
-  ProfileContextEditModeType,
-  ProfileContextDataType,
-} from '../../interfaces/context/profile-context.ts';
+import { ProfileContextEditModeType, ProfileContextDataType } from '@interfaces';
 
 export const ProfileContextEditMode = createContext<ProfileContextEditModeType | null>(null);
 

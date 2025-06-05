@@ -12,6 +12,16 @@
 
     /* Bundler mode */
     "moduleResolution": "bundler",
+    "paths": {
+      "@components": ["./src/components/index.ts"],
+      "@data": ["./src/data/index.ts"],
+      "@enums": ["./src/enums/index.ts"],
+      "@contexts": ["./src/contexts/index.ts"],
+      "@interfaces": ["./src/interfaces/index.ts"],
+      "@services": ["./src/services/index.ts"],
+      "@types": ["./src/types/index.ts"],
+      "@utils": ["./src/utils/index.ts"],
+    },
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",

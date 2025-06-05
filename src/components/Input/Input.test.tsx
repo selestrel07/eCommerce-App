@@ -2,9 +2,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Input } from './Input';
+import { ChangeEvent } from 'react';
 
 describe('Input Component', () => {
-  const mockOnChange = vi.fn<(e: React.ChangeEvent<HTMLInputElement>) => void>();
+  const mockOnChange = vi.fn<(e: ChangeEvent<HTMLInputElement>) => void>();
 
   beforeEach(() => {
     mockOnChange.mockClear();

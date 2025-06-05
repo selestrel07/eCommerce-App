@@ -1,8 +1,8 @@
 import { Card, Typography } from 'antd';
 import './ProductCard.scss';
-import { Props } from '../../interfaces/product/product';
+import { Props } from '@interfaces';
 import { useNavigate } from 'react-router-dom';
-import { Paths } from '../../enums/paths/paths';
+import { Paths } from '@enums';
 
 const { Meta } = Card;
 const { Paragraph } = Typography;

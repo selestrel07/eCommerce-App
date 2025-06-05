@@ -1,20 +1,13 @@
 import { Context, ReactElement, use, useState } from 'react';
 import { Address as AddressSdk } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
 import { Button } from 'antd';
-import { ProfileSectionNames } from '../../enums/profile-section-names/profile-section-names.ts';
-import { addressComparator } from '../../utils/customer-field.utils.ts';
-import { AddressInfo } from '../AddressInfo/AddressInfo.tsx';
-import { emptyAddressData } from '../../data/component-states/address-info-states.ts';
-import {
-  ProfileContextData,
-  ProfileContextEditMode,
-} from '../../contexts/profile-context/ProfileContexts.tsx';
-import {
-  ProfileContextDataType,
-  ProfileContextEditModeType,
-} from '../../interfaces/context/profile-context.ts';
+import { ProfileSectionNames } from '@enums';
+import { addressComparator, getAddressTags } from '@utils';
+import { AddressInfo } from '@components';
+import { emptyAddressData } from '@data';
+import { ProfileContextData, ProfileContextEditMode } from '@contexts';
+import { ProfileContextDataType, ProfileContextEditModeType } from '@interfaces';
 import { Customer } from '@commercetools/platform-sdk';
-import { getAddressTags } from '../../utils/profile.utils.tsx';
 
 const composeAddressInfoComponents = (customerData: Customer | null): ReactElement[] => {
   return customerData

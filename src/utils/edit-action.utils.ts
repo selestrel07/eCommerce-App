@@ -1,10 +1,9 @@
-import { EditAction } from '../enums/edit-actions/edit-actions.ts';
+import { EditAction, AddressType } from '@enums';
 import {
   Address,
   Address as AddressSdk,
   MyCustomerUpdateAction,
 } from '@commercetools/platform-sdk';
-import { AddressType } from '../enums/address-types/address-types.ts';
 
 export const composeAction = (
   action: EditAction,
