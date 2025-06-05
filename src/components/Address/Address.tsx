@@ -1,9 +1,8 @@
-import { Input } from '../Input/Input.tsx';
-import { CountrySelect } from '../CountrySelect/CountrySelect.tsx';
+import { Input, CountrySelect } from '@components';
 import { FC } from 'react';
-import { AddressFields } from '../../enums/address-fields/address-fields.ts';
+import { AddressFields } from '@enums';
 import './Address.scss';
-import { AddressProps } from '../../interfaces/component-props/component-props.ts';
+import { AddressProps } from '@interfaces';
 
 export const Address: FC<AddressProps> = ({
   value,

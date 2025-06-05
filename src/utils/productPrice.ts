@@ -1,5 +1,5 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { PriceInfo } from '../interfaces/product/product';
+import { PriceInfo } from '@interfaces';
 
 export const getProductPrice = (
   product: Pick<ProductProjection, 'masterVariant'>,

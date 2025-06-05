@@ -1,7 +1,6 @@
-import { LevelKeysProps } from '../interfaces/category/category.ts';
+import { LevelKeysProps, CatalogContextType, CategoryContextType } from '@interfaces';
 import { createContext, FC, ReactNode, useState } from 'react';
 import { Category } from '@commercetools/platform-sdk';
-import { CatalogContextType, CategoryContextType } from '../interfaces/context/catalog-context.ts';
 
 export const CategoryContext = createContext<CategoryContextType | null>(null);
 
