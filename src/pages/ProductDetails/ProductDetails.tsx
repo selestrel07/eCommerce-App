@@ -94,13 +94,15 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
         className="product-modal"
       >
         <div className="modal-carousel-wrapper">
-          <button
-            type="button"
-            className="carousel-arrow left"
-            onClick={() => modalCarouselRef.current?.prev()}
-          >
-            <BsArrowLeftShort />
-          </button>
+          {images.length > 1 ? (
+            <button
+              type="button"
+              className="carousel-arrow left"
+              onClick={() => modalCarouselRef.current?.prev()}
+            >
+              <BsArrowLeftShort />
+            </button>
+          ) : undefined}
 
           <Carousel
             ref={modalCarouselRef}
@@ -115,43 +117,49 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
             ))}
           </Carousel>
 
-          <button
-            type="button"
-            className="carousel-arrow right"
-            onClick={() => modalCarouselRef.current?.next()}
-          >
-            <BsArrowRightShort />
-          </button>
+          {images.length > 1 ? (
+            <button
+              type="button"
+              className="carousel-arrow right"
+              onClick={() => modalCarouselRef.current?.next()}
+            >
+              <BsArrowRightShort />
+            </button>
+          ) : undefined}
         </div>
-        <div className="mobile-arrows">
-          <button
-            type="button"
-            className="mobile-arrow left"
-            onClick={() => modalCarouselRef.current?.prev()}
-          >
-            <BsArrowLeftShort />
-          </button>
-          <button
-            type="button"
-            className="mobile-arrow rigth"
-            onClick={() => modalCarouselRef.current?.next()}
-          >
-            <BsArrowRightShort />
-          </button>
-        </div>
+        {images.length > 1 ? (
+          <div className="mobile-arrows">
+            <button
+              type="button"
+              className="mobile-arrow left"
+              onClick={() => modalCarouselRef.current?.prev()}
+            >
+              <BsArrowLeftShort />
+            </button>
+            <button
+              type="button"
+              className="mobile-arrow rigth"
+              onClick={() => modalCarouselRef.current?.next()}
+            >
+              <BsArrowRightShort />
+            </button>
+          </div>
+        ) : undefined}
       </Modal>
 
       <div className="product-container">
         <div className="product-main">
           <h1 className="product-name">{productName}</h1>
           <div className="carousel-wrapper">
-            <button
-              type="button"
-              className="carousel-arrow left"
-              onClick={() => carouselRef.current?.prev()}
-            >
-              <BsArrowLeftShort />
-            </button>
+            {images.length > 1 ? (
+              <button
+                type="button"
+                className="carousel-arrow left"
+                onClick={() => carouselRef.current?.prev()}
+              >
+                <BsArrowLeftShort />
+              </button>
+            ) : undefined}
             <Carousel ref={carouselRef} dots effect="scrollx" className="product-carousel">
               {images.map((img, index) => (
                 <div key={img.url} className="carousel-slide">
@@ -167,13 +175,15 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
                 </div>
               ))}
             </Carousel>
-            <button
-              type="button"
-              className="carousel-arrow right"
-              onClick={() => carouselRef.current?.next()}
-            >
-              <BsArrowRightShort />
-            </button>
+            {images.length > 1 ? (
+              <button
+                type="button"
+                className="carousel-arrow right"
+                onClick={() => carouselRef.current?.next()}
+              >
+                <BsArrowRightShort />
+              </button>
+            ) : undefined}
           </div>
         </div>
 
