@@ -9,6 +9,7 @@ import { Client } from '@commercetools/sdk-client-v2';
 import ProductDetails from '../pages/ProductDetails/ProductDetails.tsx';
 import Profile from '../pages/Profile/Profile.tsx';
 import Catalog from '../pages/Catalog/Catalog.tsx';
+import About from '../pages/About/About.tsx';
 
 export default function AppRoutes({
   isSignedIn,
@@ -69,6 +70,7 @@ export default function AppRoutes({
           )
         }
       />
+      <Route path={Paths.ABOUT_US} element={<About />} />
       <Route path={Paths.ANY} element={<NotFound />} />
     </Routes>
   );
