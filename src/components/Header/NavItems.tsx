@@ -1,13 +1,11 @@
 import { Link } from 'react-router-dom';
 import type { MenuProps } from 'antd';
 import { Paths } from '../../enums/paths/paths';
-// import { TiShoppingCart } from 'react-icons/ti';
 
 type ItemType = Required<MenuProps>['items'][number];
 
 export const getMenuItems = (
   isSignedIn: boolean,
-  // cartItemsCount: number,
   onClick?: () => void,
   onLogout?: () => void
 ): ItemType[] => {
@@ -36,18 +34,6 @@ export const getMenuItems = (
         label: <Link to={Paths.SIGN_UP}>Sign up</Link>,
         onClick,
       },
-      // {
-      //   key: '/cart',
-      //   label: (
-      //     <Link to={Paths.CART} className="cart-link">
-      //       <div className="cart-icon-wrapper">
-      //         <TiShoppingCart className="cart-icon" />
-      //         {cartItemsCount >= 0 && <span className="cart-badge">{cartItemsCount}</span>}
-      //       </div>
-      //     </Link>
-      //   ),
-      //   onClick,
-      // },
     ]);
   }
 
