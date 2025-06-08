@@ -20,6 +20,11 @@ export const getMenuItems = (
       label: <Link to={Paths.CATALOG}>Catalog</Link>,
       onClick,
     },
+    {
+      key: '/about',
+      label: <Link to={Paths.ABOUT_US}>About Us</Link>,
+      onClick,
+    },
   ];
 
   if (!isSignedIn) {
