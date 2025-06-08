@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { CartContext } from './CartContext';
+import { CartContext } from '@contexts';
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cartItemsCount, setCartItemsCount] = useState(0);

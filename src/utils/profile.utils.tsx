@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { Address } from '@commercetools/platform-sdk';
 import { Tag } from 'antd';
-import { AddressType } from '../enums/address-types/address-types.ts';
+import { AddressType } from '@enums';
 
 export const getAddressTagValues = (tags: ReactElement[]): string[] => {
   return tags

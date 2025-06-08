@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Select } from 'antd';
-import { CountriesData } from '../../data/countries/countries.ts';
-import { CountrySelectProps } from '../../interfaces/component-props/component-props.ts';
+import { CountriesData } from '@data';
+import { CountrySelectProps } from '@interfaces';
 import './CountrySelect.scss';
 
 export const CountrySelect: FC<CountrySelectProps> = ({ value, onChange, disabled, fieldName }) => {

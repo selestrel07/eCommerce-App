@@ -1,16 +1,11 @@
 import './Profile.scss';
 import { ReactElement, useEffect, useState } from 'react';
-import { PersonalInfoSection } from '../../components/ProfileSection/PersonalInfoSection.tsx';
-import { loadCustomerData } from '../../services/api.service.ts';
+import { PersonalInfoSection, PasswordSection, AddressSection } from '@components';
+import { loadCustomerData } from '@services';
 import { Customer } from '@commercetools/platform-sdk';
 import { Divider, Spin } from 'antd';
-import { PasswordSection } from '../../components/ProfileSection/PasswordSection.tsx';
-import { AddressSection } from '../../components/ProfileSection/AddressSection.tsx';
-import {
-  ProfileContextData,
-  ProfileProviderEditMode,
-} from '../../contexts/profile-context/ProfileContexts.tsx';
-import { ProfileProps } from '../../interfaces/component-props/component-props.ts';
+import { ProfileContextData, ProfileProviderEditMode } from '@contexts';
+import { ProfileProps } from '@interfaces';
 
 const successfulNotification = (
   notificationFunction: (message: string, description: string) => void

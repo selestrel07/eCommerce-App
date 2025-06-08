@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import React, { ReactElement, useState, useEffect } from 'react';
-import { Input } from '../../components/Input/Input';
+import { Input, DatePickerInput, Address } from '@components';
 import {
   validateDate,
   validateEmail,
@@ -8,22 +8,18 @@ import {
   validatePostalCode,
   validateRepeatPassword,
   validateStringField,
-} from '../../utils/validation';
-import { DatePickerInput } from '../../components/DatePickerInput/DatePickerInput';
+} from '@utils';
 import { Button, Typography } from 'antd';
-import { Address } from '../../components/Address/Address.tsx';
-import { AddressErrorData } from '../../types/address/address-types.ts';
-import { CountriesData } from '../../data/countries/countries.ts';
-import { AddressData } from '../../interfaces/address/address.ts';
+import { AddressErrorData } from '@types';
+import { CountriesData } from '@data';
+import { AddressData } from '@interfaces';
 import Alert from 'antd/es/alert/Alert';
-import { loginCustomer, signUpCustomer } from '../../services/authService.ts';
+import { loginCustomer, signUpCustomer, createCustomerClient, setAnonymousClient } from '@services';
 import './SignUp.scss';
 import { Client } from '@commercetools/sdk-client-v2';
-import { createCustomerClient } from '../../services/clientBuilder.ts';
-import { setAnonymousClient } from '../../services/storage/storage.service.ts';
 import SwitchAddress from '../../components/SwitchAdress/switchAddress.tsx';
 import { Switch } from 'antd';
-import { AppCustomerDraft } from '../../interfaces/customer/customer.ts';
+import { AppCustomerDraft } from '@interfaces';
 
 const { Text } = Typography;
 

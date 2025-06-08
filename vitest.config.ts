@@ -1,6 +1,8 @@
-import { defineConfig } from 'vitest/config';
+import { coverageConfigDefaults, defineConfig } from 'vitest/config';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
+  plugins: [tsconfigPaths()],
   test: {
     globals: true,
     exclude: ['node_modules', 'dist'],
@@ -10,6 +12,11 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: 'text',
+      exclude: [
+        'commitlint.config.ts',
+        'lint-staged.config.mjs',
+        ...coverageConfigDefaults.exclude,
+      ],
     },
   },
 });

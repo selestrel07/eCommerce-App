@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-import { CartContextProps } from '../../interfaces/cart/cart';
+import { CartContextProps } from '@interfaces';
 
 export const CartContext = createContext<CartContextProps>({
   cartItemsCount: 0,
