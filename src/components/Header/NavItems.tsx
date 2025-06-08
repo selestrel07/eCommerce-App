@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { MenuProps } from 'antd';
-import { Paths } from '../../enums/paths/paths';
+import { Paths } from '@enums';
 
 type ItemType = Required<MenuProps>['items'][number];
 

@@ -1,4 +1,4 @@
-import { QueryParams } from '../interfaces/query-params/query-params.ts';
+import { QueryParams } from '@interfaces';
 
 const FILTER_QUERY = 'filter.query';
 const CATEGORIES_ID = 'categories.id';

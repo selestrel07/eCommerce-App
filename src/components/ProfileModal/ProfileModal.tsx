@@ -1,8 +1,7 @@
 import { Context, FC, use } from 'react';
 import { Modal } from 'antd';
-import { ProfileContextEditMode } from '../../contexts/profile-context/ProfileContexts.tsx';
-import { ProfileContextEditModeType } from '../../interfaces/context/profile-context.ts';
-import { ProfileModalProps } from '../../interfaces/component-props/component-props.ts';
+import { ProfileContextEditMode } from '@contexts';
+import { ProfileContextEditModeType, ProfileModalProps } from '@interfaces';
 
 export const ProfileModal: FC<ProfileModalProps> = ({
   isModalOpen,

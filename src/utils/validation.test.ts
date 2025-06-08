@@ -7,7 +7,7 @@ import {
   validateFields,
   validatePassword,
 } from './validation.ts';
-import { AddressType } from '../enums/address-types/address-types.ts';
+import { AddressType } from '@enums';
 
 const incorrectEmailData: Record<string, string> = {
   '   test@test.com': 'The Email must not contain spaces at the beginning or end.',

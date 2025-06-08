@@ -1,4 +1,4 @@
-import { AddressData } from '../interfaces/address/address.ts';
+import { AddressData } from '@interfaces';
 import { Address } from '@commercetools/platform-sdk';
 
 export const addressToAddressData = (address: Address): AddressData => {

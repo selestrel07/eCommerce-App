@@ -1,5 +1,5 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { ProductAttribute } from '../interfaces/product/product';
+import { ProductAttribute } from '@interfaces';
 
 export const extractAttributes = (
   product: ProductProjection,

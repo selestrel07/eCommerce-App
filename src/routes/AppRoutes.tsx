@@ -4,7 +4,7 @@ import SignIn from '../pages/SignIn/SignIn.tsx';
 import Home from '../pages/Home/Home.tsx';
 import NotFound from '../pages/NotFound/NotFound.tsx';
 import { ReactElement } from 'react';
-import { Paths } from '../enums/paths/paths.ts';
+import { Paths } from '@enums';
 import { Client } from '@commercetools/sdk-client-v2';
 import ProductDetails from '../pages/ProductDetails/ProductDetails.tsx';
 import Profile from '../pages/Profile/Profile.tsx';

@@ -1,16 +1,13 @@
 /* eslint-disable max-lines-per-function */
 import { ReactElement, useEffect, useState } from 'react';
 import { Client } from '@commercetools/sdk-client-v2';
-import { loadProducts } from '../../services/api.service';
+import { loadProducts } from '@services';
 import './Catalog.scss';
-import { ProductCard } from '../../components/ProductCard/ProductCard';
+import { ProductCard, CategoryList, CatalogBreadcrumbs } from '@components';
 import { Input, Select, Button } from 'antd';
-import { CategoryList } from '../../components/CategoryList/CategoryList.tsx';
-import { CatalogContext, CategoryProvider } from '../../contexts/CatalogContexts.tsx';
-import { CatalogBreadcrumbs } from '../../components/CatalogBreadcrumbs/CatalogBreadcrumbs.tsx';
-import { ProductVariantWithPriceAndName } from '../../interfaces/product/product.ts';
-import { getVariants } from '../../utils/map-product.ts';
-import { QueryParams } from '../../interfaces/query-params/query-params.ts';
+import { CatalogContext, CategoryProvider } from '@contexts';
+import { ProductVariantWithPriceAndName, QueryParams } from '@interfaces';
+import { getVariants } from '@utils';
 
 const { Search } = Input;
 const { Option } = Select;

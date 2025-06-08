@@ -1,5 +1,5 @@
 import { RawApiError } from '../interfaces/interfaces';
-import { HttpStatus } from '../enums/http-status';
+import { HttpStatus } from '@enums';
 
 export function handleApiError(error: unknown): string {
   const apiError = error as RawApiError;

@@ -3,7 +3,7 @@ import { createMemoryHistory } from 'history';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import NotFound from './NotFound.tsx';
-import { Paths } from '../../enums/paths/paths.ts';
+import { Paths } from '@enums';
 
 describe('Tests for the 404 (not found) page', () => {
   it('Should open the Main page after the button click', () => {
