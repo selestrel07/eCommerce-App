@@ -15,6 +15,7 @@ import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs';
 import { Modal } from 'antd';
 import { getProductByKey } from '@services';
 import NotFound from '../NotFound/NotFound';
+import AddCartButton from '../../components/AddCartButton/AddCartButton';
 
 // eslint-disable-next-line max-lines-per-function
 const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
@@ -203,6 +204,7 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
                 {priceInfo?.amount} {priceInfo?.currency}
               </p>
             )}
+            <AddCartButton key="cart" />,
           </div>
           <div className="product-description-container">
             <h3>About this item:</h3>
