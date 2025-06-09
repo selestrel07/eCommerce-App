@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
 
 export const AddCartButton: React.FC = () => {
-  const [count, setCount] = useState(5);
+  const [disabled, setDisabled] = useState(false);
 
-  const increase = () => {
-    setCount(count + 1);
+  const handleClick = () => {
+    setDisabled(true);
   };
 
   return (
-    <Space direction="vertical">
+    <Space>
       <Space.Compact>
-        <Button onClick={increase} icon={<PlusOutlined />} />
+        <Button disabled={disabled} onClick={handleClick} type="primary">
+          {disabled ? 'Added to Cart' : 'Add to Cart'}
+        </Button>
       </Space.Compact>
     </Space>
   );
