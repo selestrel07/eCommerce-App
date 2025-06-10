@@ -11,6 +11,7 @@ export const CartItem: FC<{
   const itemCost = formatPrice(lineItem.price.value.centAmount, fractionDigits);
   const quantity = lineItem.quantity;
   const currency = lineItem.price.value.currencyCode;
+  const itemDiscountCost = formatPrice(lineItem.price.discounted?.value.centAmount, fractionDigits);
   return (
     <div className="cart-item-container">
       <div className="cart-item-info">
@@ -21,13 +22,25 @@ export const CartItem: FC<{
       </div>
       <div className="cart-item-price">
         <p>
-          <b>Price:</b> {itemCost} {currency}
+          <b>Price:</b>{' '}
+          {itemDiscountCost ? (
+            <span className="discounted-price">
+              <span className="original-price">
+                {itemCost} {currency}
+              </span>{' '}
+              {itemDiscountCost}
+            </span>
+          ) : (
+            itemCost
+          )}{' '}
+          {currency}
         </p>
         <p>
           <b>Quantity:</b> {quantity}
         </p>
         <p>
-          <b>Total cost:</b> {formatPrice(parseInt(itemCost) * quantity)} {currency}
+          <b>Total cost:</b> {formatPrice(lineItem.totalPrice.centAmount, fractionDigits)}{' '}
+          {currency}
         </p>
       </div>
     </div>

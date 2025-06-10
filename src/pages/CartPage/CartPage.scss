@@ -31,6 +31,17 @@
       gap: 10px;
     }
 
+    .discounted-price {
+      color: #e63946;
+      font-size: 1.1em;
+    }
+
+    .original-price {
+      text-decoration: line-through;
+      color: #888;
+      font-size: 0.9em;
+    }
+
     @media (width < 720px) {
       .cart-item-price {
         flex-direction: column;
