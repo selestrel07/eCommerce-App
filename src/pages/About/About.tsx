@@ -23,8 +23,7 @@ export const AboutUsPage: React.FC = () => {
             <Card.Meta
               title="Team Lead/Developer"
               description="About me: graduated from BSU with a degree in Mathematics (teacher of mathematics and computer science), 2 years worked in school as a teacher of mathematics and computer science, then in a bank as a tester and system analyst, then moved to IT and worked as QA Automation in two companies. Hobbies: I like to learn something new (more often IT related), read, play video games, go to soccer with my wife.
-
-Translated with DeepL.com (free version)"
+"
             />
           </Card>
         </Col>
@@ -40,8 +39,7 @@ I graduated from a foreign languages lyceum with a degree in foreign philology. 
 During my maternity leave I got interested in digital art and then in frontend development. Now this is my new professional direction and area of constant development.
 
 Among my hobbies are reading books, constantly striving for self-development, video games, long walks and cooking: I love to cook and delight my loved ones with my dishes.
-
-Translated with DeepL.com (free version)"
+"
             />
           </Card>
         </Col>
