@@ -1,7 +1,9 @@
 import React, { createContext } from 'react';
-import { CartContextProps } from '@interfaces';
+import { CartContextType } from '@interfaces';
 
-export const CartContext = createContext<CartContextProps>({
+export const CartContext = createContext<CartContextType>({
+  cart: null,
+  setCart: () => null,
   cartItemsCount: 0,
   setCartItemsCount: (() => null) as unknown as React.Dispatch<React.SetStateAction<number>>,
 });

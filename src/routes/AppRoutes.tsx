@@ -73,7 +73,7 @@ export default function AppRoutes({
       />
       <Route path={Paths.ABOUT_US} element={<About />} />
       <Route path={Paths.ANY} element={<NotFound />} />
-      <Route path={Paths.CART} element={<CartPage />} />
+      <Route path={Paths.CART} element={<CartPage client={apiClient} />} />
     </Routes>
   );
 }
