@@ -10,6 +10,7 @@ import ProductDetails from '../pages/ProductDetails/ProductDetails.tsx';
 import Profile from '../pages/Profile/Profile.tsx';
 import Catalog from '../pages/Catalog/Catalog.tsx';
 import About from '../pages/About/About.tsx';
+import CartPage from '../pages/CartPage/CartPage.tsx';
 
 export default function AppRoutes({
   isSignedIn,
@@ -72,6 +73,7 @@ export default function AppRoutes({
       />
       <Route path={Paths.ABOUT_US} element={<About />} />
       <Route path={Paths.ANY} element={<NotFound />} />
+      <Route path={Paths.CART} element={<CartPage />} />
     </Routes>
   );
 }
