@@ -30,6 +30,10 @@ export const loadProducts = async (
       filterExpressions.push(`variants.attributes.color:"${filters.color}"`);
     }
 
+    if (filters.scopedPriceDiscounted) {
+      filterExpressions.push(`variants.scopedPriceDiscounted:"${filters.scopedPriceDiscounted}"`);
+    }
+
     if (filters.sex) {
       filterExpressions.push(`variants.attributes.sex.key:"${filters.sex}"`);
     }
@@ -191,6 +195,16 @@ export const createCart = async (client: Client) => {
         },
       })
       .execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    throw new Error(handleApiError(rawError));
+  }
+};
+
+export const loadDiscountCodes = async (client: Client) => {
+  const apiRoot = apiRootBuilder(client);
+  try {
+    const httpResponse = await apiRoot.discountCodes().get().execute();
     return httpResponse.body;
   } catch (rawError: unknown) {
     throw new Error(handleApiError(rawError));

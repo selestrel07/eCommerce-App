@@ -22,6 +22,7 @@ export interface QueryParams {
   storeProjection?: string;
   sex?: string;
   color?: string;
+  scopedPriceDiscounted?: boolean;
 
   [key: string]: QueryParam;
 }
