@@ -14,6 +14,7 @@ import {
 } from '@services';
 import { isTokenStore } from '@types';
 import { Context } from 'react-responsive';
+import { CartProvider } from './contexts/cart-context/CartContexts.tsx';
 
 export const App = () => {
   const token = loadCustomerToken();
@@ -46,18 +47,20 @@ export const App = () => {
   });
 
   return (
-    <Layout>
-      <AppHeader isSignedIn={isSignedIn} setSignedIn={setSignedIn} />
-      {contextHolder}
-      <Layout.Content>
-        <AppRoutes
-          isSignedIn={isSignedIn}
-          setSignedIn={setSignedIn}
-          apiClient={client}
-          setApiClient={setClient}
-          openNotification={openNotification}
-        />
-      </Layout.Content>
-    </Layout>
+    <CartProvider>
+      <Layout>
+        <AppHeader isSignedIn={isSignedIn} setSignedIn={setSignedIn} />
+        {contextHolder}
+        <Layout.Content>
+          <AppRoutes
+            isSignedIn={isSignedIn}
+            setSignedIn={setSignedIn}
+            apiClient={client}
+            setApiClient={setClient}
+            openNotification={openNotification}
+          />
+        </Layout.Content>
+      </Layout>
+    </CartProvider>
   );
 };

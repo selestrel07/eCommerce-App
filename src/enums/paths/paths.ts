@@ -9,4 +9,5 @@ export enum Paths {
   ANY = '*',
   PRODUCT_DETAILS = '/productdetails/:key',
   ABOUT_US = '/about',
+  CART = '/cart',
 }

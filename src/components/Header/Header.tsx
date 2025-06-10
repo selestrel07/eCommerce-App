@@ -8,6 +8,8 @@ import logo from '../../assets/logo.png';
 import './Header.scss';
 import { Paths } from '@enums';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../contexts/cart-context/UseCart.ts';
+import { TiShoppingCart } from 'react-icons/ti';
 import { emptyTokenStore, tokenCache, revokeToken } from '@services';
 import { getMenuItems } from '@components';
 
@@ -15,6 +17,8 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
   const location = useLocation();
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [drawerVisible, setDrawerVisible] = useState(false);
+
+  const { cartItemsCount } = useCart();
 
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -44,7 +48,12 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
                   className="menu"
                   mode="vertical"
                   selectedKeys={[location.pathname]}
-                  items={getMenuItems(isSignedIn, () => setDrawerVisible(false), handleLogout)}
+                  items={getMenuItems(
+                    isSignedIn,
+                    // cartItemsCount,
+                    () => setDrawerVisible(false),
+                    handleLogout
+                  )}
                 />
               </Drawer>
             )}
@@ -60,6 +69,12 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
           </>
         )}
       </div>
+      <Link to={Paths.CART} className="cart-link">
+        <div className="cart-icon-wrapper">
+          <TiShoppingCart className="cart-icon" />
+          {cartItemsCount >= 0 && <span className="cart-badge">{cartItemsCount}</span>}
+        </div>
+      </Link>
     </Layout.Header>
   );
 };
