@@ -58,7 +58,13 @@ Among my hobbies are reading books, constantly striving for self-development, vi
         <Col xs={24} md={8}>
           <Card cover={<img alt="member3" src={EgorImg} />}>
             <Card.Meta title="Egor Zhitkovski" />
-            <Card.Meta title="Developer" description="sdasd" />
+            <Card.Meta
+              title="Developer"
+              description="About me: from an early age I have been interested in programming and learning about it. As early as 12 years old, I was learning languages such as: Pascal ABC, Python, and many other block programming languages. I was insanely interested in all this and with each year the attraction only grew. In the 11th grade I got to RSSchool for the first time, but in the same year I finished my studies in this place. But I did not put my hands down and continued to study but in other courses to be ready for RSSchool. After school I entered BNTU, a technical university and now I am an engineer! While studying at the university and RSSchool, I work as a programming teacher for children.
+My hobbies are: Development, programming, computer games and technology.  
+
+Translated with DeepL.com (free version)"
+            />
             <a href="https://github.com/heresyhawkins">
               <img className="logo-git" src={LogoGit} alt="" />
             </a>
