@@ -4,6 +4,7 @@ import { Client } from '@commercetools/sdk-client-v2';
 import { mapAuthError } from './authService';
 import {
   Customer,
+  MyCartUpdateAction,
   MyCustomerUpdateAction,
   ProductProjection,
   ProductProjectionPagedQueryResponse,
@@ -205,6 +206,33 @@ export const loadDiscountCodes = async (client: Client) => {
   const apiRoot = apiRootBuilder(client);
   try {
     const httpResponse = await apiRoot.discountCodes().get().execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    throw new Error(handleApiError(rawError));
+  }
+};
+
+export const updateCart = async (
+  client: Client,
+  ID: string,
+  version: number,
+  actions: MyCartUpdateAction[]
+) => {
+  const apiRoot = apiRootBuilder(client);
+  try {
+    const httpResponse = await apiRoot
+      .me()
+      .carts()
+      .withId({
+        ID,
+      })
+      .post({
+        body: {
+          version,
+          actions,
+        },
+      })
+      .execute();
     return httpResponse.body;
   } catch (rawError: unknown) {
     throw new Error(handleApiError(rawError));

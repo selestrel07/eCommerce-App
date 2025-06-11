@@ -19,3 +19,4 @@ export * from './SwitchAdress/switchAddress.tsx';
 export * from './ProfileModal/ProfileModal.tsx';
 export * from './CartItem/CartItem.tsx';
 export * from './DiscountCodeCard/DiscountCodeCard.tsx';
+export * from './CartDiscountCode/CartDiscountCode.tsx';
