@@ -1,7 +1,21 @@
 import { Cart } from '@components';
+import { use, useEffect } from 'react';
+import { Client } from '@commercetools/sdk-client-v2';
+import { loadCart } from '@services';
+import { CartContext } from '@contexts';
 import './CartPage.scss';
 
-export default function CartPage() {
+export default function CartPage({ client }: { client: Client }) {
+  const { setCart, setCartItemsCount } = use(CartContext);
+  useEffect(() => {
+    loadCart(client)
+      .then((response) => {
+        setCart(response);
+        setCartItemsCount(response.lineItems.length);
+      })
+      .catch((error) => console.error(error));
+  }, [client]);
+
   return (
     <div className="cart-page-container">
       <Cart />

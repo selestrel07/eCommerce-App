@@ -164,3 +164,35 @@ export const loadCategories = async (client: Client) => {
     throw new Error(humanReadableMsg);
   }
 };
+
+export const loadCart = async (client: Client) => {
+  const apiRoot = apiRootBuilder(client);
+  try {
+    const httpResponse = await apiRoot.me().activeCart().get().execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    if (rawError instanceof Error && rawError.message === 'URI not found: /yagni/me/active-cart') {
+      return createCart(client);
+    } else {
+      throw new Error(handleApiError(rawError));
+    }
+  }
+};
+
+export const createCart = async (client: Client) => {
+  const apiRoot = apiRootBuilder(client);
+  try {
+    const httpResponse = await apiRoot
+      .me()
+      .carts()
+      .post({
+        body: {
+          currency: 'EUR',
+        },
+      })
+      .execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    throw new Error(handleApiError(rawError));
+  }
+};
