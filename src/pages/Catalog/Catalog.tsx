@@ -4,7 +4,7 @@ import { Client } from '@commercetools/sdk-client-v2';
 import { loadProducts } from '@services';
 import './Catalog.scss';
 import { ProductCard, CategoryList, CatalogBreadcrumbs } from '@components';
-import { Input, Select, Button, Pagination } from 'antd';
+import { Input, Select, Button, Pagination, Spin } from 'antd';
 import { CatalogContext, CategoryProvider } from '@contexts';
 import { ProductVariantWithPriceAndName, QueryParams } from '@interfaces';
 import { getVariants } from '@utils';
@@ -159,10 +159,6 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                 <p>Page size:</p>
                 <Select
                   value={pageSize}
-                  // onChange={(size) => {
-                  //   setPageSize(size);
-                  //   setCurrentPage(1);
-                  // }}
                   onChange={(size) => {
                     setPageSize(() => {
                       setCurrentPage(1);
@@ -178,7 +174,10 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
               </div>
 
               {loading ? (
-                <h2>Loading products...</h2>
+                <div className="loading-spinner">
+                  <Spin size="large" />
+                  <p className="loading-text">Loading products...</p>
+                </div>
               ) : error ? (
                 <div className="catalog-error">
                   <h2>Error</h2>
@@ -196,15 +195,17 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                   })}
                 </div>
               )}
-              <div className="pagination-controls">
-                <Pagination
-                  current={currentPage}
-                  pageSize={pageSize}
-                  total={totalProducts}
-                  onChange={(page) => setCurrentPage(page)}
-                  showSizeChanger={false}
-                />
-              </div>
+              {!loading && (
+                <div className="pagination-controls">
+                  <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={totalProducts}
+                    onChange={(page) => setCurrentPage(page)}
+                    showSizeChanger={false}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
