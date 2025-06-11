@@ -15,6 +15,7 @@ import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs';
 import { Modal } from 'antd';
 import { getProductByKey } from '@services';
 import NotFound from '../NotFound/NotFound';
+import AddCartButton from '../../components/AddCartButton/AddCartButton';
 
 // eslint-disable-next-line max-lines-per-function
 const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
@@ -188,21 +189,27 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
 
         <div className="product-general-description">
           <div className="product-price">
-            <h2 className="price-text">Price:</h2>
-            {priceInfo?.originalAmount ? (
-              <>
-                <p className="price old-price">
-                  {priceInfo.originalAmount} {priceInfo.currency}
+            <div className="product-price-info">
+              <h2 className="price-text">Price:</h2>
+              {priceInfo?.originalAmount ? (
+                <>
+                  <p className="price old-price">
+                    {priceInfo.originalAmount} {priceInfo.currency}
+                  </p>
+                  <p className="price discounted-price">
+                    {priceInfo.amount} {priceInfo.currency}
+                  </p>
+                </>
+              ) : (
+                <p className="price">
+                  {priceInfo?.amount} {priceInfo?.currency}
                 </p>
-                <p className="price discounted-price">
-                  {priceInfo.amount} {priceInfo.currency}
-                </p>
-              </>
-            ) : (
-              <p className="price">
-                {priceInfo?.amount} {priceInfo?.currency}
-              </p>
-            )}
+              )}
+            </div>
+
+            <div className="product-button">
+              <AddCartButton key="cart" />
+            </div>
           </div>
           <div className="product-description-container">
             <h3>About this item:</h3>
