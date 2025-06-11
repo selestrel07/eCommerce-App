@@ -69,7 +69,7 @@ My hobbies are: Development, programming, computer games and technology.
         </Col>
       </Row>
       <div>
-        <p>
+        <p className="info">
           Our team successfully handled all tasks and successfully closed all tasks within the
           required time frame. We never had any problems within the team, difficulties or
           disagreements. We easily found a common language and easily discussed all points at our
