@@ -134,6 +134,11 @@
   color: red;
 }
 
+.page-size-container {
+  display: flex;
+  padding-left: 10px;
+}
+
 @media (width > 1200px) {
   .catalog-grid {
     grid-template-columns: repeat(4, 1fr);

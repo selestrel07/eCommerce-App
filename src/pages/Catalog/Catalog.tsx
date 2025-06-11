@@ -4,7 +4,7 @@ import { Client } from '@commercetools/sdk-client-v2';
 import { loadProducts } from '@services';
 import './Catalog.scss';
 import { ProductCard, CategoryList, CatalogBreadcrumbs } from '@components';
-import { Input, Select, Button } from 'antd';
+import { Input, Select, Button, Pagination } from 'antd';
 import { CatalogContext, CategoryProvider } from '@contexts';
 import { ProductVariantWithPriceAndName, QueryParams } from '@interfaces';
 import { getVariants } from '@utils';
@@ -19,6 +19,8 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [filters, setFilters] = useState<QueryParams>({});
   const [sortOption, setSortOption] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(8);
 
   const handleSortChange = (value: string) => {
     setSortOption(value);
@@ -39,7 +41,9 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
           undefined,
           sortOption,
           filters['filter.query'],
-          searchQuery
+          searchQuery,
+          pageSize,
+          (currentPage - 1) * pageSize
         );
         setProducts(getVariants(productList, filters));
       } catch (err) {
@@ -50,7 +54,7 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     };
 
     void fetchProducts();
-  }, [apiClient, sortOption, searchQuery, filters]);
+  }, [apiClient, sortOption, searchQuery, filters, pageSize, currentPage]);
 
   const handleColorChange = (value: string) => {
     setFilters((prev) => ({ ...prev, color: value }));
@@ -64,6 +68,8 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     setFilters({});
     setSearchQuery('');
   };
+
+  // const paginatedProducts = products.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <CatalogContext
@@ -148,6 +154,22 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                 </Button>
               </div>
 
+              <div className="page-size-container">
+                <p>Page size:</p>
+                <Select
+                  value={pageSize}
+                  onChange={(size) => {
+                    setPageSize(size);
+                    setCurrentPage(1);
+                  }}
+                  style={{ width: 120, marginLeft: '16px' }}
+                >
+                  <Select.Option value={4}>4 / page</Select.Option>
+                  <Select.Option value={8}>8 / page</Select.Option>
+                  <Select.Option value={12}>12 / page</Select.Option>
+                </Select>
+              </div>
+
               {loading ? (
                 <h2>Loading products...</h2>
               ) : error ? (
@@ -167,6 +189,27 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                   })}
                 </div>
               )}
+              <div className="pagination-controls">
+                <Pagination
+                  current={currentPage}
+                  pageSize={pageSize}
+                  total={products.length < pageSize ? products.length : 100}
+                  onChange={(page) => setCurrentPage(page)}
+                  showSizeChanger={false}
+                />
+                {/* <Select
+                  value={pageSize}
+                  onChange={(size) => {
+                    setPageSize(size);
+                    setCurrentPage(1);
+                  }}
+                  style={{ width: 120, marginLeft: '16px' }}
+                >
+                  <Select.Option value={5}>5 / page</Select.Option>
+                  <Select.Option value={10}>10 / page</Select.Option>
+                  <Select.Option value={20}>20 / page</Select.Option>
+                </Select> */}
+              </div>
             </div>
           </div>
         </div>
