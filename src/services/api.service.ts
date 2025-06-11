@@ -5,10 +5,10 @@ import { mapAuthError } from './authService';
 import {
   Customer,
   MyCustomerUpdateAction,
-  ProductProjection,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { QueryParams } from '@interfaces';
+import { ProductResponse } from '@interfaces';
 
 export const loadProducts = async (
   client: Client,
@@ -19,10 +19,8 @@ export const loadProducts = async (
   channelId?: string,
   sort?: string,
   filterQueries?: string[],
-  searchQuery?: string,
-  limit?: number,
-  offset?: number
-): Promise<ProductProjection[]> => {
+  searchQuery?: string
+): Promise<ProductResponse> => {
   const apiRoot = apiRootBuilder(client);
 
   try {
@@ -44,8 +42,6 @@ export const loadProducts = async (
           ...(searchQuery && { ['text.en-US']: searchQuery }),
           priceCurrency: currency,
           markMatchingVariants: true,
-          limit,
-          offset,
           staged: false,
           variantFilter: [
             filters.color ? `attributes.color:"${filters.color}"` : null,
@@ -63,7 +59,10 @@ export const loadProducts = async (
 
     const httpResponse = await requestBuilder.execute();
 
-    return httpResponse.body.results;
+    return {
+      results: httpResponse.body.results,
+      total: httpResponse.body.total ?? 0,
+    };
   } catch (rawError: unknown) {
     const humanReadableMsg = handleApiError(rawError);
     throw mapAuthError(humanReadableMsg);

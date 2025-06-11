@@ -137,6 +137,12 @@
 .page-size-container {
   display: flex;
   padding-left: 10px;
+  align-items: center;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
 }
 
 @media (width > 1200px) {

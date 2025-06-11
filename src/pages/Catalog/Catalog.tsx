@@ -13,7 +13,6 @@ const { Search } = Input;
 const { Option } = Select;
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
-  const [products, setProducts] = useState<ProductVariantWithPriceAndName[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -21,6 +20,8 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
   const [sortOption, setSortOption] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(8);
+  const [totalProducts, setTotalProducts] = useState<number>(0);
+  const [allVariants, setAllVariants] = useState<ProductVariantWithPriceAndName[]>([]);
 
   const handleSortChange = (value: string) => {
     setSortOption(value);
@@ -41,11 +42,11 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
           undefined,
           sortOption,
           filters['filter.query'],
-          searchQuery,
-          pageSize,
-          (currentPage - 1) * pageSize
+          searchQuery
         );
-        setProducts(getVariants(productList, filters));
+        const variants = getVariants(productList.results, filters);
+        setAllVariants(variants);
+        setTotalProducts(variants.length);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
       } finally {
@@ -69,7 +70,7 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     setSearchQuery('');
   };
 
-  // const paginatedProducts = products.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const paginatedVariants = allVariants.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <CatalogContext
@@ -158,9 +159,15 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                 <p>Page size:</p>
                 <Select
                   value={pageSize}
+                  // onChange={(size) => {
+                  //   setPageSize(size);
+                  //   setCurrentPage(1);
+                  // }}
                   onChange={(size) => {
-                    setPageSize(size);
-                    setCurrentPage(1);
+                    setPageSize(() => {
+                      setCurrentPage(1);
+                      return size;
+                    });
                   }}
                   style={{ width: 120, marginLeft: '16px' }}
                 >
@@ -177,11 +184,11 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                   <h2>Error</h2>
                   <p>{error}</p>
                 </div>
-              ) : products.length === 0 ? (
+              ) : allVariants.length === 0 ? (
                 <p className="catalog-empty-text">No product variations found.</p>
               ) : (
                 <div className="catalog-grid">
-                  {products.map((variant) => {
+                  {paginatedVariants.map((variant) => {
                     const productName = Object.values(variant.productName)[0] || 'Unnamed Product';
                     const productKey = variant.key ?? `variant-${variant.id}`;
 
@@ -193,22 +200,10 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                 <Pagination
                   current={currentPage}
                   pageSize={pageSize}
-                  total={products.length < pageSize ? products.length : 100}
+                  total={totalProducts}
                   onChange={(page) => setCurrentPage(page)}
                   showSizeChanger={false}
                 />
-                {/* <Select
-                  value={pageSize}
-                  onChange={(size) => {
-                    setPageSize(size);
-                    setCurrentPage(1);
-                  }}
-                  style={{ width: 120, marginLeft: '16px' }}
-                >
-                  <Select.Option value={5}>5 / page</Select.Option>
-                  <Select.Option value={10}>10 / page</Select.Option>
-                  <Select.Option value={20}>20 / page</Select.Option>
-                </Select> */}
               </div>
             </div>
           </div>
