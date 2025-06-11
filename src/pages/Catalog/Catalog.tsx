@@ -55,7 +55,7 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     };
 
     void fetchProducts();
-  }, [apiClient, sortOption, searchQuery, filters, pageSize, currentPage]);
+  }, [apiClient, sortOption, searchQuery, filters]);
 
   const handleColorChange = (value: string) => {
     setFilters((prev) => ({ ...prev, color: value }));
