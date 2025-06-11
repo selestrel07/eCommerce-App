@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import React from 'react';
 import { Row, Col, Card, Typography } from 'antd';
 import DimaImg from '../../assets/aboutUs/member_1.jpg';
@@ -16,9 +17,6 @@ export const AboutUsPage: React.FC = () => {
       <Title className="about-title" level={2}>
         About Us
       </Title>
-      <a href="https://rs.school/">
-        <img className="logo-school" src={LogoSchool} alt="" />
-      </a>
 
       <Row gutter={[GRID_GUTTER, GRID_GUTTER]}>
         <Col xs={24} md={8}>
@@ -70,6 +68,47 @@ My hobbies are: Development, programming, computer games and technology.
           </Card>
         </Col>
       </Row>
+      <div>
+        <p>
+          Our team successfully handled all tasks and successfully closed all tasks within the
+          required time frame. We never had any problems within the team, difficulties or
+          disagreements. We easily found a common language and easily discussed all points at our
+          meetings. During this time everyone contributed to the overall development of the team.
+          Each of us learned something new thanks to this work. I think that everyone in our team is
+          happy that this is the kind of team we have made. During this time, each of us has managed
+          to stand out in some way. <br />
+          <br />
+          Our team leader Dima managed the whole process perfectly, gave tasks, did reviews and
+          wrote code perfectly. We are insanely grateful to him for his hard work and efforts! We
+          learned a lot of things thanks to him. Dima showed us how to create routing between pages
+          and it was Dima who wrote the first React component in our project, which gave us an
+          example and an opportunity to move on! Dima also successfully completed the categories for
+          the for our catalog! And completely made the profile himself, with his own changes and
+          Dima also wrote tests for our project!
+          <br />
+          <br />
+          Tanya did a great job with all her tasks. She was attentive and careful in writing code.
+          Despite the difficulties she continued her work and never put her hands down, which is
+          worthy of respect! All the jobs that Tanya did were not easy. It is thanks to Tanya that
+          our API came into being! Tanya did a great job, she was extremely responsible in
+          fulfilling our task and to achieve a common goal. Also, Tanya made the pages for our
+          cards! And is in charge of pagination of our catalog!
+          <br />
+          <br />
+          Egor was also good at his job. He always delivered tasks on time and was attentive to his
+          code! Also to the code of his teammates. Egor always tried to help his teammates in better
+          realization of the task with the help of reviews and gave advice on how to improve the
+          code. Also Egor made catalog, filtering, search and makes this page! Egor also created
+          initial forms for login and registration, wrote validation and tests for them!
+          <br />
+          <br />I hope that all the guys, like me, are extremely happy with our acquaintance and
+          will remember this experience of working together as one of the best! Thank you all!
+        </p>
+      </div>
+
+      <a href="https://rs.school/">
+        <img className="logo-school" src={LogoSchool} alt="" />
+      </a>
     </div>
   );
 };
