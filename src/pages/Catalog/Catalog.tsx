@@ -27,6 +27,8 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     setSortOption(value);
   };
 
+  // const offset = (currentPage - 1) * pageSize;
+
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -42,10 +44,16 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
           undefined,
           sortOption,
           filters['filter.query'],
-          searchQuery
+          searchQuery,
+          100,
+          0
         );
         const variants = getVariants(productList.results, filters);
-        setAllVariants(variants);
+
+        const start = (currentPage - 1) * pageSize;
+        const end = start + pageSize;
+
+        setAllVariants(variants.slice(start, end));
         setTotalProducts(variants.length);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
@@ -55,7 +63,7 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     };
 
     void fetchProducts();
-  }, [apiClient, sortOption, searchQuery, filters]);
+  }, [apiClient, sortOption, searchQuery, filters, pageSize, currentPage]);
 
   const handleColorChange = (value: string) => {
     setFilters((prev) => ({ ...prev, color: value }));
@@ -70,7 +78,8 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     setSearchQuery('');
   };
 
-  const paginatedVariants = allVariants.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  // const paginatedVariants = allVariants.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const paginatedVariants = allVariants; // уже отфильтровано и с оффсетом
 
   return (
     <CatalogContext

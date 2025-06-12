@@ -19,7 +19,9 @@ export const loadProducts = async (
   channelId?: string,
   sort?: string,
   filterQueries?: string[],
-  searchQuery?: string
+  searchQuery?: string,
+  limit?: number,
+  offset?: number
 ): Promise<ProductResponse> => {
   const apiRoot = apiRootBuilder(client);
 
@@ -43,6 +45,8 @@ export const loadProducts = async (
           priceCurrency: currency,
           markMatchingVariants: true,
           staged: false,
+          limit,
+          offset,
           variantFilter: [
             filters.color ? `attributes.color:"${filters.color}"` : null,
             filters.sex ? `attributes.sex.key:"${filters.sex}"` : null,
