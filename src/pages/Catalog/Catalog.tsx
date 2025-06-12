@@ -33,6 +33,9 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
       setError(null);
 
       try {
+        const limit = pageSize;
+        const offset = (currentPage - 1) * pageSize;
+
         const productList = await loadProducts(
           apiClient,
           'EUR',
@@ -43,16 +46,13 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
           sortOption,
           filters['filter.query'],
           searchQuery,
-          100,
-          0
+          limit,
+          offset
         );
         const variants = getVariants(productList.results, filters);
 
-        const start = (currentPage - 1) * pageSize;
-        const end = start + pageSize;
-
-        setAllVariants(variants.slice(start, end));
-        setTotalProducts(variants.length);
+        setAllVariants(variants);
+        setTotalProducts(productList.total);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
       } finally {
