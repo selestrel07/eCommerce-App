@@ -66,4 +66,35 @@
       overflow: hidden;
     }
   }
+
+  .discount-code-applied {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    max-width: 95vw;
+    gap: 10px;
+
+    .ant-tag {
+      margin: 0;
+    }
+  }
+
+  .discount-code-controls {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    max-width: 95vw;
+    gap: 10px;
+
+    .input {
+      min-width: min(320px, 69vw);
+      width: min(320px, 79vw);
+    }
+  }
+
+  @media screen and (width < 400px) {
+    .discount-code-applied {
+      gap: 5px;
+    }
+  }
 }

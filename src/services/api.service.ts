@@ -4,6 +4,7 @@ import { Client } from '@commercetools/sdk-client-v2';
 import { mapAuthError } from './authService';
 import {
   Customer,
+  MyCartUpdateAction,
   MyCustomerUpdateAction,
   ProductProjection,
   ProductProjectionPagedQueryResponse,
@@ -28,6 +29,10 @@ export const loadProducts = async (
 
     if (filters.color) {
       filterExpressions.push(`variants.attributes.color:"${filters.color}"`);
+    }
+
+    if (filters.scopedPriceDiscounted) {
+      filterExpressions.push(`variants.scopedPriceDiscounted:"${filters.scopedPriceDiscounted}"`);
     }
 
     if (filters.sex) {
@@ -188,6 +193,43 @@ export const createCart = async (client: Client) => {
       .post({
         body: {
           currency: 'EUR',
+        },
+      })
+      .execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    throw new Error(handleApiError(rawError));
+  }
+};
+
+export const loadDiscountCodes = async (client: Client) => {
+  const apiRoot = apiRootBuilder(client);
+  try {
+    const httpResponse = await apiRoot.discountCodes().get().execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    throw new Error(handleApiError(rawError));
+  }
+};
+
+export const updateCart = async (
+  client: Client,
+  ID: string,
+  version: number,
+  actions: MyCartUpdateAction[]
+) => {
+  const apiRoot = apiRootBuilder(client);
+  try {
+    const httpResponse = await apiRoot
+      .me()
+      .carts()
+      .withId({
+        ID,
+      })
+      .post({
+        body: {
+          version,
+          actions,
         },
       })
       .execute();
