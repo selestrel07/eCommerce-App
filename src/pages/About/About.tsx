@@ -13,14 +13,14 @@ const GRID_GUTTER = 32;
 
 export const AboutUsPage: React.FC = () => {
   return (
-    <div>
+    <div className="container-info">
       <Title className="about-title" level={2}>
         About Us
       </Title>
 
       <Row gutter={[GRID_GUTTER, GRID_GUTTER]}>
         <Col xs={24} md={8}>
-          <Card cover={<img alt="member1" src={DimaImg} />}>
+          <Card cover={<img className="photo-member" alt="member1" src={DimaImg} />}>
             <Card.Meta title="Dzmitry Kulevich" />
 
             <Card.Meta
@@ -28,14 +28,14 @@ export const AboutUsPage: React.FC = () => {
               description="About me: graduated from BSU with a degree in Mathematics (teacher of mathematics and computer science), 2 years worked in school as a teacher of mathematics and computer science, then in a bank as a tester and system analyst, then moved to IT and worked as QA Automation in two companies. Hobbies: I like to learn something new (more often IT related), read, play video games, go to soccer with my wife.
 "
             />
-            <a href="https://github.com/selestrel07">
+            <a href="https://github.com/selestrel07" target="_blank">
               <img className="logo-git" src={LogoGit} alt="" />
             </a>
           </Card>
         </Col>
 
         <Col xs={24} md={8}>
-          <Card cover={<img alt="member2" src={TanyaImg} />}>
+          <Card cover={<img className="photo-member" alt="member2" src={TanyaImg} />}>
             <Card.Meta title="Tatyana Pavlyuchenko" />
             <Card.Meta
               title="Developer"
@@ -47,14 +47,14 @@ During my maternity leave I got interested in digital art and then in frontend d
 Among my hobbies are reading books, constantly striving for self-development, video games, long walks and cooking: I love to cook and delight my loved ones with my dishes.
 "
             />
-            <a href="https://github.com/isvaya">
+            <a href="https://github.com/isvaya" target="_blank">
               <img className="logo-git" src={LogoGit} alt="" />
             </a>
           </Card>
         </Col>
 
         <Col xs={24} md={8}>
-          <Card cover={<img alt="member3" src={EgorImg} />}>
+          <Card cover={<img className="photo-member" alt="member3" src={EgorImg} />}>
             <Card.Meta title="Egor Zhitkovski" />
             <Card.Meta
               title="Developer"
@@ -62,7 +62,7 @@ Among my hobbies are reading books, constantly striving for self-development, vi
 My hobbies are: Development, programming, computer games and technology.  
 "
             />
-            <a href="https://github.com/heresyhawkins">
+            <a href="https://github.com/heresyhawkins" target="_blank">
               <img className="logo-git" src={LogoGit} alt="" />
             </a>
           </Card>
@@ -106,7 +106,7 @@ My hobbies are: Development, programming, computer games and technology.
         </p>
       </div>
 
-      <a href="https://rs.school/">
+      <a href="https://rs.school/" target="_blank">
         <img className="logo-school" src={LogoSchool} alt="" />
       </a>
     </div>
