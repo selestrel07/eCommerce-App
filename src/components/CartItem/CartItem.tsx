@@ -2,6 +2,8 @@ import { FC } from 'react';
 import { LineItem } from '@commercetools/platform-sdk';
 import { formatPrice, keyToNameFormatter } from '@utils';
 import { Image } from 'antd';
+import './CartItem.scss';
+import { DeleteFromCartButton } from '../DeleteFromCartButton/DeleteFromCartButton';
 
 export const CartItem: FC<{
   lineItem: LineItem;
@@ -42,6 +44,7 @@ export const CartItem: FC<{
           <b>Total cost:</b> {formatPrice(lineItem.totalPrice.centAmount, fractionDigits)}{' '}
           {currency}
         </p>
+        <DeleteFromCartButton />
       </div>
     </div>
   );
