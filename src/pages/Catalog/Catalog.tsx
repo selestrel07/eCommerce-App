@@ -76,8 +76,6 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     setSearchQuery('');
   };
 
-  const paginatedVariants = allVariants;
-
   return (
     <CatalogContext
       value={{
@@ -192,7 +190,7 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                 <p className="catalog-empty-text">No product variations found.</p>
               ) : (
                 <div className="catalog-grid">
-                  {paginatedVariants.map((variant) => {
+                  {allVariants.map((variant) => {
                     const productName = Object.values(variant.productName)[0] || 'Unnamed Product';
                     const productKey = variant.key ?? `variant-${variant.id}`;
 
