@@ -27,8 +27,6 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     setSortOption(value);
   };
 
-  // const offset = (currentPage - 1) * pageSize;
-
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -78,8 +76,7 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     setSearchQuery('');
   };
 
-  // const paginatedVariants = allVariants.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-  const paginatedVariants = allVariants; // уже отфильтровано и с оффсетом
+  const paginatedVariants = allVariants;
 
   return (
     <CatalogContext
@@ -174,7 +171,6 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                       return size;
                     });
                   }}
-                  style={{ width: 120, marginLeft: '16px' }}
                 >
                   <Select.Option value={4}>4 / page</Select.Option>
                   <Select.Option value={8}>8 / page</Select.Option>
