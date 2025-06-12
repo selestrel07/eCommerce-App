@@ -208,7 +208,8 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
             </div>
 
             <div className="product-button">
-              <AddCartButton key="cart" />
+              {/* <AddCartButton key="cart" /> */}
+              <AddCartButton apiClient={apiClient} variantId={selectedVariant.id} />
             </div>
           </div>
           <div className="product-description-container">

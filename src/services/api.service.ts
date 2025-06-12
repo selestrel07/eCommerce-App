@@ -7,6 +7,7 @@ import {
   MyCustomerUpdateAction,
   ProductProjection,
   ProductProjectionPagedQueryResponse,
+  Cart,
 } from '@commercetools/platform-sdk';
 import { QueryParams } from '@interfaces';
 
@@ -195,4 +196,45 @@ export const createCart = async (client: Client) => {
   } catch (rawError: unknown) {
     throw new Error(handleApiError(rawError));
   }
+};
+
+export const addToCart = async (client: Client, variantId: number) => {
+  const apiRoot = apiRootBuilder(client);
+
+  let cart;
+  try {
+    const response = await apiRoot.me().activeCart().get().execute();
+    cart = response.body;
+  } catch {
+    const response = await apiRoot
+      .me()
+      .carts()
+      .post({
+        body: { currency: 'EUR' },
+      })
+      .execute();
+    cart = response.body;
+  }
+
+  await apiRoot
+    .me()
+    .carts()
+    .withId({ ID: cart.id })
+    .post({
+      body: {
+        version: cart.version,
+        actions: [
+          {
+            action: 'addLineItem',
+            variantId,
+            quantity: 1,
+          },
+        ],
+      },
+    })
+    .execute();
+};
+
+export const isProductInCart = (cart: Cart, variantId: number): boolean => {
+  return cart.lineItems.some((item) => item.variant.id === variantId);
 };
