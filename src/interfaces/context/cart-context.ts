@@ -1,9 +1,8 @@
 import { Cart } from '@commercetools/platform-sdk';
-import { Dispatch, SetStateAction } from 'react';
 
 export interface CartContextType {
   cart: Cart | null;
-  setCart: (cart: Cart) => void;
+  setCart: React.Dispatch<React.SetStateAction<Cart | null>>;
   cartItemsCount: number;
-  setCartItemsCount: Dispatch<SetStateAction<number>>;
+  setCartItemsCount: React.Dispatch<React.SetStateAction<number>>;
 }

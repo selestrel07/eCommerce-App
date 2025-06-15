@@ -7,18 +7,24 @@ import './CartPage.scss';
 
 export default function CartPage({ client }: { client: Client }) {
   const { setCart, setCartItemsCount } = use(CartContext);
+
+  const refreshCart = async () => {
+    try {
+      const response = await loadCart(client);
+      setCart(response);
+      setCartItemsCount(response.lineItems.length);
+    } catch (error) {
+      console.error('Failed to refresh cart', error);
+    }
+  };
+
   useEffect(() => {
-    loadCart(client)
-      .then((response) => {
-        setCart(response);
-        setCartItemsCount(response.lineItems.length);
-      })
-      .catch((error) => console.error(error));
+    void refreshCart();
   }, [client]);
 
   return (
     <div className="cart-page-container">
-      <Cart />
+      <Cart onCartUpdate={() => void refreshCart()} client={client} />
     </div>
   );
 }
