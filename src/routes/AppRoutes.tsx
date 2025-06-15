@@ -28,7 +28,7 @@ export default function AppRoutes({
   setApiClient: (client: Client) => void;
   openNotification: (message: string, description: string) => void;
 }): ReactElement {
-  const { cart, setCart, setCartItemsCount } = use(CartContext);
+  const { cart, setCart, setCartItemsCount, setCartTotal } = use(CartContext);
 
   useEffect(() => {
     loadCart(apiClient)
@@ -41,13 +41,23 @@ export default function AppRoutes({
   }, [apiClient, setCart]);
 
   useEffect(() => {
-    if (cart) {
-      const total = cart.lineItems.reduce((sum, li) => sum + li.quantity, 0);
-      setCartItemsCount(total);
-    } else {
+    if (!cart) {
       setCartItemsCount(0);
+      setCartTotal(0);
+      return;
     }
-  }, [cart, setCartItemsCount]);
+
+    const count = cart?.lineItems.reduce((sum, li) => sum + li.quantity, 0);
+    setCartItemsCount(count);
+
+    const total =
+      cart?.totalPrice?.centAmount ??
+      cart?.lineItems.reduce((acc, li) => {
+        const lineTotal = li.totalPrice?.centAmount ?? li.price.value.centAmount * li.quantity;
+        return acc + lineTotal;
+      }, 0);
+    setCartTotal(total);
+  }, [cart, setCartItemsCount, setCartTotal]);
 
   return (
     <Routes>

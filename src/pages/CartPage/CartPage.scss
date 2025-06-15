@@ -92,6 +92,12 @@
     }
   }
 
+  .cart-page-total {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
   @media screen and (width < 400px) {
     .discount-code-applied {
       gap: 5px;

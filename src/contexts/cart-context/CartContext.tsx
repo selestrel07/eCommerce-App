@@ -6,4 +6,6 @@ export const CartContext = createContext<CartContextType>({
   setCart: () => null,
   cartItemsCount: 0,
   setCartItemsCount: (() => null) as unknown as React.Dispatch<React.SetStateAction<number>>,
+  cartTotal: 0,
+  setCartTotal: (() => null) as unknown as React.Dispatch<React.SetStateAction<number>>,
 });

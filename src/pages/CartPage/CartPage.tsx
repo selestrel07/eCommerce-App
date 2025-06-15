@@ -6,7 +6,7 @@ import { CartContext } from '@contexts';
 import './CartPage.scss';
 
 export default function CartPage({ client }: { client: Client }) {
-  const { setCart, setCartItemsCount } = use(CartContext);
+  const { cart, cartTotal, setCart, setCartItemsCount } = use(CartContext);
   useEffect(() => {
     loadCart(client)
       .then((response) => {
@@ -14,11 +14,18 @@ export default function CartPage({ client }: { client: Client }) {
         setCartItemsCount(response.lineItems.length);
       })
       .catch((error) => console.error(error));
-  }, [client]);
+  }, [client, setCart, setCartItemsCount]);
+
+  const currency = cart?.totalPrice?.currencyCode ?? 'EUR';
+
+  const formattedTotal = (cartTotal / 100).toFixed(2);
 
   return (
     <div className="cart-page-container">
       <Cart client={client} />
+      <div className="cart-page-total">
+        <h3 className="title-total-cost">Total:</h3> {formattedTotal} {currency}
+      </div>
     </div>
   );
 }
