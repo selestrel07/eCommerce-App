@@ -66,35 +66,3 @@ async function createCart(client: Client) {
 
   return cart.body;
 }
-
-export async function removeLineItem(client: Client, lineItemId: string) {
-  const apiRoot = apiRootBuilder(client);
-
-  try {
-    const cartResponse = await apiRoot.me().activeCart().get().execute();
-    const cart = cartResponse.body;
-
-    const updatedCart = await apiRoot
-      .me()
-      .carts()
-      .withId({ ID: cart.id })
-      .post({
-        body: {
-          version: cart.version,
-          actions: [
-            {
-              action: 'removeLineItem' as const,
-              lineItemId,
-              quantity: 1,
-            },
-          ],
-        },
-      })
-      .execute();
-
-    return updatedCart.body;
-  } catch (rawError) {
-    console.error('Failed to decrease line item quantity:', rawError);
-    throw new Error(handleApiError(rawError));
-  }
-}

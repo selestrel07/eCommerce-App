@@ -9,3 +9,6 @@ export * from './filter/filter.ts';
 export * from './product/product.ts';
 export * from './query-params/query-params.ts';
 export * from './context/cart-context.ts';
+export * from './cart-props/cart-props.ts';
+export * from './cart-item/cart-item.ts';
+export * from './delete-button/delete-button.ts';

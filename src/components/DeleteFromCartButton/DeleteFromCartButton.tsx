@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import { FC, useState } from 'react';
 import TrashImg from '../../assets/trash.png';
 import { message } from 'antd';
-import { removeLineItem } from '../../services/cart.service';
 import { DeleteFromCartButtonProps } from '../../interfaces/delete-button/delete-button';
+import { removeLineItem } from '@services';
+import { use } from 'react';
+import { CartContext } from '@contexts';
 
-export const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
+export const DeleteFromCartButton: FC<DeleteFromCartButtonProps> = ({
   lineItemId,
   client,
   onCartUpdate,
@@ -12,13 +14,17 @@ export const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
 
+  const { setCart } = use(CartContext);
+
   const handleClick = async () => {
     if (loading || props.disabled) return;
 
     setLoading(true);
     try {
-      await removeLineItem(client, lineItemId);
-      message.success('Product removed');
+      const updatedCart = await removeLineItem(client, lineItemId);
+
+      setCart(updatedCart);
+
       if (onCartUpdate) onCartUpdate();
     } catch (error) {
       console.error('Failed to remove product:', error);

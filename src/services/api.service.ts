@@ -3,6 +3,7 @@ import { handleApiError } from './errorHandler';
 import { Client } from '@commercetools/sdk-client-v2';
 import { mapAuthError } from './authService';
 import {
+  Cart,
   Customer,
   MyCustomerUpdateAction,
   ProductProjection,
@@ -196,3 +197,34 @@ export const createCart = async (client: Client) => {
     throw new Error(handleApiError(rawError));
   }
 };
+
+export async function removeLineItem(client: Client, lineItemId: string): Promise<Cart> {
+  const apiRoot = apiRootBuilder(client);
+
+  try {
+    const cartResponse = await apiRoot.me().activeCart().get().execute();
+    const cart = cartResponse.body;
+
+    const updatedCartResponse = await apiRoot
+      .me()
+      .carts()
+      .withId({ ID: cart.id })
+      .post({
+        body: {
+          version: cart.version,
+          actions: [
+            {
+              action: 'removeLineItem',
+              lineItemId,
+            },
+          ],
+        },
+      })
+      .execute();
+
+    return updatedCartResponse.body;
+  } catch (rawError) {
+    console.error('Failed to remove line item:', rawError);
+    throw new Error(handleApiError(rawError));
+  }
+}
