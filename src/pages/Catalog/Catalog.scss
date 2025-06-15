@@ -134,6 +134,31 @@
   color: red;
 }
 
+.page-size-container {
+  display: flex;
+  padding-left: 10px;
+  align-items: center;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.loading-text {
+  margin-top: 16px;
+  font-size: 18px;
+  color: #888;
+}
+
 @media (width > 1200px) {
   .catalog-grid {
     grid-template-columns: repeat(4, 1fr);
