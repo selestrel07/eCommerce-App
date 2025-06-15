@@ -47,4 +47,4 @@ export const AddCartButton: React.FC<AddCartButtonProps> = ({ client, productId,
   );
 };
 
-export default AddCartButton;
+// export default AddCartButton;

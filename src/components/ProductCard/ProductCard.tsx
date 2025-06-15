@@ -3,7 +3,7 @@ import './ProductCard.scss';
 import { Props } from '@interfaces';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '@enums';
-import AddCartButton from '../AddCartButton/AddCartButton';
+import { AddCartButton } from '@components';
 
 const { Meta } = Card;
 const { Paragraph } = Typography;

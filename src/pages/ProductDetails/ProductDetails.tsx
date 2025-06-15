@@ -15,7 +15,7 @@ import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs';
 import { Modal } from 'antd';
 import { getProductByKey } from '@services';
 import NotFound from '../NotFound/NotFound';
-import AddCartButton from '../../components/AddCartButton/AddCartButton';
+import { AddCartButton } from '@components';
 
 // eslint-disable-next-line max-lines-per-function
 const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
@@ -208,7 +208,11 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
             </div>
 
             <div className="product-button">
-              <AddCartButton key="cart" />
+              <AddCartButton
+                client={apiClient}
+                productId={product.id}
+                variantId={selectedVariant.id}
+              />
             </div>
           </div>
           <div className="product-description-container">
