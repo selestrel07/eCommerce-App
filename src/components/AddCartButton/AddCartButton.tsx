@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, use } from 'react';
 import { Button, message } from 'antd';
 import { Client } from '@commercetools/sdk-client-v2';
-import { addToCart } from '../../services/cart.servise';
+import { addToCart } from '@services';
 import { CartContext } from '@contexts';
 
 interface AddCartButtonProps {
@@ -11,7 +11,7 @@ interface AddCartButtonProps {
 }
 
 export const AddCartButton: React.FC<AddCartButtonProps> = ({ client, productId, variantId }) => {
-  const { cart, setCart, setCartItemsCount } = useContext(CartContext);
+  const { cart, setCart, setCartItemsCount } = use(CartContext);
   const [saving, setSaving] = useState(false);
 
   const alreadyInCart =
@@ -19,11 +19,15 @@ export const AddCartButton: React.FC<AddCartButtonProps> = ({ client, productId,
     false;
 
   const handleClick = async () => {
+    if (!cart) {
+      message.error('Cart is not loaded yet');
+      return;
+    }
     if (alreadyInCart || saving) return;
 
     setSaving(true);
     try {
-      const updatedCart = await addToCart(client, productId, variantId);
+      const updatedCart = await addToCart(client, cart.id, cart.version, productId, variantId);
       setCart(updatedCart);
       setCartItemsCount(updatedCart.lineItems.length);
       message.success('Product added to cart!');
@@ -46,5 +50,3 @@ export const AddCartButton: React.FC<AddCartButtonProps> = ({ client, productId,
     </Button>
   );
 };
-
-// export default AddCartButton;

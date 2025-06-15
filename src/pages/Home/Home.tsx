@@ -15,7 +15,6 @@ interface HomeItem {
 
 export default function Home({ apiClient }: { apiClient: Client }): ReactElement {
   const [codes, setCodes] = useState<DiscountCode[]>([]);
-  // const [items, setItems] = useState<ProductVariantWithPriceAndName[]>([]);
   const [items, setItems] = useState<HomeItem[]>([]);
   useEffect(() => {
     loadDiscountCodes(apiClient)
@@ -23,11 +22,6 @@ export default function Home({ apiClient }: { apiClient: Client }): ReactElement
       .then(() => {
         return loadProducts(apiClient, 'EUR', { scopedPriceDiscounted: true });
       })
-      // .then((products) =>
-      //   setItems(
-      //     getVariants(products, {}).filter((variant) => variant.price?.discountedValue !== null)
-      //   )
-      // )
       .then((products) => {
         const discountedVariants = products
           .flatMap((product) =>
@@ -54,11 +48,6 @@ export default function Home({ apiClient }: { apiClient: Client }): ReactElement
         </Carousel>
       </div>
       <h2>Our best offers:</h2>
-      {/* <div className="discount-items">
-        {items.map((item) => (
-          <ProductCard key={item.sku} variant={item} name={item.productName['en-US']} />
-        ))}
-      </div> */}
       <div className="discount-items">
         {items.map(({ productId, variant }) => (
           <ProductCard
