@@ -9,3 +9,5 @@ export * from './product-price.utils.ts';
 export * from './profile.utils.tsx';
 export * from './query-params-builder.ts';
 export * from './validation.ts';
+export * from './price-formatter.ts';
+export * from './product-key-formatter.ts';

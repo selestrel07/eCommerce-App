@@ -10,3 +10,4 @@ export * from './product/product.ts';
 export * from './query-params/query-params.ts';
 export * from './cart/cart.ts';
 export * from './catalog/catalog.ts';
+export * from './context/cart-context.ts';

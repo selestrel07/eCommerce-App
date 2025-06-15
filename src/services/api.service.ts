@@ -4,6 +4,7 @@ import { Client } from '@commercetools/sdk-client-v2';
 import { mapAuthError } from './authService';
 import {
   Customer,
+  MyCartUpdateAction,
   MyCustomerUpdateAction,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
@@ -30,6 +31,10 @@ export const loadProducts = async (
 
     if (filters.color) {
       filterExpressions.push(`variants.attributes.color:"${filters.color}"`);
+    }
+
+    if (filters.scopedPriceDiscounted) {
+      filterExpressions.push(`variants.scopedPriceDiscounted:"${filters.scopedPriceDiscounted}"`);
     }
 
     if (filters.sex) {
@@ -168,5 +173,74 @@ export const loadCategories = async (client: Client) => {
   } catch (rawError: unknown) {
     const humanReadableMsg = handleApiError(rawError);
     throw new Error(humanReadableMsg);
+  }
+};
+
+export const loadCart = async (client: Client) => {
+  const apiRoot = apiRootBuilder(client);
+  try {
+    const httpResponse = await apiRoot.me().activeCart().get().execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    if (rawError instanceof Error && rawError.message === 'URI not found: /yagni/me/active-cart') {
+      return createCart(client);
+    } else {
+      throw new Error(handleApiError(rawError));
+    }
+  }
+};
+
+export const createCart = async (client: Client) => {
+  const apiRoot = apiRootBuilder(client);
+  try {
+    const httpResponse = await apiRoot
+      .me()
+      .carts()
+      .post({
+        body: {
+          currency: 'EUR',
+        },
+      })
+      .execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    throw new Error(handleApiError(rawError));
+  }
+};
+
+export const loadDiscountCodes = async (client: Client) => {
+  const apiRoot = apiRootBuilder(client);
+  try {
+    const httpResponse = await apiRoot.discountCodes().get().execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    throw new Error(handleApiError(rawError));
+  }
+};
+
+export const updateCart = async (
+  client: Client,
+  ID: string,
+  version: number,
+  actions: MyCartUpdateAction[]
+) => {
+  const apiRoot = apiRootBuilder(client);
+  try {
+    const httpResponse = await apiRoot
+      .me()
+      .carts()
+      .withId({
+        ID,
+      })
+      .post({
+        body: {
+          version,
+          actions,
+        },
+      })
+      .execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    throw new Error(handleApiError(rawError));
   }
 };
