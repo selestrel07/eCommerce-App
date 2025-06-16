@@ -17,11 +17,15 @@ export default function Home({ apiClient }: { apiClient: Client }): ReactElement
       .then(() => {
         return loadProducts(apiClient, 'EUR', { scopedPriceDiscounted: true });
       })
-      .then((products) =>
-        setItems(
-          getVariants(products, {}).filter((variant) => variant.price?.discountedValue !== null)
-        )
-      )
+      .then((products) => {
+        const productProjections = products.results;
+        const variants = getVariants(productProjections, {});
+        const discountedVariants = variants.filter(
+          (variant) => variant.price?.discountedValue !== null
+        );
+
+        setItems(discountedVariants);
+      })
       .catch(console.error);
   }, [apiClient]);
 
