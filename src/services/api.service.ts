@@ -9,6 +9,7 @@ import {
   MyCustomerUpdateAction,
   ProductProjection,
   ProductProjectionPagedQueryResponse,
+  InventoryEntry,
 } from '@commercetools/platform-sdk';
 import { QueryParams } from '@interfaces';
 
@@ -249,4 +250,29 @@ export async function addToCart(
   };
 
   return updateCart(client, cartId, cartVersion, [action]);
+}
+
+export async function fetchInventoryBySKU(
+  client: Client,
+  sku: string
+): Promise<InventoryEntry | null> {
+  const apiRoot = apiRootBuilder(client);
+
+  try {
+    const response = await apiRoot
+      .inventory()
+      .get({
+        queryArgs: {
+          where: `sku="${sku}"`,
+          limit: 1,
+        },
+      })
+      .execute();
+
+    const results = response.body.results;
+    return results.length > 0 ? results[0] : null;
+  } catch (rawError: unknown) {
+    console.error('Failed to fetch inventory', rawError);
+    throw new Error(handleApiError(rawError));
+  }
 }

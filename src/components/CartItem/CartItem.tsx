@@ -9,10 +9,16 @@ import './CartItem.scss';
 interface CartItemProps {
   lineItem: LineItem;
   updating: boolean;
+  availableStock: number;
   onQuantityChange: (lineItenId: string, mewQty: number) => void;
 }
 
-export const CartItem: FC<CartItemProps> = ({ lineItem, updating, onQuantityChange }) => {
+export const CartItem: FC<CartItemProps> = ({
+  lineItem,
+  updating,
+  availableStock,
+  onQuantityChange,
+}) => {
   const imageUrl = lineItem.variant.images ? lineItem.variant.images[0].url : '';
   const fractionDigits = lineItem.price.value.fractionDigits;
   const itemCost = formatPrice(lineItem.price.value.centAmount, fractionDigits);
@@ -62,6 +68,7 @@ export const CartItem: FC<CartItemProps> = ({ lineItem, updating, onQuantityChan
           className="input-quantity"
           type="number"
           min={1}
+          max={availableStock}
           value={lineItem.quantity}
           disabled={updating}
           onChange={(e) => {
@@ -76,6 +83,7 @@ export const CartItem: FC<CartItemProps> = ({ lineItem, updating, onQuantityChan
           disabled={updating}
           size="small"
         ></Button>
+        <p className="stock-info">In stock: {availableStock}</p>
       </div>
     </div>
   );
