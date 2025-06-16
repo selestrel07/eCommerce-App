@@ -14,11 +14,12 @@ export default function CartPage({ client }: { client: Client }) {
         setCartItemsCount(response.lineItems.length);
       })
       .catch((error) => console.error(error));
-  }, [client, setCart, setCartItemsCount]);
+  }, [client]);
 
   const currency = cart?.totalPrice?.currencyCode ?? 'EUR';
 
   const formattedTotal = (cartTotal / 100).toFixed(2);
+  // const formattedTotal = formatPrice(cartTotal);
 
   return (
     <div className="cart-page-container">
