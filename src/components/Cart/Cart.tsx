@@ -2,7 +2,7 @@ import { Paths } from '@enums';
 import { FC, ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '@contexts';
-import { CartDiscountCode, CartItem } from '@components';
+import { CartDiscountCode, CartItem, ClearShoppingCartButton } from '@components';
 import { Flex } from 'antd';
 import { Client } from '@commercetools/sdk-client-v2';
 
@@ -21,9 +21,10 @@ export const Cart: FC<{
         <>
           <Flex gap="middle" vertical align="center">
             {cart.lineItems.map((item) => (
-              <CartItem key={item.id} lineItem={item} />
+              <CartItem client={client} key={item.id} lineItem={item} />
             ))}
             <CartDiscountCode client={client} />
+            <ClearShoppingCartButton client={client} />
           </Flex>
         </>
       )}

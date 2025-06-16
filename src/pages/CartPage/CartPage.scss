@@ -89,7 +89,15 @@
     .input {
       min-width: min(320px, 69vw);
       width: min(320px, 79vw);
+      height: auto;
     }
+  }
+  .clear-shopping-cart-button {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    max-width: 95vw;
+    gap: 10px;
   }
 
   @media screen and (width < 400px) {

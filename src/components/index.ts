@@ -18,5 +18,8 @@ export * from './ProfileSection/PersonalInfoSection.tsx';
 export * from './SwitchAdress/switchAddress.tsx';
 export * from './ProfileModal/ProfileModal.tsx';
 export * from './CartItem/CartItem.tsx';
+export * from './DeleteFromCartButton/DeleteFromCartButton.tsx';
+export * from './AddCartButton/AddCartButton.tsx';
+export * from './ClearShoppingCartButton/ClearShoppingCartButton.tsx';
 export * from './DiscountCodeCard/DiscountCodeCard.tsx';
 export * from './CartDiscountCode/CartDiscountCode.tsx';

@@ -3,6 +3,7 @@ import { handleApiError } from './errorHandler';
 import { Client } from '@commercetools/sdk-client-v2';
 import { mapAuthError } from './authService';
 import {
+  Cart,
   Customer,
   MyCartUpdateAction,
   MyCustomerUpdateAction,
@@ -208,6 +209,108 @@ export const createCart = async (client: Client) => {
   }
 };
 
+export async function removeLineItem(client: Client, lineItemId: string): Promise<Cart> {
+  const apiRoot = apiRootBuilder(client);
+
+  try {
+    const cartResponse = await apiRoot.me().activeCart().get().execute();
+    const cart = cartResponse.body;
+
+    const updatedCartResponse = await apiRoot
+      .me()
+      .carts()
+      .withId({ ID: cart.id })
+      .post({
+        body: {
+          version: cart.version,
+          actions: [
+            {
+              action: 'removeLineItem',
+              lineItemId,
+            },
+          ],
+        },
+      })
+      .execute();
+
+    return updatedCartResponse.body;
+  } catch (rawError) {
+    console.error('Failed to remove line item:', rawError);
+    throw new Error(handleApiError(rawError));
+  }
+}
+
+export async function addToCart(
+  client: Client,
+  productId: string,
+  variantId: number
+): Promise<Cart> {
+  const apiRoot = apiRootBuilder(client);
+
+  try {
+    const cartResponse = await apiRoot.me().activeCart().get().execute();
+    const cart = cartResponse.body;
+
+    if (!cart.id || !cart.version) {
+      throw new Error('No active cart found. Please reload the app or sign in again.');
+    }
+
+    const updatedCartResponse = await apiRoot
+      .me()
+      .carts()
+      .withId({ ID: cart.id })
+      .post({
+        body: {
+          version: cart.version,
+          actions: [
+            {
+              action: 'addLineItem',
+              productId,
+              variantId,
+              quantity: 1,
+            },
+          ],
+        },
+      })
+      .execute();
+
+    return updatedCartResponse.body;
+  } catch (rawError) {
+    console.error('Failed to add product to cart:', rawError);
+    throw new Error(handleApiError(rawError));
+  }
+}
+
+export async function clearCart(client: Client): Promise<Cart> {
+  const apiRoot = apiRootBuilder(client);
+
+  try {
+    const cartResponse = await apiRoot.me().activeCart().get().execute();
+    const cart = cartResponse.body;
+
+    const actions = cart.lineItems.map((item) => ({
+      action: 'removeLineItem' as const,
+      lineItemId: item.id,
+    }));
+
+    const updatedCartResponse = await apiRoot
+      .me()
+      .carts()
+      .withId({ ID: cart.id })
+      .post({
+        body: {
+          version: cart.version,
+          actions,
+        },
+      })
+      .execute();
+    return updatedCartResponse.body;
+  } catch (rawError) {
+    console.error('Failed to clear cart', rawError);
+    throw new Error('Failed to clear the cart');
+  }
+}
+
 export const loadDiscountCodes = async (client: Client) => {
   const apiRoot = apiRootBuilder(client);
   try {
@@ -239,6 +342,7 @@ export const updateCart = async (
         },
       })
       .execute();
+
     return httpResponse.body;
   } catch (rawError: unknown) {
     throw new Error(handleApiError(rawError));

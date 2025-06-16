@@ -1,22 +1,54 @@
-import React, { useState } from 'react';
-import { Button, Space } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Button, message } from 'antd';
+import { useCart } from '@contexts';
+import { AddCartButtonProps } from '@interfaces';
+import { addToCart } from '@services';
 
-export const AddCartButton: React.FC = () => {
-  const [disabled, setDisabled] = useState(false);
+export const AddCartButton: React.FC<AddCartButtonProps> = ({ client, productId, variantId }) => {
+  const { cart, setCart, setCartItemsCount } = useCart();
+  const [loading, setLoading] = useState(false);
+  const [inCart, setInCart] = useState(false);
 
-  const handleClick = () => {
-    setDisabled(true);
+  useEffect(() => {
+    if (!cart?.lineItems) return;
+
+    const isInCart = cart.lineItems.some(
+      (item) => item.productId === productId && item.variant.id === variantId
+    );
+
+    setInCart(isInCart);
+  }, [cart]);
+
+  const handleClick = async () => {
+    if (inCart || loading) return;
+
+    setLoading(true);
+    try {
+      const updatedCart = await addToCart(client, productId, variantId);
+
+      setCart(updatedCart);
+
+      const totalQuantity = updatedCart.lineItems.reduce((acc, item) => acc + item.quantity, 0);
+      setCartItemsCount(totalQuantity);
+
+      setInCart(true);
+      message.success('Product added to cart!');
+    } catch (error) {
+      console.error('Failed to add product to cart:', error);
+      message.error('Failed to add product to cart.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Space>
-      <Space.Compact>
-        <Button disabled={disabled} onClick={handleClick} type="primary">
-          {disabled ? 'Added to Cart' : 'Add to Cart'}
-        </Button>
-      </Space.Compact>
-    </Space>
+    <Button
+      type="primary"
+      onClick={() => void handleClick()}
+      loading={loading}
+      disabled={inCart || loading}
+    >
+      {inCart ? 'Added to Cart' : 'Add to Cart'}
+    </Button>
   );
 };
-
-export default AddCartButton;

@@ -1,17 +1,20 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vitest } from 'vitest';
 import { screen, render } from '@testing-library/react';
 import { CartProvider } from '@contexts';
 import { Cart } from '@components';
 import { BrowserRouter, Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { Paths } from '@enums';
+import { Client } from '@commercetools/sdk-client-v2';
 
 describe('Cart component tests', () => {
+  const client: Client = { execute: vitest.fn(), process: vitest.fn() };
+
   it('Should contain message if cart is empty', async () => {
     render(
       <BrowserRouter>
         <CartProvider>
-          <Cart />
+          <Cart client={client} />
         </CartProvider>
       </BrowserRouter>
     );
@@ -25,7 +28,7 @@ describe('Cart component tests', () => {
     render(
       <Router location={history.location} navigator={history}>
         <CartProvider>
-          <Cart />
+          <Cart client={client} />
         </CartProvider>
       </Router>
     );
