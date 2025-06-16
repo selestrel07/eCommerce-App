@@ -5,6 +5,7 @@ import { CartContext } from '@contexts';
 import { CartItem } from '@components';
 import { Flex } from 'antd';
 import { CartProps } from '../../interfaces/cart-props/cart-props';
+import { ClearShoppingCartButton } from '../ClearShoppingCartButton.tsx/ClearShoppingCartButton';
 
 export const Cart: FC<CartProps> = ({ onCartUpdate, client }) => {
   const { cart } = use(CartContext);
@@ -23,10 +24,13 @@ export const Cart: FC<CartProps> = ({ onCartUpdate, client }) => {
   }
 
   return (
-    <Flex gap="middle" vertical align="center">
-      {cart.lineItems.map((item) => (
-        <CartItem key={item.id} lineItem={item} client={client} onCartUpdate={onCartUpdate} />
-      ))}
-    </Flex>
+    <div className="cart-page">
+      <ClearShoppingCartButton client={client} />
+      <Flex gap="middle" vertical align="center">
+        {cart.lineItems.map((item) => (
+          <CartItem key={item.id} lineItem={item} client={client} onCartUpdate={onCartUpdate} />
+        ))}
+      </Flex>
+    </div>
   );
 };
