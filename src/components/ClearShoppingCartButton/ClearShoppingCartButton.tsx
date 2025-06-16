@@ -27,7 +27,12 @@ export const ClearShoppingCartButton: FC<ClearShoppingCartButtonProps> = ({ clie
 
   return (
     <>
-      <Button className="clear-cart-button" onClick={() => setModalVisible(true)} loading={loading}>
+      <Button
+        className="clear-cart-button"
+        type="primary"
+        onClick={() => setModalVisible(true)}
+        loading={loading}
+      >
         Clear Shopping Cart
       </Button>
 
