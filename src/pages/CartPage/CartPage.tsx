@@ -5,7 +5,7 @@ import { Cart } from '@components';
 export default function CartPage({ client }: { client: Client }) {
   return (
     <div className="cart-page-container">
-      <Cart onCartUpdate={undefined} client={client} />
+      <Cart client={client} />
     </div>
   );
 }

@@ -27,29 +27,31 @@ export const ClearShoppingCartButton: FC<ClearShoppingCartButtonProps> = ({ clie
 
   return (
     <>
-      <Button
-        className="clear-cart-button"
-        type="primary"
-        onClick={() => setModalVisible(true)}
-        loading={loading}
-      >
-        Clear Shopping Cart
-      </Button>
+      <div className="clear-shopping-cart-button">
+        <Button
+          className="clear-cart-button"
+          type="primary"
+          onClick={() => setModalVisible(true)}
+          loading={loading}
+        >
+          Clear Shopping Cart
+        </Button>
 
-      <Modal
-        title="Are you sure?"
-        open={isModalVisible}
-        onOk={() => {
-          void handleConfirm();
-        }}
-        onCancel={() => setModalVisible(false)}
-        okText="Yes, Clear Cart"
-        okType="danger"
-        cancelText="Cancel"
-      >
-        <p>This will remove all items from your cart.</p>
-        <p>This action cannot be undone.</p>
-      </Modal>
+        <Modal
+          title="Are you sure?"
+          open={isModalVisible}
+          onOk={() => {
+            void handleConfirm();
+          }}
+          onCancel={() => setModalVisible(false)}
+          okText="Yes, Clear Cart"
+          okType="danger"
+          cancelText="Cancel"
+        >
+          <p>This will remove all items from your cart.</p>
+          <p>This action cannot be undone.</p>
+        </Modal>
+      </div>
     </>
   );
 };

@@ -5,11 +5,12 @@ import { mapAuthError } from './authService';
 import {
   Cart,
   Customer,
+  MyCartUpdateAction,
   MyCustomerUpdateAction,
-  ProductProjection,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { QueryParams } from '@interfaces';
+import { ProductResponse } from '@interfaces';
 
 export const loadProducts = async (
   client: Client,
@@ -20,8 +21,10 @@ export const loadProducts = async (
   channelId?: string,
   sort?: string,
   filterQueries?: string[],
-  searchQuery?: string
-): Promise<ProductProjection[]> => {
+  searchQuery?: string,
+  limit?: number,
+  offset?: number
+): Promise<ProductResponse> => {
   const apiRoot = apiRootBuilder(client);
 
   try {
@@ -29,6 +32,10 @@ export const loadProducts = async (
 
     if (filters.color) {
       filterExpressions.push(`variants.attributes.color:"${filters.color}"`);
+    }
+
+    if (filters.scopedPriceDiscounted) {
+      filterExpressions.push(`variants.scopedPriceDiscounted:"${filters.scopedPriceDiscounted}"`);
     }
 
     if (filters.sex) {
@@ -43,8 +50,9 @@ export const loadProducts = async (
           ...(searchQuery && { ['text.en-US']: searchQuery }),
           priceCurrency: currency,
           markMatchingVariants: true,
-          limit: 50,
           staged: false,
+          limit,
+          offset,
           variantFilter: [
             filters.color ? `attributes.color:"${filters.color}"` : null,
             filters.sex ? `attributes.sex.key:"${filters.sex}"` : null,
@@ -61,7 +69,10 @@ export const loadProducts = async (
 
     const httpResponse = await requestBuilder.execute();
 
-    return httpResponse.body.results;
+    return {
+      results: httpResponse.body.results,
+      total: httpResponse.body.total ?? 0,
+    };
   } catch (rawError: unknown) {
     const humanReadableMsg = handleApiError(rawError);
     throw mapAuthError(humanReadableMsg);
@@ -293,10 +304,47 @@ export async function clearCart(client: Client): Promise<Cart> {
         },
       })
       .execute();
-
     return updatedCartResponse.body;
   } catch (rawError) {
     console.error('Failed to clear cart', rawError);
     throw new Error('Failed to clear the cart');
   }
 }
+
+export const loadDiscountCodes = async (client: Client) => {
+  const apiRoot = apiRootBuilder(client);
+  try {
+    const httpResponse = await apiRoot.discountCodes().get().execute();
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    throw new Error(handleApiError(rawError));
+  }
+};
+
+export const updateCart = async (
+  client: Client,
+  ID: string,
+  version: number,
+  actions: MyCartUpdateAction[]
+) => {
+  const apiRoot = apiRootBuilder(client);
+  try {
+    const httpResponse = await apiRoot
+      .me()
+      .carts()
+      .withId({
+        ID,
+      })
+      .post({
+        body: {
+          version,
+          actions,
+        },
+      })
+      .execute();
+
+    return httpResponse.body;
+  } catch (rawError: unknown) {
+    throw new Error(handleApiError(rawError));
+  }
+};

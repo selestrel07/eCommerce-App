@@ -12,4 +12,6 @@ export enum EditAction {
   SET_DEFAULT_BILLING_ADDRESS = 'setDefaultBillingAddress',
   ADD_BILLING_ADDRESS_ID = 'addBillingAddressId',
   REMOVE_BILLING_ADDRESS_ID = 'removeBillingAddressId',
+  ADD_DISCOUNT_CODE = 'addDiscountCode',
+  REMOVE_DISCOUNT_CODE = 'removeDiscountCode',
 }
