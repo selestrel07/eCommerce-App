@@ -25,12 +25,12 @@ export const Cart: FC<CartProps> = ({ onCartUpdate, client }) => {
 
   return (
     <div className="cart-page">
-      <ClearShoppingCartButton client={client} />
       <Flex gap="middle" vertical align="center">
         {cart.lineItems.map((item) => (
           <CartItem key={item.id} lineItem={item} client={client} onCartUpdate={onCartUpdate} />
         ))}
       </Flex>
+      <ClearShoppingCartButton client={client} />
     </div>
   );
 };
