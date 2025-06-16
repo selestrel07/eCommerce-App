@@ -15,7 +15,7 @@ import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs';
 import { Modal } from 'antd';
 import { getProductByKey } from '@services';
 import NotFound from '../NotFound/NotFound';
-import { AddCartButton } from '../../components/AddCartButton/AddCartButton';
+import { AddCartButton } from '@components';
 
 // eslint-disable-next-line max-lines-per-function
 const ProductDetails = ({ apiClient }: { apiClient: Client }) => {

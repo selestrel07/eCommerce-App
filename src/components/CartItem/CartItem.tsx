@@ -2,8 +2,8 @@ import { FC } from 'react';
 import { formatPrice, keyToNameFormatter } from '@utils';
 import { Image } from 'antd';
 import './CartItem.scss';
-import { DeleteFromCartButton } from '../DeleteFromCartButton/DeleteFromCartButton';
 import { CartItemProps } from '../../interfaces/cart-item/cart-item';
+import { DeleteFromCartButton } from '@components';
 
 export const CartItem: FC<CartItemProps> = ({ lineItem, client, onCartUpdate }) => {
   const imageUrl = lineItem.variant.images?.[0]?.url ?? '';
