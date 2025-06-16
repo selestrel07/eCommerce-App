@@ -8,5 +8,6 @@ export * from './customer/customer.ts';
 export * from './filter/filter.ts';
 export * from './product/product.ts';
 export * from './query-params/query-params.ts';
+export * from './catalog/catalog.ts';
 export * from './context/cart-context.ts';
 export * from './add-to-cart-button/add-to-cart-button.ts';

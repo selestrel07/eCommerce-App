@@ -18,7 +18,7 @@ export default function CartPage({ client }: { client: Client }) {
 
   return (
     <div className="cart-page-container">
-      <Cart />
+      <Cart client={client} />
     </div>
   );
 }
