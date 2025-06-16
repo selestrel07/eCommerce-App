@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { CartContext } from '@contexts';
 import { CartItem } from '@components';
 import { Flex } from 'antd';
-import { CartProps } from '../../interfaces/cart-props/cart-props';
-import { ClearShoppingCartButton } from '../ClearShoppingCartButton.tsx/ClearShoppingCartButton';
+import { CartProps } from '@interfaces';
+import { ClearShoppingCartButton } from '@components';
 
 export const Cart: FC<CartProps> = ({ onCartUpdate, client }) => {
   const { cart } = use(CartContext);

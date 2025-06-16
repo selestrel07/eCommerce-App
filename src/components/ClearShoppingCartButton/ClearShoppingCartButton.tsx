@@ -1,12 +1,8 @@
 import { FC, useState } from 'react';
 import { Button, Modal, message } from 'antd';
-import { Client } from '@commercetools/sdk-client-v2';
 import { useCart } from '@contexts';
 import { clearCart } from '@services';
-
-interface ClearShoppingCartButtonProps {
-  client: Client;
-}
+import { ClearShoppingCartButtonProps } from '@interfaces';
 
 export const ClearShoppingCartButton: FC<ClearShoppingCartButtonProps> = ({ client }) => {
   const [isModalVisible, setModalVisible] = useState(false);

@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import TrashImg from '../../assets/trash.png';
 import { message } from 'antd';
-import { DeleteFromCartButtonProps } from '../../interfaces/delete-button/delete-button';
+import { DeleteFromCartButtonProps } from '@interfaces';
 import { removeLineItem } from '@services';
 import { use } from 'react';
 import { CartContext } from '@contexts';

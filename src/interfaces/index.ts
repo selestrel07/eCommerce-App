@@ -13,3 +13,5 @@ export * from './cart-props/cart-props.ts';
 export * from './cart-item/cart-item.ts';
 export * from './delete-button/delete-button.ts';
 export * from './add-to-cart-button/add-to-cart-button.ts';
+export * from './clear-cart/clear-cart.ts';
+export * from './delete-button/delete-button.ts';
