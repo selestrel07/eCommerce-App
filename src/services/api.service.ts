@@ -3,6 +3,7 @@ import { handleApiError } from './errorHandler';
 import { Client } from '@commercetools/sdk-client-v2';
 import { mapAuthError } from './authService';
 import {
+  Cart,
   Customer,
   MyCustomerUpdateAction,
   ProductProjection,
@@ -196,3 +197,84 @@ export const createCart = async (client: Client) => {
     throw new Error(handleApiError(rawError));
   }
 };
+
+export async function removeLineItem(client: Client, lineItemId: string): Promise<Cart> {
+  const apiRoot = apiRootBuilder(client);
+
+  try {
+    const cartResponse = await apiRoot.me().activeCart().get().execute();
+    const cart = cartResponse.body;
+
+    const updatedCartResponse = await apiRoot
+      .me()
+      .carts()
+      .withId({ ID: cart.id })
+      .post({
+        body: {
+          version: cart.version,
+          actions: [
+            {
+              action: 'removeLineItem',
+              lineItemId,
+            },
+          ],
+        },
+      })
+      .execute();
+
+    return updatedCartResponse.body;
+  } catch (rawError) {
+    console.error('Failed to remove line item:', rawError);
+    throw new Error(handleApiError(rawError));
+  }
+}
+
+export async function addToCart(client: Client, productId: string, variantId: number) {
+  const apiRoot = apiRootBuilder(client);
+
+  try {
+    let cartResponse;
+    try {
+      cartResponse = await apiRoot.me().activeCart().get().execute();
+    } catch (error: unknown) {
+      if (
+        error instanceof Error &&
+        'message' in error &&
+        typeof error.message === 'string' &&
+        error.message.includes('URL not found: /yagni/me/active-cart')
+      ) {
+        cartResponse = { body: await createCart(client) };
+      } else {
+        throw error;
+      }
+    }
+
+    if (!cartResponse?.body?.id) {
+      throw new Error('Failed to retrieve or create cart');
+    }
+
+    const updatedCart = await apiRoot
+      .me()
+      .carts()
+      .withId({ ID: cartResponse.body.id })
+      .post({
+        body: {
+          version: cartResponse.body.version,
+          actions: [
+            {
+              action: 'addLineItem',
+              productId,
+              variantId,
+              quantity: 1,
+            },
+          ],
+        },
+      })
+      .execute();
+
+    return updatedCart.body;
+  } catch (rawError) {
+    console.error('Failed to add product to cart:', rawError);
+    throw new Error(handleApiError(rawError));
+  }
+}
