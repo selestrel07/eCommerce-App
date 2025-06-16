@@ -5,13 +5,14 @@ import { Cart } from '@components';
 import { BrowserRouter, Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { Paths } from '@enums';
+import { Client } from '@commercetools/sdk-client-v2';
 
 describe('Cart component tests', () => {
-  it('Should contain message if cart is empty', async () => {
+  it('Should contain message if cart is empty', async (client: Client) => {
     render(
       <BrowserRouter>
         <CartProvider>
-          <Cart />
+          <Cart client={client} />
         </CartProvider>
       </BrowserRouter>
     );
@@ -19,13 +20,13 @@ describe('Cart component tests', () => {
     expect(await screen.findByText('Catalog')).toBeInTheDocument();
   });
 
-  it('Should redirect to the Catalog page after the Catalog link click', async () => {
+  it('Should redirect to the Catalog page after the Catalog link click', async (client: Client) => {
     const history = createMemoryHistory();
     history.push(Paths.CART);
     render(
       <Router location={history.location} navigator={history}>
         <CartProvider>
-          <Cart />
+          <Cart client={client} />
         </CartProvider>
       </Router>
     );
