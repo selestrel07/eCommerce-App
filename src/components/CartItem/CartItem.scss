@@ -1,11 +1,20 @@
+.stock-quantity-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+}
+
 .cart-item-controls {
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 2px;
 }
 
 .input-quantity {
-  max-width: 40px;
+  max-width: 50px;
   height: 25px;
   text-align: center;
   
@@ -18,4 +27,7 @@
   }
 
   appearance: none;
+
+  border: 0;
+  color: rgb(41, 40, 40);
 }
