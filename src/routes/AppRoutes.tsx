@@ -38,7 +38,7 @@ export default function AppRoutes({
       .catch((err) => {
         console.error('Failed to load cart:', err);
       });
-  }, [apiClient, setCart]);
+  }, [apiClient]);
 
   useEffect(() => {
     if (cart) {
@@ -47,7 +47,7 @@ export default function AppRoutes({
     } else {
       setCartItemsCount(0);
     }
-  }, [cart, setCartItemsCount]);
+  }, [cart]);
 
   return (
     <Routes>

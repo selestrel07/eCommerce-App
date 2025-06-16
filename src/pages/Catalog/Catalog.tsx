@@ -6,18 +6,13 @@ import './Catalog.scss';
 import { ProductCard, CategoryList, CatalogBreadcrumbs } from '@components';
 import { Input, Select, Button } from 'antd';
 import { CatalogContext, CategoryProvider } from '@contexts';
-import { ProductVariantWithPriceAndName, QueryParams } from '@interfaces';
+import { QueryParams, CatalogItem } from '@interfaces';
 import { getVariants } from '@utils';
 
 const { Search } = Input;
 const { Option } = Select;
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
-  interface CatalogItem {
-    productId: string;
-    variant: ProductVariantWithPriceAndName;
-  }
-
   const [items, setItems] = useState<CatalogItem[]>([]);
 
   const [loading, setLoading] = useState(true);

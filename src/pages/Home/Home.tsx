@@ -4,14 +4,9 @@ import { loadDiscountCodes, loadProducts } from '@services';
 import { DiscountCodeCard, ProductCard } from '@components';
 import { Carousel } from 'antd';
 import { DiscountCode } from '@commercetools/platform-sdk';
-import { ProductVariantWithPriceAndName } from '@interfaces';
+import { HomeItem } from '@interfaces';
 import { getVariants } from '@utils';
 import './Home.scss';
-
-interface HomeItem {
-  productId: string;
-  variant: ProductVariantWithPriceAndName;
-}
 
 export default function Home({ apiClient }: { apiClient: Client }): ReactElement {
   const [codes, setCodes] = useState<DiscountCode[]>([]);
