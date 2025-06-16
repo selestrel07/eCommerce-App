@@ -1,13 +1,12 @@
 import { Paths } from '@enums';
-import { Context, FC, ReactElement, use } from 'react';
+import { FC, ReactElement, use } from 'react';
 import { Link } from 'react-router-dom';
 import { CartContext } from '@contexts';
-import { CartContextType } from '@interfaces';
 import { CartItem } from '@components';
 import { Flex } from 'antd';
 
 export const Cart: FC = (): ReactElement => {
-  const { cart } = use(CartContext as Context<CartContextType>);
+  const { cart } = use(CartContext);
   return (
     <>
       {cart === null || cart?.lineItems.length === 0 ? (

@@ -3,7 +3,7 @@ import { LineItem } from '@commercetools/platform-sdk';
 import { formatPrice, keyToNameFormatter } from '@utils';
 import { Image } from 'antd';
 import './CartItem.scss';
-import { DeleteFromCartButton } from '../DeleteFromCartButton/DeleteFromCartButton';
+import { DeleteFromCartButton } from '@components';
 
 export const CartItem: FC<{
   lineItem: LineItem;

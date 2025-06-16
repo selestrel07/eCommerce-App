@@ -17,7 +17,7 @@ export const AddCartButton: React.FC<AddCartButtonProps> = ({ client, productId,
     );
 
     setInCart(isInCart);
-  }, [cart, productId, variantId]);
+  }, [cart]);
 
   const handleClick = async () => {
     if (inCart || loading) return;

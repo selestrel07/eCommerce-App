@@ -229,37 +229,28 @@ export async function removeLineItem(client: Client, lineItemId: string): Promis
   }
 }
 
-export async function addToCart(client: Client, productId: string, variantId: number) {
+export async function addToCart(
+  client: Client,
+  productId: string,
+  variantId: number
+): Promise<Cart> {
   const apiRoot = apiRootBuilder(client);
 
   try {
-    let cartResponse;
-    try {
-      cartResponse = await apiRoot.me().activeCart().get().execute();
-    } catch (error: unknown) {
-      if (
-        error instanceof Error &&
-        'message' in error &&
-        typeof error.message === 'string' &&
-        error.message.includes('URL not found: /yagni/me/active-cart')
-      ) {
-        cartResponse = { body: await createCart(client) };
-      } else {
-        throw error;
-      }
+    const cartResponse = await apiRoot.me().activeCart().get().execute();
+    const cart = cartResponse.body;
+
+    if (!cart.id || !cart.version) {
+      throw new Error('No active cart found. Please reload the app or sign in again.');
     }
 
-    if (!cartResponse?.body?.id) {
-      throw new Error('Failed to retrieve or create cart');
-    }
-
-    const updatedCart = await apiRoot
+    const updatedCartResponse = await apiRoot
       .me()
       .carts()
-      .withId({ ID: cartResponse.body.id })
+      .withId({ ID: cart.id })
       .post({
         body: {
-          version: cartResponse.body.version,
+          version: cart.version,
           actions: [
             {
               action: 'addLineItem',
@@ -272,7 +263,7 @@ export async function addToCart(client: Client, productId: string, variantId: nu
       })
       .execute();
 
-    return updatedCart.body;
+    return updatedCartResponse.body;
   } catch (rawError) {
     console.error('Failed to add product to cart:', rawError);
     throw new Error(handleApiError(rawError));
