@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button, message } from 'antd';
-import { addToCart } from '@services';
 import { useCart } from '@contexts';
 import { AddCartButtonProps } from '@interfaces';
+import { addToCart } from '@services';
 
 export const AddCartButton: React.FC<AddCartButtonProps> = ({ client, productId, variantId }) => {
   const { cart, setCart, setCartItemsCount } = useCart();

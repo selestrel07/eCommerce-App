@@ -280,6 +280,37 @@ export async function addToCart(
     throw new Error(handleApiError(rawError));
   }
 }
+
+export async function clearCart(client: Client): Promise<Cart> {
+  const apiRoot = apiRootBuilder(client);
+
+  try {
+    const cartResponse = await apiRoot.me().activeCart().get().execute();
+    const cart = cartResponse.body;
+
+    const actions = cart.lineItems.map((item) => ({
+      action: 'removeLineItem' as const,
+      lineItemId: item.id,
+    }));
+
+    const updatedCartResponse = await apiRoot
+      .me()
+      .carts()
+      .withId({ ID: cart.id })
+      .post({
+        body: {
+          version: cart.version,
+          actions,
+        },
+      })
+      .execute();
+    return updatedCartResponse.body;
+  } catch (rawError) {
+    console.error('Failed to clear cart', rawError);
+    throw new Error('Failed to clear the cart');
+  }
+}
+
 export const loadDiscountCodes = async (client: Client) => {
   const apiRoot = apiRootBuilder(client);
   try {
@@ -311,6 +342,7 @@ export const updateCart = async (
         },
       })
       .execute();
+
     return httpResponse.body;
   } catch (rawError: unknown) {
     throw new Error(handleApiError(rawError));
