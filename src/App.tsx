@@ -14,7 +14,7 @@ import {
 } from '@services';
 import { isTokenStore } from '@types';
 import { Context } from 'react-responsive';
-import { CartProvider } from './contexts/cart-context/CartContexts.tsx';
+import { CartProvider } from '@contexts';
 
 export const App = () => {
   const token = loadCustomerToken();

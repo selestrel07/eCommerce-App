@@ -70,7 +70,7 @@ export const getVariants = (
         return {
           ...variant,
           productName: product.name,
-          isMatchingVariant: !!(matchesColor && matchesSex),
+          isMatchingVariant: matchesColor && matchesSex,
         };
       })
     )

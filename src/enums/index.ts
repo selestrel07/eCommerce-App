@@ -1,6 +1,5 @@
 export * from './address-fields/address-fields.ts';
 export * from './address-types/address-types.ts';
-export * from './customer-fields/customer-fields.ts';
 export * from './paths/paths.ts';
 export * from './edit-actions/edit-actions.ts';
 export * from './profile-section-names/profile-section-names.ts';

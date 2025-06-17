@@ -8,7 +8,7 @@ import logo from '../../assets/logo.png';
 import './Header.scss';
 import { Paths } from '@enums';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../../contexts/cart-context/UseCart.ts';
+import { useCart } from '@contexts';
 import { TiShoppingCart } from 'react-icons/ti';
 import {
   emptyTokenStore,
