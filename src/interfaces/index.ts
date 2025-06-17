@@ -5,7 +5,6 @@ export * from './component-props/component-props.ts';
 export * from './context/profile-context.ts';
 export * from './context/catalog-context.ts';
 export * from './customer/customer.ts';
-export * from './filter/filter.ts';
 export * from './product/product.ts';
 export * from './query-params/query-params.ts';
 export * from './catalog/catalog.ts';

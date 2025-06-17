@@ -1,13 +1,12 @@
-.stock-info {
-  color: rgb(15, 111, 236);
-}
-
 .delete-image {
   width: 20px;
   height: 20px;
 }
 
 .delete-from-cart-button {
+  position: absolute;
+  right: 5px;
+  top: -10px;
   background-color: rgba(241, 241, 239, 0.58);
   cursor: pointer;
   border: none;
@@ -31,7 +30,7 @@
   max-width: 50px;
   height: 25px;
   text-align: center;
-  
+
   -moz-appearance: textfield;
 
   &::-webkit-outer-spin-button,

@@ -49,7 +49,7 @@ export const App = () => {
   return (
     <CartProvider>
       <Layout>
-        <AppHeader isSignedIn={isSignedIn} setSignedIn={setSignedIn} />
+        <AppHeader isSignedIn={isSignedIn} setSignedIn={setSignedIn} setApiClient={setClient} />
         {contextHolder}
         <Layout.Content>
           <AppRoutes

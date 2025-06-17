@@ -4,11 +4,12 @@ import { Props } from '@interfaces';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '@enums';
 import { AddCartButton } from '@components';
+import { FC } from 'react';
 
 const { Meta } = Card;
 const { Paragraph } = Typography;
 
-export const ProductCard: React.FC<Props> = ({ variant, name, client, productId }) => {
+export const ProductCard: FC<Props> = ({ variant, name, client, productId }) => {
   const navigate = useNavigate();
   const mainImage =
     variant.images.find((img) => img.label === 'Main')?.url ?? variant.images[0]?.url;

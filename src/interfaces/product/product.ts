@@ -22,17 +22,6 @@ export interface ProductVariantWithPrice {
   isMatchingVariant?: boolean;
 }
 
-export interface ProductWithPrice {
-  id: string;
-  key: string;
-  name: Record<string, string>;
-  description?: Record<string, string>;
-  image?: string;
-  price?: PriceInfo;
-  masterVariant: ProductVariantWithPrice;
-  variants: ProductVariantWithPrice[];
-}
-
 export interface ProductAttribute {
   name: string;
   value: string | Record<string, string>;
@@ -40,11 +29,6 @@ export interface ProductAttribute {
 
 export interface DiscountedPrice {
   value: TypedMoney;
-}
-
-export interface Price {
-  value: TypedMoney;
-  discounted?: DiscountedPrice;
 }
 
 export interface TypedMoney {

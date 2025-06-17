@@ -63,51 +63,51 @@ export const CartItem: FC<CartItemProps> = ({
           {currency}
         </p>
         <p>
-          <b>Quantity:</b> {quantity}
+          <div className="stock-quantity-container">
+            <b>Quantity:</b>
+            <div className="cart-item-controls">
+              <Button
+                className="button-quantity-change"
+                icon={<CiSquareMinus size={32} />}
+                onClick={() => onQuantityChange(lineItem.id, lineItem.quantity - 1)}
+                disabled={updating || lineItem.quantity <= 1}
+                size="small"
+              ></Button>
+              <input
+                className="input-quantity"
+                type="number"
+                min={1}
+                max={availableStock}
+                value={lineItem.quantity}
+                disabled={updating}
+                onChange={(e) => {
+                  let q = parseInt(e.target.value, 10);
+                  if (Number.isNaN(q)) return;
+
+                  if (q < 1) q = 1;
+                  if (q > availableStock) q = availableStock;
+
+                  if (q !== lineItem.quantity) {
+                    onQuantityChange(lineItem.id, q);
+                  }
+                }}
+              />
+              <Button
+                className="button-quantity-change"
+                icon={<CiSquarePlus size={32} />}
+                onClick={() => onQuantityChange(lineItem.id, lineItem.quantity + 1)}
+                disabled={updating || lineItem.quantity >= availableStock}
+                size="small"
+              ></Button>
+            </div>
+            <p className="stock-info">In stock: {availableStock}</p>
+          </div>
         </p>
         <p>
           <b>Total cost:</b> {formatPrice(itemTotalCost, fractionDigits)} {currency}
         </p>
       </div>
       <DeleteFromCartButton lineItemId={lineItem.id} client={client} onCartUpdate={onCartUpdate} />
-      <div className="stock-quantity-container">
-        <div className="cart-item-controls">
-          <Button
-            className="button-quantity-change"
-            icon={<CiSquareMinus size={32} />}
-            onClick={() => onQuantityChange(lineItem.id, lineItem.quantity - 1)}
-            disabled={updating || lineItem.quantity <= 1}
-            size="small"
-          ></Button>
-          <input
-            className="input-quantity"
-            type="number"
-            min={1}
-            max={availableStock}
-            value={lineItem.quantity}
-            disabled={updating}
-            onChange={(e) => {
-              let q = parseInt(e.target.value, 10);
-              if (Number.isNaN(q)) return;
-
-              if (q < 1) q = 1;
-              if (q > availableStock) q = availableStock;
-
-              if (q !== lineItem.quantity) {
-                onQuantityChange(lineItem.id, q);
-              }
-            }}
-          />
-          <Button
-            className="button-quantity-change"
-            icon={<CiSquarePlus size={32} />}
-            onClick={() => onQuantityChange(lineItem.id, lineItem.quantity + 1)}
-            disabled={updating || lineItem.quantity >= availableStock}
-            size="small"
-          ></Button>
-        </div>
-        <p className="stock-info">In stock: {availableStock}</p>
-      </div>
     </div>
   );
 };
