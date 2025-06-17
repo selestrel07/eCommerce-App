@@ -5,6 +5,7 @@ import { mapAuthError } from './authService';
 import {
   Cart,
   Customer,
+  MyCartAddLineItemAction,
   MyCartUpdateAction,
   MyCustomerUpdateAction,
   ProductProjectionPagedQueryResponse,
@@ -240,46 +241,46 @@ export async function removeLineItem(client: Client, lineItemId: string): Promis
   }
 }
 
-export async function addToCart(
-  client: Client,
-  productId: string,
-  variantId: number
-): Promise<Cart> {
-  const apiRoot = apiRootBuilder(client);
+// export async function addToCart(
+//   client: Client,
+//   productId: string,
+//   variantId: number
+// ): Promise<Cart> {
+//   const apiRoot = apiRootBuilder(client);
 
-  try {
-    const cartResponse = await apiRoot.me().activeCart().get().execute();
-    const cart = cartResponse.body;
+//   try {
+//     const cartResponse = await apiRoot.me().activeCart().get().execute();
+//     const cart = cartResponse.body;
 
-    if (!cart.id || !cart.version) {
-      throw new Error('No active cart found. Please reload the app or sign in again.');
-    }
+//     if (!cart.id || !cart.version) {
+//       throw new Error('No active cart found. Please reload the app or sign in again.');
+//     }
 
-    const updatedCartResponse = await apiRoot
-      .me()
-      .carts()
-      .withId({ ID: cart.id })
-      .post({
-        body: {
-          version: cart.version,
-          actions: [
-            {
-              action: 'addLineItem',
-              productId,
-              variantId,
-              quantity: 1,
-            },
-          ],
-        },
-      })
-      .execute();
+//     const updatedCartResponse = await apiRoot
+//       .me()
+//       .carts()
+//       .withId({ ID: cart.id })
+//       .post({
+//         body: {
+//           version: cart.version,
+//           actions: [
+//             {
+//               action: 'addLineItem',
+//               productId,
+//               variantId,
+//               quantity: 1,
+//             },
+//           ],
+//         },
+//       })
+//       .execute();
 
-    return updatedCartResponse.body;
-  } catch (rawError) {
-    console.error('Failed to add product to cart:', rawError);
-    throw new Error(handleApiError(rawError));
-  }
-}
+//     return updatedCartResponse.body;
+//   } catch (rawError) {
+//     console.error('Failed to add product to cart:', rawError);
+//     throw new Error(handleApiError(rawError));
+//   }
+// }
 
 export async function clearCart(client: Client): Promise<Cart> {
   const apiRoot = apiRootBuilder(client);
@@ -321,30 +322,40 @@ export const loadDiscountCodes = async (client: Client) => {
   }
 };
 
-export const updateCart = async (
+export async function updateCart(
   client: Client,
-  ID: string,
-  version: number,
+  cartId: string,
+  cartVersion: number,
   actions: MyCartUpdateAction[]
-) => {
+) {
   const apiRoot = apiRootBuilder(client);
   try {
-    const httpResponse = await apiRoot
+    const resp = await apiRoot
       .me()
       .carts()
-      .withId({
-        ID,
-      })
-      .post({
-        body: {
-          version,
-          actions,
-        },
-      })
+      .withId({ ID: cartId })
+      .post({ body: { version: cartVersion, actions } })
       .execute();
-
-    return httpResponse.body;
-  } catch (rawError: unknown) {
-    throw new Error(handleApiError(rawError));
+    return resp.body;
+  } catch (err: unknown) {
+    console.error('Cart update failed', err);
+    throw new Error(handleApiError(err));
   }
-};
+}
+
+export async function addToCart(
+  client: Client,
+  cartId: string,
+  cartVersion: number,
+  productId: string,
+  variantId: number
+) {
+  const action: MyCartAddLineItemAction = {
+    action: 'addLineItem',
+    productId,
+    variantId,
+    quantity: 1,
+  };
+
+  return updateCart(client, cartId, cartVersion, [action]);
+}

@@ -23,3 +23,4 @@ export * from './AddCartButton/AddCartButton.tsx';
 export * from './ClearShoppingCartButton/ClearShoppingCartButton.tsx';
 export * from './DiscountCodeCard/DiscountCodeCard.tsx';
 export * from './CartDiscountCode/CartDiscountCode.tsx';
+export * from './AddCartButton/AddCartButton.tsx';

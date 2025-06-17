@@ -1,3 +1,5 @@
+import { Client } from '@commercetools/sdk-client-v2';
+
 export interface PriceInfo {
   amount: number;
   currency: string;
@@ -59,4 +61,6 @@ export interface ProductVariantWithPriceAndName extends ProductVariantWithPrice 
 export interface Props {
   variant: ProductVariantWithPrice;
   name: string;
+  client: Client;
+  productId: string;
 }

@@ -6,13 +6,15 @@ import './Catalog.scss';
 import { ProductCard, CategoryList, CatalogBreadcrumbs } from '@components';
 import { Input, Select, Button, Pagination, Spin } from 'antd';
 import { CatalogContext, CategoryProvider } from '@contexts';
-import { ProductVariantWithPriceAndName, QueryParams } from '@interfaces';
+import { QueryParams, CatalogItem } from '@interfaces';
 import { getVariants } from '@utils';
 
 const { Search } = Input;
 const { Option } = Select;
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
+  const [items, setItems] = useState<CatalogItem[]>([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -21,7 +23,6 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(8);
   const [totalProducts, setTotalProducts] = useState<number>(0);
-  const [allVariants, setAllVariants] = useState<ProductVariantWithPriceAndName[]>([]);
 
   const handleSortChange = (value: string) => {
     setSortOption(value);
@@ -49,9 +50,13 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
           limit,
           offset
         );
-        const variants = getVariants(productList.results, filters);
-
-        setAllVariants(variants);
+        const catalogItems = productList.results.flatMap((product) =>
+          getVariants([product], filters).map((variant) => ({
+            productId: product.id,
+            variant,
+          }))
+        );
+        setItems(catalogItems);
         setTotalProducts(productList.total);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
@@ -186,15 +191,23 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                   <h2>Error</h2>
                   <p>{error}</p>
                 </div>
-              ) : allVariants.length === 0 ? (
+              ) : items.length === 0 ? (
                 <p className="catalog-empty-text">No product variations found.</p>
               ) : (
                 <div className="catalog-grid">
-                  {allVariants.map((variant) => {
+                  {items.map(({ productId, variant }) => {
                     const productName = Object.values(variant.productName)[0] || 'Unnamed Product';
                     const productKey = variant.key ?? `variant-${variant.id}`;
 
-                    return <ProductCard key={productKey} variant={variant} name={productName} />;
+                    return (
+                      <ProductCard
+                        key={productKey}
+                        variant={variant}
+                        name={productName}
+                        client={apiClient}
+                        productId={productId}
+                      />
+                    );
                   })}
                 </div>
               )}

@@ -4,7 +4,7 @@ import SignUp from '../pages/SignUp/SignUp.tsx';
 import SignIn from '../pages/SignIn/SignIn.tsx';
 import Home from '../pages/Home/Home.tsx';
 import NotFound from '../pages/NotFound/NotFound.tsx';
-import { ReactElement, useEffect } from 'react';
+import { ReactElement, useEffect, use } from 'react';
 import { Paths } from '@enums';
 import { Client } from '@commercetools/sdk-client-v2';
 import ProductDetails from '../pages/ProductDetails/ProductDetails.tsx';
@@ -12,8 +12,8 @@ import Profile from '../pages/Profile/Profile.tsx';
 import Catalog from '../pages/Catalog/Catalog.tsx';
 import About from '../pages/About/About.tsx';
 import CartPage from '../pages/CartPage/CartPage.tsx';
-import { useCart } from '@contexts';
 import { loadCart } from '@services';
+import { CartContext } from '@contexts';
 
 export default function AppRoutes({
   isSignedIn,
@@ -28,27 +28,25 @@ export default function AppRoutes({
   setApiClient: (client: Client) => void;
   openNotification: (message: string, description: string) => void;
 }): ReactElement {
-  const { cart, setCart, setCartItemsCount } = useCart();
+  const { cart, setCart, setCartItemsCount } = use(CartContext);
 
   useEffect(() => {
     loadCart(apiClient)
-      .then((response) => {
-        setCart(response);
+      .then((fetchedCart) => {
+        setCart(fetchedCart);
       })
-      .catch((error) => {
-        console.error('Failed to load cart on app start', error);
+      .catch((err) => {
+        console.error('Failed to load cart:', err);
       });
   }, [apiClient]);
 
   useEffect(() => {
-    if (!cart) {
+    if (cart) {
+      const total = cart.lineItems.reduce((sum, li) => sum + li.quantity, 0);
+      setCartItemsCount(total);
+    } else {
       setCartItemsCount(0);
-      return;
     }
-
-    const totalQuantity = cart.lineItems.reduce((acc, lineItem) => acc + lineItem.quantity, 0);
-
-    setCartItemsCount(totalQuantity);
   }, [cart]);
 
   return (

@@ -1,43 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, use } from 'react';
 import { Button, message } from 'antd';
-import { useCart } from '@contexts';
-import { AddCartButtonProps } from '@interfaces';
 import { addToCart } from '@services';
+import { CartContext } from '@contexts';
+import { AddCartButtonProps } from '@interfaces';
+import { loadCart } from '@services';
 
 export const AddCartButton: React.FC<AddCartButtonProps> = ({ client, productId, variantId }) => {
-  const { cart, setCart, setCartItemsCount } = useCart();
-  const [loading, setLoading] = useState(false);
-  const [inCart, setInCart] = useState(false);
+  const { cart, setCart, setCartItemsCount } = use(CartContext);
+  const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    if (!cart?.lineItems) return;
-
-    const isInCart = cart.lineItems.some(
-      (item) => item.productId === productId && item.variant.id === variantId
-    );
-
-    setInCart(isInCart);
-  }, [cart]);
+  const alreadyInCart =
+    cart?.lineItems.some((li) => li.productId === productId && li.variant.id === variantId) ??
+    false;
 
   const handleClick = async () => {
-    if (inCart || loading) return;
+    if (!cart) {
+      try {
+        const fresh = await loadCart(client);
+        setCart(fresh);
+        setCartItemsCount(fresh.lineItems.length);
+      } catch (loadErr) {
+        console.error('Failed to load cart:', loadErr);
+        message.error('Failed to load cart. Please try again.');
+      }
+      return;
+    }
+    if (alreadyInCart || saving) return;
 
-    setLoading(true);
+    setSaving(true);
     try {
-      const updatedCart = await addToCart(client, productId, variantId);
-
+      const updatedCart = await addToCart(client, cart.id, cart.version, productId, variantId);
       setCart(updatedCart);
-
-      const totalQuantity = updatedCart.lineItems.reduce((acc, item) => acc + item.quantity, 0);
-      setCartItemsCount(totalQuantity);
-
-      setInCart(true);
+      setCartItemsCount(updatedCart.lineItems.length);
       message.success('Product added to cart!');
-    } catch (error) {
-      console.error('Failed to add product to cart:', error);
-      message.error('Failed to add product to cart.');
+    } catch (err: unknown) {
+      console.error('Failed to add product to cart:', err);
+      message.error(err instanceof Error ? err.message : 'Failed to add product to cart.');
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
 
@@ -45,10 +45,10 @@ export const AddCartButton: React.FC<AddCartButtonProps> = ({ client, productId,
     <Button
       type="primary"
       onClick={() => void handleClick()}
-      loading={loading}
-      disabled={inCart || loading}
+      loading={saving}
+      disabled={alreadyInCart}
     >
-      {inCart ? 'Added to Cart' : 'Add to Cart'}
+      {alreadyInCart ? 'Added to Cart' : 'Add to Cart'}
     </Button>
   );
 };
