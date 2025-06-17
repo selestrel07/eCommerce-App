@@ -4,20 +4,15 @@ import { Client } from '@commercetools/sdk-client-v2';
 import { loadProducts } from '@services';
 import './Catalog.scss';
 import { ProductCard, CategoryList, CatalogBreadcrumbs } from '@components';
-import { Input, Select, Button } from 'antd';
+import { Input, Select, Button, Pagination, Spin } from 'antd';
 import { CatalogContext, CategoryProvider } from '@contexts';
-import { ProductVariantWithPriceAndName, QueryParams } from '@interfaces';
+import { QueryParams, CatalogItem } from '@interfaces';
 import { getVariants } from '@utils';
 
 const { Search } = Input;
 const { Option } = Select;
 
 export default function Catalog({ apiClient }: { apiClient: Client }): ReactElement {
-  interface CatalogItem {
-    productId: string;
-    variant: ProductVariantWithPriceAndName;
-  }
-
   const [items, setItems] = useState<CatalogItem[]>([]);
 
   const [loading, setLoading] = useState(true);
@@ -25,6 +20,9 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [filters, setFilters] = useState<QueryParams>({});
   const [sortOption, setSortOption] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(8);
+  const [totalProducts, setTotalProducts] = useState<number>(0);
 
   const handleSortChange = (value: string) => {
     setSortOption(value);
@@ -36,6 +34,9 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
       setError(null);
 
       try {
+        const limit = pageSize;
+        const offset = (currentPage - 1) * pageSize;
+
         const productList = await loadProducts(
           apiClient,
           'EUR',
@@ -45,15 +46,18 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
           undefined,
           sortOption,
           filters['filter.query'],
-          searchQuery
+          searchQuery,
+          limit,
+          offset
         );
-        const catalogItems = productList.flatMap((product) =>
+        const catalogItems = productList.results.flatMap((product) =>
           getVariants([product], filters).map((variant) => ({
             productId: product.id,
             variant,
           }))
         );
         setItems(catalogItems);
+        setTotalProducts(productList.total);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
       } finally {
@@ -62,7 +66,7 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
     };
 
     void fetchProducts();
-  }, [apiClient, sortOption, searchQuery, filters]);
+  }, [apiClient, sortOption, searchQuery, filters, pageSize, currentPage]);
 
   const handleColorChange = (value: string) => {
     setFilters((prev) => ({ ...prev, color: value }));
@@ -160,8 +164,28 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                 </Button>
               </div>
 
+              <div className="page-size-container">
+                <p>Page size:</p>
+                <Select
+                  value={pageSize}
+                  onChange={(size) => {
+                    setPageSize(() => {
+                      setCurrentPage(1);
+                      return size;
+                    });
+                  }}
+                >
+                  <Select.Option value={4}>4 / page</Select.Option>
+                  <Select.Option value={8}>8 / page</Select.Option>
+                  <Select.Option value={12}>12 / page</Select.Option>
+                </Select>
+              </div>
+
               {loading ? (
-                <h2>Loading products...</h2>
+                <div className="loading-spinner">
+                  <Spin size="large" />
+                  <p className="loading-text">Loading products...</p>
+                </div>
               ) : error ? (
                 <div className="catalog-error">
                   <h2>Error</h2>
@@ -185,6 +209,17 @@ export default function Catalog({ apiClient }: { apiClient: Client }): ReactElem
                       />
                     );
                   })}
+                </div>
+              )}
+              {!loading && (
+                <div className="pagination-controls">
+                  <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={totalProducts}
+                    onChange={(page) => setCurrentPage(page)}
+                    showSizeChanger={false}
+                  />
                 </div>
               )}
             </div>

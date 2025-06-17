@@ -38,7 +38,7 @@ export default function AppRoutes({
       .catch((err) => {
         console.error('Failed to load cart:', err);
       });
-  }, [apiClient, setCart]);
+  }, [apiClient]);
 
   useEffect(() => {
     if (!cart) {
@@ -63,6 +63,7 @@ export default function AppRoutes({
     <Routes>
       <Route path={Paths.EMPTY} element={<Navigate to={Paths.MAIN} replace />} />
       <Route path={Paths.ANY} element={<Navigate to={Paths.CATALOG} replace />} />
+
       <Route
         path={Paths.SIGN_UP}
         element={
@@ -78,6 +79,7 @@ export default function AppRoutes({
           )
         }
       />
+
       <Route
         path={Paths.SIGN_IN}
         element={
@@ -88,9 +90,11 @@ export default function AppRoutes({
           )
         }
       />
+
       <Route path={Paths.MAIN} element={<Home apiClient={apiClient} />} />
       <Route path={Paths.PRODUCT_DETAILS} element={<ProductDetails apiClient={apiClient} />} />
       <Route path={Paths.CATALOG} element={<Catalog apiClient={apiClient} />} />
+      <Route path={Paths.ABOUT_US} element={<About />} />
       <Route
         path={Paths.PROFILE}
         element={
@@ -105,9 +109,8 @@ export default function AppRoutes({
           )
         }
       />
-      <Route path={Paths.ABOUT_US} element={<About />} />
-      <Route path={Paths.ANY} element={<NotFound />} />
       <Route path={Paths.CART} element={<CartPage client={apiClient} />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

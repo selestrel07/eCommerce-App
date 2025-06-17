@@ -81,6 +81,13 @@
       height: fit-content;
     }
   }
+  .clear-shopping-cart-button {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    max-width: 95vw;
+    gap: 10px;
+  }
 
   .cart-page-total {
     display: flex;
