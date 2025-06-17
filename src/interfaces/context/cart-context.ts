@@ -6,4 +6,6 @@ export interface CartContextType {
   setCart: Dispatch<SetStateAction<Cart | null>>;
   cartItemsCount: number;
   setCartItemsCount: Dispatch<SetStateAction<number>>;
+  cartTotal: number;
+  setCartTotal: Dispatch<SetStateAction<number>>;
 }
