@@ -70,8 +70,8 @@ export const Cart: FC<{
                 }}
               />
             ))}
-            <CartDiscountCode client={client} />
             <ClearShoppingCartButton client={client} />
+            <CartDiscountCode client={client} />
             <div className="cart-page-total">
               <h3 className="title-total-cost">Total:</h3>{' '}
               {totalItemsCost > cartTotal ? (
