@@ -1,0 +1,47 @@
+.stock-info {
+  color: rgb(15, 111, 236);
+}
+
+.delete-image {
+  width: 20px;
+  height: 20px;
+}
+
+.delete-from-cart-button {
+  background-color: rgba(241, 241, 239, 0.58);
+  cursor: pointer;
+  border: none;
+}
+.stock-quantity-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+}
+
+.cart-item-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2px;
+}
+
+.input-quantity {
+  max-width: 50px;
+  height: 25px;
+  text-align: center;
+  
+  -moz-appearance: textfield;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  appearance: none;
+
+  border: 0;
+  color: rgb(41, 40, 40);
+}

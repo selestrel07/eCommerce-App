@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import { createContext } from 'react';
 import { CartContextType } from '@interfaces';
 
 export const CartContext = createContext<CartContextType>({

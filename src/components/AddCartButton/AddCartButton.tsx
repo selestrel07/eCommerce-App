@@ -1,14 +1,9 @@
 import React, { useState, use } from 'react';
 import { Button, message } from 'antd';
-import { Client } from '@commercetools/sdk-client-v2';
 import { addToCart } from '@services';
 import { CartContext } from '@contexts';
-
-interface AddCartButtonProps {
-  client: Client;
-  productId: string;
-  variantId: number;
-}
+import { AddCartButtonProps } from '@interfaces';
+import { loadCart } from '@services';
 
 export const AddCartButton: React.FC<AddCartButtonProps> = ({ client, productId, variantId }) => {
   const { cart, setCart, setCartItemsCount } = use(CartContext);
@@ -20,7 +15,14 @@ export const AddCartButton: React.FC<AddCartButtonProps> = ({ client, productId,
 
   const handleClick = async () => {
     if (!cart) {
-      message.error('Cart is not loaded yet');
+      try {
+        const fresh = await loadCart(client);
+        setCart(fresh);
+        setCartItemsCount(fresh.lineItems.length);
+      } catch (loadErr) {
+        console.error('Failed to load cart:', loadErr);
+        message.error('Failed to load cart. Please try again.');
+      }
       return;
     }
     if (alreadyInCart || saving) return;
