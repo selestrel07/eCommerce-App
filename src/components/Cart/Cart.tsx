@@ -5,11 +5,40 @@ import { useCart } from '@contexts';
 import { CartDiscountCode, CartItem, ClearShoppingCartButton } from '@components';
 import { Flex } from 'antd';
 import { Client } from '@commercetools/sdk-client-v2';
+import { updateCart, loadCart } from '@services';
+import { useState } from 'react';
 
 export const Cart: FC<{
   client: Client;
 }> = ({ client }): ReactElement => {
-  const { cart } = useCart();
+  const { cart, setCart } = useCart();
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  const onCartUpdate = async () => {
+    // перезагрузим корзину целиком
+    try {
+      const fresh = await loadCart(client);
+      setCart(fresh);
+    } catch (err) {
+      console.error('Failed to refresh cart:', err);
+    }
+  };
+
+  const handleQuantityChange = async (lineItemId: string, newQty: number) => {
+    if (!cart || newQty < 1) return;
+    setUpdatingId(lineItemId);
+    try {
+      const updated = await updateCart(client, cart.id, cart.version, [
+        { action: 'changeLineItemQuantity', lineItemId, quantity: newQty },
+      ]);
+      setCart(updated);
+    } catch (err) {
+      console.error('Failed to update cart:', err);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
   return (
     <>
       {cart === null || cart?.lineItems.length === 0 ? (
@@ -21,7 +50,17 @@ export const Cart: FC<{
         <>
           <Flex gap="middle" vertical align="center">
             {cart.lineItems.map((item) => (
-              <CartItem client={client} key={item.id} lineItem={item} />
+              <CartItem
+                key={item.id}
+                lineItem={item}
+                client={client}
+                onCartUpdate={() => void onCartUpdate()}
+                updating={updatingId === item.id}
+                availableStock={item.variant.availability?.availableQuantity ?? 0}
+                onQuantityChange={(id, qty) => {
+                  void handleQuantityChange(id, qty);
+                }}
+              />
             ))}
             <CartDiscountCode client={client} />
             <ClearShoppingCartButton client={client} />

@@ -178,17 +178,35 @@ export const loadCategories = async (client: Client) => {
   }
 };
 
+function isNotFoundError(error: unknown): boolean {
+  if (typeof error === 'object' && error !== null && 'statusCode' in error) {
+    const status = (error as { statusCode?: unknown }).statusCode;
+    return typeof status === 'number' && status === 404;
+  }
+  return false;
+}
+
 export const loadCart = async (client: Client) => {
   const apiRoot = apiRootBuilder(client);
   try {
-    const httpResponse = await apiRoot.me().activeCart().get().execute();
+    const httpResponse = await apiRoot
+      .me()
+      .activeCart()
+      .get({
+        queryArgs: {
+          expand: ['lineItems[*].variant.availability'],
+        },
+      })
+      .execute();
     return httpResponse.body;
-  } catch (rawError: unknown) {
-    if (rawError instanceof Error && rawError.message === 'URI not found: /yagni/me/active-cart') {
+  } catch (error: unknown) {
+    if (isNotFoundError(error)) {
       return createCart(client);
-    } else {
-      throw new Error(handleApiError(rawError));
     }
+    if (error instanceof Error && error.message.includes('active-cart')) {
+      return createCart(client);
+    }
+    throw error;
   }
 };
 
