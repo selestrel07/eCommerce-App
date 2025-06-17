@@ -10,10 +10,16 @@ import { Paths } from '@enums';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../contexts/cart-context/UseCart.ts';
 import { TiShoppingCart } from 'react-icons/ti';
-import { emptyTokenStore, tokenCache, revokeToken } from '@services';
+import {
+  emptyTokenStore,
+  tokenCache,
+  revokeToken,
+  getAnonymousClient,
+  createAnonymousClient,
+} from '@services';
 import { getMenuItems } from '@components';
 
-const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
+const AppHeader = ({ isSignedIn, setSignedIn, setApiClient }: AppHeaderProps) => {
   const location = useLocation();
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -26,6 +32,7 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
     void navigate(Paths.SIGN_IN);
     void revokeToken(tokenCache.get().token);
     tokenCache.set(emptyTokenStore);
+    setApiClient(getAnonymousClient() ?? createAnonymousClient());
   };
   return (
     <Layout.Header className="header">

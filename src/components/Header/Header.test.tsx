@@ -14,6 +14,7 @@ vi.mock('react-router-dom', async () => {
 });
 
 const mockNavigate = vi.fn();
+const mockSetApiClient = vi.fn();
 
 describe('AppHeader', () => {
   it('cCalls setSignedIn(false) and navigates to the Sign In page (desktop)', () => {
@@ -25,7 +26,11 @@ describe('AppHeader', () => {
 
     render(
       <MemoryRouter initialEntries={['/app']}>
-        <AppHeader isSignedIn={true} setSignedIn={mockSetSignedIn} />
+        <AppHeader
+          isSignedIn={true}
+          setSignedIn={mockSetSignedIn}
+          setApiClient={mockSetApiClient}
+        />
       </MemoryRouter>
     );
 
