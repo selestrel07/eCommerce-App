@@ -43,7 +43,13 @@ const AppHeader = ({ isSignedIn, setSignedIn, setApiClient }: AppHeaderProps) =>
         </Link>
 
         {isMobile ? (
-          <>
+          <div className="header-menu">
+            <Link to={Paths.CART} className="cart-link">
+              <div className="cart-icon-wrapper">
+                <TiShoppingCart className="cart-icon" />
+                {cartItemsCount >= 0 && <span className="cart-badge">{cartItemsCount}</span>}
+              </div>
+            </Link>
             <Button
               icon={<MenuOutlined />}
               className="menu-button"
@@ -64,24 +70,24 @@ const AppHeader = ({ isSignedIn, setSignedIn, setApiClient }: AppHeaderProps) =>
                 />
               </Drawer>
             )}
-          </>
+          </div>
         ) : (
-          <>
+          <div className="header-menu">
+            <Link to={Paths.CART} className="cart-link">
+              <div className="cart-icon-wrapper">
+                <TiShoppingCart className="cart-icon" />
+                {cartItemsCount >= 0 && <span className="cart-badge">{cartItemsCount}</span>}
+              </div>
+            </Link>
             <Menu
               className="menu"
               mode="horizontal"
               selectedKeys={[location.pathname]}
               items={getMenuItems(isSignedIn, undefined, handleLogout)}
             />
-          </>
+          </div>
         )}
       </div>
-      <Link to={Paths.CART} className="cart-link">
-        <div className="cart-icon-wrapper">
-          <TiShoppingCart className="cart-icon" />
-          {cartItemsCount >= 0 && <span className="cart-badge">{cartItemsCount}</span>}
-        </div>
-      </Link>
     </Layout.Header>
   );
 };
