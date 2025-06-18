@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { MenuProps } from 'antd';
-import { Paths } from '../../enums/paths/paths';
+import { Paths } from '@enums';
 
 type ItemType = Required<MenuProps>['items'][number];
 
@@ -18,6 +18,11 @@ export const getMenuItems = (
     {
       key: '/catalog',
       label: <Link to={Paths.CATALOG}>Catalog</Link>,
+      onClick,
+    },
+    {
+      key: '/about',
+      label: <Link to={Paths.ABOUT_US}>About Us</Link>,
       onClick,
     },
   ];

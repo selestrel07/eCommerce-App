@@ -4,17 +4,17 @@ import { Layout, notification } from 'antd';
 import AppHeader from './components/Header/Header';
 import { useState } from 'react';
 import '@ant-design/v5-patch-for-react-19';
-import {
-  deleteCustomerToken,
-  loadCustomerToken,
-  saveCustomerToken,
-} from './services/storage/session-storage.service.ts';
+import { deleteCustomerToken, loadCustomerToken, saveCustomerToken } from '@services';
 import { Client } from '@commercetools/sdk-client-v2';
-import { createAnonymousClient, createRefreshTokenClient } from './services/clientBuilder.ts';
-import { getAnonymousId } from './services/authService.ts';
-import { tokenCache } from './services/storage/storage.service.ts';
-import { isTokenStore } from './types/token-store/token-store.ts';
+import {
+  createAnonymousClient,
+  createRefreshTokenClient,
+  getAnonymousId,
+  tokenCache,
+} from '@services';
+import { isTokenStore } from '@types';
 import { Context } from 'react-responsive';
+import { CartProvider } from '@contexts';
 
 export const App = () => {
   const token = loadCustomerToken();
@@ -47,18 +47,20 @@ export const App = () => {
   });
 
   return (
-    <Layout>
-      <AppHeader isSignedIn={isSignedIn} setSignedIn={setSignedIn} />
-      {contextHolder}
-      <Layout.Content>
-        <AppRoutes
-          isSignedIn={isSignedIn}
-          setSignedIn={setSignedIn}
-          apiClient={client}
-          setApiClient={setClient}
-          openNotification={openNotification}
-        />
-      </Layout.Content>
-    </Layout>
+    <CartProvider>
+      <Layout>
+        <AppHeader isSignedIn={isSignedIn} setSignedIn={setSignedIn} setApiClient={setClient} />
+        {contextHolder}
+        <Layout.Content>
+          <AppRoutes
+            isSignedIn={isSignedIn}
+            setSignedIn={setSignedIn}
+            apiClient={client}
+            setApiClient={setClient}
+            openNotification={openNotification}
+          />
+        </Layout.Content>
+      </Layout>
+    </CartProvider>
   );
 };

@@ -1,16 +1,12 @@
 import { Category } from '@commercetools/platform-sdk';
 import { Context, FC, use, useEffect, useState } from 'react';
-import { loadCategories } from '../../services/api.service.ts';
+import { loadCategories } from '@services';
 import { Client } from '@commercetools/sdk-client-v2';
 import { Menu, MenuProps } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
-import { LevelKeysProps } from '../../interfaces/category/category.ts';
-import { CatalogContext, CategoryContext } from '../../contexts/CatalogContexts.tsx';
-import {
-  CatalogContextType,
-  CategoryContextType,
-} from '../../interfaces/context/catalog-context.ts';
-import { setCategory } from '../../utils/query-params-builder.ts';
+import { LevelKeysProps, CatalogContextType, CategoryContextType } from '@interfaces';
+import { CatalogContext, CategoryContext } from '@contexts';
+import { setCategory } from '@utils';
 
 const getCategoryIdByKey = (categories: Category[], key: string): string | undefined => {
   return categories.find((category) => category.name['en-US'] === key)?.id;

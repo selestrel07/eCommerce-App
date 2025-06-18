@@ -1,3 +1,9 @@
+.product-button {
+  .delete-from-cart-button {
+    position: static;
+  }
+}
+
 .product-container {
   display: flex;
   gap: 50px;
@@ -30,7 +36,7 @@
     border-bottom: 1px solid rgba(5, 5, 5, 0.2);
     padding-bottom: 20px;
 
-    p{
+    p {
       text-align: justify;
       line-height: 1.1rem;
     }
@@ -39,13 +45,18 @@
   .product-price {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    align-items: baseline;
-    gap: 10px;
+    justify-content: space-between;
     border-bottom: 1px solid rgba(5, 5, 5, 0.2);
     padding-bottom: 20px;
 
-    .price{
+    .product-price-info {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .price {
       color: rgb(35, 34, 34);
       font-size: large;
     }
@@ -153,10 +164,10 @@
   cursor: pointer;
   transition: background 0.3s ease;
 
-    svg {
-      width: 30px;
-      height: 30px;
-    }
+  svg {
+    width: 30px;
+    height: 30px;
+  }
 
   &:hover {
     background: #0a66c2;
@@ -281,7 +292,6 @@
     }
   }
 
-
   .product-modal {
     .carousel-arrow.right {
       display: none;
@@ -319,7 +329,6 @@
     }
   }
 }
-
 
 @media (max-width: 450px) {
   .product-carousel {

@@ -1,8 +1,7 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { getProductPrice } from './productPrice.ts';
 import { extractAttributes } from './extractAttributes.ts';
-import { ProductVariantWithPriceAndName } from '../interfaces/product/product.ts';
-import { QueryParams } from '../interfaces/query-params/query-params.ts';
+import { ProductVariantWithPriceAndName, QueryParams } from '@interfaces';
 
 export const mapProducts = (products: ProductProjection[]) =>
   products.map((product) => {
@@ -71,7 +70,7 @@ export const getVariants = (
         return {
           ...variant,
           productName: product.name,
-          isMatchingVariant: !!(matchesColor && matchesSex),
+          isMatchingVariant: matchesColor && matchesSex,
         };
       })
     )

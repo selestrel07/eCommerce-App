@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { FieldValidationObject } from '../interfaces/interfaces.ts';
-import { CountriesData } from '../data/countries/countries.ts';
-import { AddressType } from '../enums/address-types/address-types.ts';
+import { CountriesData } from '@data';
+import { AddressType } from '@enums';
 
 const PASSWORD_MIN_LENGTH = 8;
 const MINIMUM_AGE = 13;

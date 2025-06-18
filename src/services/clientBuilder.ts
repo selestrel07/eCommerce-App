@@ -8,7 +8,7 @@ import type {
 } from '@commercetools/sdk-client-v2';
 
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
-import { EnvKey } from '../enums/env-keys';
+import { EnvKey } from '@enums';
 import { TokenCache, TokenStore } from '@commercetools/ts-client';
 import { tokenCache } from './storage/storage.service.ts';
 

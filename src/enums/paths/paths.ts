@@ -8,4 +8,6 @@ export enum Paths {
   NOT_FOUND = '/error',
   ANY = '*',
   PRODUCT_DETAILS = '/productdetails/:key',
+  ABOUT_US = '/about',
+  CART = '/cart',
 }

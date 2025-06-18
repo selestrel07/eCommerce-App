@@ -6,16 +6,25 @@ import { useState } from 'react';
 import { AppHeaderProps } from '../../interfaces/interfaces';
 import logo from '../../assets/logo.png';
 import './Header.scss';
-import { Paths } from '../../enums/paths/paths';
+import { Paths } from '@enums';
 import { useNavigate } from 'react-router-dom';
-import { emptyTokenStore, tokenCache } from '../../services/storage/storage.service.ts';
-import { revokeToken } from '../../services/authService.ts';
-import { getMenuItems } from './NavItems.tsx';
+import { useCart } from '@contexts';
+import { TiShoppingCart } from 'react-icons/ti';
+import {
+  emptyTokenStore,
+  tokenCache,
+  revokeToken,
+  getAnonymousClient,
+  createAnonymousClient,
+} from '@services';
+import { getMenuItems } from '@components';
 
-const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
+const AppHeader = ({ isSignedIn, setSignedIn, setApiClient }: AppHeaderProps) => {
   const location = useLocation();
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [drawerVisible, setDrawerVisible] = useState(false);
+
+  const { cartItemsCount } = useCart();
 
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -23,6 +32,7 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
     void navigate(Paths.SIGN_IN);
     void revokeToken(tokenCache.get().token);
     tokenCache.set(emptyTokenStore);
+    setApiClient(getAnonymousClient() ?? createAnonymousClient());
   };
   return (
     <Layout.Header className="header">
@@ -33,7 +43,13 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
         </Link>
 
         {isMobile ? (
-          <>
+          <div className="header-menu">
+            <Link to={Paths.CART} className="cart-link">
+              <div className="cart-icon-wrapper">
+                <TiShoppingCart className="cart-icon" />
+                {cartItemsCount >= 0 && <span className="cart-badge">{cartItemsCount}</span>}
+              </div>
+            </Link>
             <Button
               icon={<MenuOutlined />}
               className="menu-button"
@@ -45,20 +61,31 @@ const AppHeader = ({ isSignedIn, setSignedIn }: AppHeaderProps) => {
                   className="menu"
                   mode="vertical"
                   selectedKeys={[location.pathname]}
-                  items={getMenuItems(isSignedIn, () => setDrawerVisible(false), handleLogout)}
+                  items={getMenuItems(
+                    isSignedIn,
+                    // cartItemsCount,
+                    () => setDrawerVisible(false),
+                    handleLogout
+                  )}
                 />
               </Drawer>
             )}
-          </>
+          </div>
         ) : (
-          <>
+          <div className="header-menu">
+            <Link to={Paths.CART} className="cart-link">
+              <div className="cart-icon-wrapper">
+                <TiShoppingCart className="cart-icon" />
+                {cartItemsCount >= 0 && <span className="cart-badge">{cartItemsCount}</span>}
+              </div>
+            </Link>
             <Menu
               className="menu"
               mode="horizontal"
               selectedKeys={[location.pathname]}
               items={getMenuItems(isSignedIn, undefined, handleLogout)}
             />
-          </>
+          </div>
         )}
       </div>
     </Layout.Header>

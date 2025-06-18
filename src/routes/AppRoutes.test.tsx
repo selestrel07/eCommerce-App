@@ -1,11 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import AppRoutes from './AppRoutes.tsx';
 import { render } from '@testing-library/react';
-import { Paths } from '../enums/paths/paths.ts';
+import { Paths } from '@enums';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { createAnonymousClient } from '../services/clientBuilder.ts';
-import { getAnonymousId } from '../services/authService.ts';
+import { createAnonymousClient, getAnonymousId } from '@services';
 
 const mockSetSignedIn = vi.fn();
 const mockSetClient = vi.fn();

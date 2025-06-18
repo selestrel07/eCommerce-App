@@ -1,6 +1,9 @@
+import { Client } from '@commercetools/sdk-client-v2';
+
 export interface AppHeaderProps {
   isSignedIn: boolean;
   setSignedIn: (value: boolean) => void;
+  setApiClient: (client: Client) => void;
 }
 
 export interface ApiErrorBody {

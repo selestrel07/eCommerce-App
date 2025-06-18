@@ -1,10 +1,10 @@
-import { EditAction } from '../enums/edit-actions/edit-actions.ts';
+import { EditAction, AddressType } from '@enums';
 import {
   Address,
   Address as AddressSdk,
+  MyCartUpdateAction,
   MyCustomerUpdateAction,
 } from '@commercetools/platform-sdk';
-import { AddressType } from '../enums/address-types/address-types.ts';
 
 export const composeAction = (
   action: EditAction,
@@ -154,4 +154,21 @@ export const composeAddressTypeActions = (
     )
   );
   return actions.filter((action) => action !== undefined);
+};
+
+export const composeAddCodeAction = (code: string): MyCartUpdateAction => {
+  return {
+    action: EditAction.ADD_DISCOUNT_CODE,
+    code,
+  };
+};
+
+export const composeRemoveCodeAction = (id: string): MyCartUpdateAction => {
+  return {
+    action: EditAction.REMOVE_DISCOUNT_CODE,
+    discountCode: {
+      typeId: 'discount-code',
+      id,
+    },
+  };
 };

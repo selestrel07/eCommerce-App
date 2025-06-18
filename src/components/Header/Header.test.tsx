@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import AppHeader from './Header';
-import { Paths } from '../../enums/paths/paths';
+import { Paths } from '@enums';
 
 // change useNavigate a fake function
 vi.mock('react-router-dom', async () => {
@@ -14,6 +14,7 @@ vi.mock('react-router-dom', async () => {
 });
 
 const mockNavigate = vi.fn();
+const mockSetApiClient = vi.fn();
 
 describe('AppHeader', () => {
   it('cCalls setSignedIn(false) and navigates to the Sign In page (desktop)', () => {
@@ -25,7 +26,11 @@ describe('AppHeader', () => {
 
     render(
       <MemoryRouter initialEntries={['/app']}>
-        <AppHeader isSignedIn={true} setSignedIn={mockSetSignedIn} />
+        <AppHeader
+          isSignedIn={true}
+          setSignedIn={mockSetSignedIn}
+          setApiClient={mockSetApiClient}
+        />
       </MemoryRouter>
     );
 

@@ -2,9 +2,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import AppHeader from './Header';
-import { Paths } from '../../enums/paths/paths';
+import { Paths } from '@enums';
 
 const mockNavigate = vi.fn();
+const mockSetApiClient = vi.fn();
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
   return {
@@ -23,7 +24,11 @@ describe('AppHeader (mobile)', () => {
 
     render(
       <MemoryRouter initialEntries={['/app']}>
-        <AppHeader isSignedIn={true} setSignedIn={mockSetSignedIn} />
+        <AppHeader
+          isSignedIn={true}
+          setSignedIn={mockSetSignedIn}
+          setApiClient={mockSetApiClient}
+        />
       </MemoryRouter>
     );
 

@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { AddressInfoControls } from './AddressInfoControls.tsx';
-import { emptyAddressData } from '../../data/component-states/address-info-states.ts';
-import { ProfileContextEditMode } from '../../contexts/profile-context/ProfileContexts.tsx';
+import { AddressInfoControls } from '@components';
+import { emptyAddressData } from '@data';
+import { ProfileContextEditMode } from '@contexts';
 
 const handleUpdate = vi.fn();
 const setAddressData = vi.fn();

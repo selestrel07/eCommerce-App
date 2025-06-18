@@ -1,21 +1,23 @@
 import './ProductDetails.scss';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ProductProjection,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { Client } from '@commercetools/sdk-client-v2';
-import { getProductPrice } from '../../utils/product-price.utils';
-import { extractAttributes } from '../../utils/product-attribites.utils';
+import { getProductPrice, extractAttributes } from '@utils';
 import { IoIosPeople, IoIosColorPalette } from 'react-icons/io';
 import { GiRolledCloth } from 'react-icons/gi';
 import { Carousel } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
 import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs';
 import { Modal } from 'antd';
-import { getProductByKey } from '../../services/api.service';
+import { getProductByKey } from '@services';
 import NotFound from '../NotFound/NotFound';
+import { AddCartButton } from '@components';
+import { CartContext } from '@contexts';
+import { DeleteFromCartButton } from '@components';
 
 // eslint-disable-next-line max-lines-per-function
 const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
@@ -67,6 +69,8 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
     return variant ?? product.masterVariant;
   };
 
+  const { cart } = useContext(CartContext);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
   if (isNotFound) return <NotFound />;
@@ -75,6 +79,11 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
   const { name, description } = product;
   const selectedVariant = findVariantByKey(product, key ?? '');
   const images = selectedVariant.images ?? [];
+
+  const thisLineItem = cart?.lineItems.find(
+    (li) => li.productId === product.id && li.variant.id === selectedVariant.id
+  );
+  const inCart = Boolean(thisLineItem);
 
   const locale = 'en-US';
   const productName = name[locale];
@@ -189,21 +198,35 @@ const ProductDetails = ({ apiClient }: { apiClient: Client }) => {
 
         <div className="product-general-description">
           <div className="product-price">
-            <h2 className="price-text">Price:</h2>
-            {priceInfo?.originalAmount ? (
-              <>
-                <p className="price old-price">
-                  {priceInfo.originalAmount} {priceInfo.currency}
+            <div className="product-price-info">
+              <h2 className="price-text">Price:</h2>
+              {priceInfo?.originalAmount ? (
+                <>
+                  <p className="price old-price">
+                    {priceInfo.originalAmount} {priceInfo.currency}
+                  </p>
+                  <p className="price discounted-price">
+                    {priceInfo.amount} {priceInfo.currency}
+                  </p>
+                </>
+              ) : (
+                <p className="price">
+                  {priceInfo?.amount} {priceInfo?.currency}
                 </p>
-                <p className="price discounted-price">
-                  {priceInfo.amount} {priceInfo.currency}
-                </p>
-              </>
-            ) : (
-              <p className="price">
-                {priceInfo?.amount} {priceInfo?.currency}
-              </p>
-            )}
+              )}
+            </div>
+
+            <div className="product-button">
+              {inCart ? (
+                <DeleteFromCartButton client={apiClient} lineItemId={thisLineItem!.id} />
+              ) : (
+                <AddCartButton
+                  client={apiClient}
+                  productId={product.id}
+                  variantId={selectedVariant.id}
+                />
+              )}
+            </div>
           </div>
           <div className="product-description-container">
             <h3>About this item:</h3>
