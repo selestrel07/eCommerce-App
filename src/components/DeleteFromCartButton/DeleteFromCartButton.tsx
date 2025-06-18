@@ -14,20 +14,19 @@ export const DeleteFromCartButton: FC<DeleteFromCartButtonProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
 
-  const { setCart } = use(CartContext);
+  const { cart, setCart, setCartItemsCount } = use(CartContext);
 
   const handleClick = async () => {
-    if (loading || props.disabled) return;
-
+    if (!cart || loading) return;
     setLoading(true);
     try {
-      const updatedCart = await removeLineItem(client, lineItemId);
-
-      setCart(updatedCart);
-
-      if (onCartUpdate) onCartUpdate();
-    } catch (error) {
-      console.error('Failed to remove product:', error);
+      const updated = await removeLineItem(client, cart.id, cart.version, lineItemId);
+      setCart(updated);
+      setCartItemsCount(updated.lineItems.reduce((sum, li) => sum + li.quantity, 0));
+      onCartUpdate?.();
+      message.success('Product removed from cart');
+    } catch (err) {
+      console.error('Failed to remove product:', err);
       message.error('Failed to remove product.');
     } finally {
       setLoading(false);
